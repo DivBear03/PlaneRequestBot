@@ -1,0 +1,63 @@
+Tracking start time: 2020-06-22 23:23:38.206521
+#adamtheenginerd
+vuldahviing: 18 messages
+zlayer___: 17 messages
+ironmax22_: 16 messages
+roxor030: 12 messages
+handofstalin_russianbias: 7 messages
+commieturtle: 6 messages
+sovietsausagegirl: 6 messages
+nightbot: 4 messages
+kingsman784: 4 messages
+thewrit666: 4 messages
+: 3 messages
+lonk_hero_of_memes: 2 messages
+takaleon: 2 messages
+unknowndistance: 2 messages
+the_ssn: 2 messages
+buzz_beurling: 1 messages
+adamtheenginerd: 1 messages
+char_aznable__: 1 messages
+fatalowl: 1 messages
+Number of requests: 0
+Tracking end time: 2020-06-22 23:45:39.044498
+
+Tracking start time: 2020-06-22 23:45:46.132003
+#adamtheenginerd
+kingsman784: 3 messages
+unknowndistance: 2 messages
+nightbot: 2 messages
+wisemutenroshi: 1 messages
+deputydankcx: 1 messages
+zlayer___: 1 messages
+ironmax22_: 1 messages
+nightbot, wisemutenroshi, unknowndistance: 1 messages
+thewrit666: 1 messages
+handofstalin_russianbias: 1 messages
+Number of requests: 0
+Tracking end time: 2020-06-22 23:47:16.746512
+
+Tracking start time: 2020-06-23 09:12:08.871895
+#kingsman784
+Number of requests: 0
+Tracking end time: 2020-06-23 09:12:12.628756
+
+Tracking start time: 2020-06-23 09:13:21.875943
+#kingsman784
+kingsman784: 2 messages
+Number of requests: 2
+Tracking end time: 2020-06-23 09:15:50.320500
+
+Tracking start time: 2020-06-23 09:15:56.749130
+#kingsman784
+: 1 messages
+kingsman784: 1 messages
+Number of requests: 1
+Tracking end time: 2020-06-23 09:18:14.367518
+
+Tracking start time: 2020-06-23 09:18:58.364256
+#kingsman784
+kingsman784: 5 messages
+Number of requests: 3
+Tracking end time: 2020-06-23 09:22:59.783943
+

@@ -1,0 +1,24 @@
+--request <planename>
+	Adds the plane name to the running list of requested planes
+--requests
+	Shows the list of requested planes without deleting the 1st one afterward
+--reqdel
+	Shows the list of requested planes and deletes the 1st plane from the list afterward
+	If you want to skip the present plane, use --skip command
+--skip [<insert aircraft name here>]
+	Skips the aircraft specified. Replies "<aircraft> has been skipped"
+--commands
+	Prints the Google Site that has all the commands listed on it
+--skip
+	Removes the first one. Replies "<aircraft> has been skipped"
+--enable
+	Enables the bot
+--disable
+	Disables the bot
+--end
+	Turns the bot off, only way to turn it back on is to manually run the program over again. Writes the usercount 
+	dictionary to logs.txt
+--track
+	Begins to count how many messages each user sends. 
+--stoptrack
+	Stops tracking user message counts. Can be reenabled with another !track command and no previous data is lost.
