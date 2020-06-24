@@ -162,15 +162,24 @@ while True:
     elif chat.startswith("PING"):               #check for PING from Twitch IRC
         sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
 
-    elif "--commands" in chat:
-        sock.send(f"PRIVMSG {channel} :Learn commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
 
-
-    elif "--add" in chat and user == "adamtheenginerd":
+    elif "--skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
+        if user == "zlayer___" or user == "adamtheenginerd":
+            plane = re.findall("--skip\[(.+)\]", message)
+            plane = cleanup(plane)
+            plane = plane.replace("'", "")
+            if len(requestlist) > 0:
+                for n in range(len(requestlist)):
+                    if requestlist[n] == plane:
+                        requestlist.pop(n)
+                sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
+            else:
+                sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
+    '''elif "--add" in chat and user == "adamtheenginerd":
         newpriuser = re.findall("--add (.+)", chat)
         newpriuser = cleanup(newpriuser)
         newpriuser = newpriuser.replace("'", "")
-        priorityusers.append(newpriuser)
+        priorityusers.append(newpriuser)'''
 
 
     if go == True:                              #all code after this only runs if the bot is enabled
@@ -219,18 +228,6 @@ while True:
                 else:
                     sock.send(f"PRIVMSG {channel} :No aircraft in request list\r\n".encode('utf-8'))
 
-        elif "--skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
-            if user == "zlayer___" or user == "adamtheenginerd":
-                plane = re.findall("--skip\[(.+)\]", message)
-                plane = cleanup(plane)
-                plane = plane.replace("'", "")
-                if len(requestlist) > 0:
-                    for n in range(len(requestlist)):
-                        if requestlist[n] == plane:
-                            requestlist.pop(n)
-                    sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
-                else:
-                    sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
 
         elif "--requests" in message:               #check for requests message. Same code as before, but first plane is not removed
             commands['--requests'] += 1
@@ -243,6 +240,8 @@ while True:
                 sock.send(f"PRIVMSG {channel} :No planes in request list\r\n".encode('utf-8'))
 
 
+        elif "--commands" in chat:
+            sock.send(f"PRIVMSG {channel} :Learn commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
         '''elif "ssn" in message and count > 2:
             sock.send(f"PRIVMSG {channel} :Praise SSN!\r\n".encode('utf-8'))'''
 
