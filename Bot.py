@@ -24,22 +24,20 @@ def search(plane):
         plane = plane.replace("\n", "")
         return plane
     similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
-    plane = cleanup2(plane)                                 #cleanup algorithm for removing whitespace
+    plane = cleanup2(plane)
     for plane1 in alliedaircraft:                           #iterate through all allied planes
-        plane1 = cleanup2(plane1)                           #cleanup the name
-        if plane == plane1:                                 #if they are a perfect match
+        if plane == cleanup2(plane1):                                 #if they are a perfect match
             similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
             break
-        elif len(plane1) >= len(plane):                     #if not a perfect match
-            similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)+1]).ratio()    #calculate percent match
+        elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
+            similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
             similarities[plane1] = similarity * 100                                             #multiply by 100 for actual percent readings
     for plane1 in axisaircraft:                           #iterate through all allied planes
-        plane1 = cleanup2(plane1)                           #cleanup the name
-        if plane == plane1:                                 #if they are a perfect match
+        if plane == cleanup2(plane1):                                 #if they are a perfect match
             similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
             break
-        elif len(plane1) >= len(plane):                     #if not a perfect match
-            similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)+1]).ratio()    #calculate percent match
+        elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
+            similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
             similarities[plane1] = similarity * 100 
     sortedlist = list()                 #creating empty list to hold sorted users
     for thing in similarities.items():     #iterate through the keys and terms of usercount dictionary
@@ -80,6 +78,7 @@ priorityhandle = open("VIPs.txt", 'r+')
 for line in priorityhandle:
     priorityusers.append(line.strip())'''
 
+authorized = ["adamtheenginerd", "zlayer___", "kingsman784"]
 
 texthandle = open("logs.txt", 'a+')                                     #opening logs file
 texthandle.write("Tracking start time: ")
@@ -154,7 +153,7 @@ while True:
     message = chat[startmessage:]                                       #pull out the message text
     print(user + ": " + message.rstrip())                                        #print simplified version of user and message
     if "--disable" in chat:                 #check for disable command
-        if user == "adamtheenginerd" or user == "zlayer___":
+        if user in authorized:
             go = False
             commands['--disable'] += 1
             print("BotOn = " + str(go))
@@ -163,15 +162,18 @@ while True:
 
 
     elif "--enable" in chat:                      #check for enable command
-        if user == "adamtheenginerd" or user == "zlayer___":
+        if user in authorized:
             go = True
             commands['--enable'] += 1
             print("BotOn = " + str(go))
         else:
             sock.send(f"PRIVMSG {channel} :You do not have permission to enable me\r\n".encode('utf-8'))
 
-    elif (user == "zlayer___" or user == "adamtheenginerd") and "--end" in chat:                   #check for end program command
-        break
+    elif "--end" in chat:                   #check for end program command
+        if user in authorized:
+            break
+        else:
+            sock.send(f"PRIVMSG {channel} :You do not have permission to kill the bot\r\n".encode('utf-8'))
         
 
 
@@ -202,7 +204,7 @@ while True:
 
 
     elif "--skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
-        if user == "zlayer___" or user == "adamtheenginerd":
+        if user in authorized:
             plane = re.findall("--skip\[(.+)\]", message)
             plane = cleanup(plane)
             plane = plane.replace("'", "")
@@ -246,7 +248,7 @@ while True:
 
 
         elif "--reqdel" in message:             #checking for reqdel command
-            if user == "zlayer___" or user == "adamtheenginerd":
+            if user in authorized:
                 commands['--reqdel'] += 1
                 buildstring = ""                    #create empty string that will show the list of requested planes
                 for plane in requestlist:           #iterate through the planes in the list
@@ -259,7 +261,7 @@ while True:
 
 
         elif "--skip" in message:                      #check for skip command, skip the first plane in the list
-            if user == "zlayer___" or user == "adamtheenginerd":
+            if user in authorized:
                 commands['--skip'] += 1
                 if len(requestlist) > 0:            #if there are planes in the requestlist
                     aircraft = requestlist.pop(0)
