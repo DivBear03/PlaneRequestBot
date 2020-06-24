@@ -19,6 +19,30 @@ def search(plane):
         plane = plane.lower()
         plane = plane.replace("\n", "")
         return plane
+    similarities = {}
+    plane = cleanup2(plane)
+    for plane1 in alliedaircraft:
+        plane1 = cleanup2(plane1)
+        if plane == plane1:
+            similarities[plane1] = 100
+            break
+        elif len(plane1) >= len(plane):
+            similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)+1]).ratio()
+            similarities[plane1] = similarity * 100
+    sortedlist = list()                 #creating empty list to hold sorted users
+    for thing in similarities.items():     #iterate through the keys and terms of usercount dictionary
+        sortedlist.append(thing)        #add each key,value pair to sortedlist
+    for i in range(1, len(sortedlist)):         #insertion sort algorithm
+        nextElementValue = sortedlist[i][1]
+        temp = sortedlist[i]
+        j = i-1
+        while j >= 0 and sortedlist[j][1] < nextElementValue:
+            item = sortedlist[j]
+            sortedlist[j+1] = item
+            j = j-1
+        sortedlist[j+1] = temp
+    if sortedlist[0][1] > 50: 
+        return sortedlist[0][0].replace("\n", "")
 
 
 class Request:
@@ -138,7 +162,7 @@ while True:
 
 
     elif '--track' in chat:                     #check for tracking start command
-        if user == "adamtheenginerd" or user == "zlayer___":
+        if user == "adamtheenginerd":
             tracking = True
             commands['--track'] += 1
             print("Tracking = " + str(tracking))
@@ -147,7 +171,7 @@ while True:
 
 
     elif '--stoptrack' in chat:                 #check for tracking end command
-        if user == "adamtheenginerd" or user == "zlayer___":
+        if user == "adamtheenginerd":
             tracking = False
             commands['--stoptrack'] += 1
             if usercount.get(user, 0) == 0:         #check to see if the user already exists in the dictionary
@@ -175,6 +199,8 @@ while True:
                 sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
             else:
                 sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
+        else:
+            sock.send(f"PRIVMSG {channel} :You do not have permission to skip planes\r\n".encode('utf-8'))
     '''elif "--add" in chat and user == "adamtheenginerd":
         newpriuser = re.findall("--add (.+)", chat)
         newpriuser = cleanup(newpriuser)
