@@ -1,6 +1,5 @@
 import difflib
 from difflib import SequenceMatcher
-import numpy as np
 import itertools
 alliedaircraft = []
 texthandle = open("Aircraft - Allied.txt", 'r')
