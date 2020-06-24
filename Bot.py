@@ -3,6 +3,23 @@ import re
 import time
 from datetime import datetime
 import os
+import difflib
+from difflib import SequenceMatcher
+import itertools
+
+
+def search(plane):
+    alliedaircraft = []
+    texthandle = open("Aircraft - Allied.txt", 'r')
+    for line in texthandle:
+        alliedaircraft.append(line.lower())
+    def cleanup2(plane):
+        plane = plane.replace("-", "")
+        plane = plane.replace(" ", "")
+        plane = plane.lower()
+        plane = plane.replace("\n", "")
+        return plane
+
 
 class Request:
     def __init__(self, priority, plane):
@@ -196,24 +213,24 @@ while True:
         elif "--skip" in message:                      #check for skip command, skip the first plane in the list
             if user == "zlayer___" or user == "adamtheenginerd":
                 commands['--skip'] += 1
-                buildstring = ""                    #create empty string that will show the list of requested planes
-                for plane in requestlist:           #iterate through the planes in the list
-                    buildstring += plane + ", "     #add the plane to the string and a comma
                 if len(requestlist) > 0:            #if there are planes in the requestlist
                     aircraft = requestlist.pop(0)
-                    sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encpde('utf-8'))
+                    sock.send(f"PRIVMSG {channel} :{aircraft} has been skipped\r\n".encpde('utf-8'))
                 else:
                     sock.send(f"PRIVMSG {channel} :No aircraft in request list\r\n".encode('utf-8'))
 
         elif "--skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
             if user == "zlayer___" or user == "adamtheenginerd":
-                plane = re.findall("--skip[(.+)]", message)
+                plane = re.findall("--skip\[(.+)\]", message)
                 plane = cleanup(plane)
                 plane = plane.replace("'", "")
-                for n in range(len(requestlist)):
-                    if requestlist[n] == plane:
-                        requestlist.pop(n)
-                sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
+                if len(requestlist) > 0:
+                    for n in range(len(requestlist)):
+                        if requestlist[n] == plane:
+                            requestlist.pop(n)
+                    sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
+                else:
+                    sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
 
         elif "--requests" in message:               #check for requests message. Same code as before, but first plane is not removed
             commands['--requests'] += 1
