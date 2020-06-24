@@ -13,6 +13,10 @@ def search(plane):
     texthandle = open("Aircraft - Allied.txt", 'r')         #open file that contains all useful allied aircraft
     for line in texthandle:                                 #iterate through text file
         alliedaircraft.append(line.lower())                 #add the aircraft names to the list
+    axisaircraft = []
+    texthandle2 = open("Aircraft - Axis.txt", 'r')
+    for line in texthandle2:
+        axisaircraft.append(line.lower())
     def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
         plane = plane.replace("-", "")
         plane = plane.replace(" ", "")
@@ -29,6 +33,14 @@ def search(plane):
         elif len(plane1) >= len(plane):                     #if not a perfect match
             similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)+1]).ratio()    #calculate percent match
             similarities[plane1] = similarity * 100                                             #multiply by 100 for actual percent readings
+    for plane1 in axisaircraft:                           #iterate through all allied planes
+        plane1 = cleanup2(plane1)                           #cleanup the name
+        if plane == plane1:                                 #if they are a perfect match
+            similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
+            break
+        elif len(plane1) >= len(plane):                     #if not a perfect match
+            similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)+1]).ratio()    #calculate percent match
+            similarities[plane1] = similarity * 100 
     sortedlist = list()                 #creating empty list to hold sorted users
     for thing in similarities.items():     #iterate through the keys and terms of usercount dictionary
         sortedlist.append(thing)        #add each key,value pair to sortedlist
