@@ -12,7 +12,7 @@ def search(plane):
     alliedaircraft = []             #all allied aircraft that could be considered useful
     texthandle = open("Aircraft - Allied.txt", 'r')         #open file that contains all useful allied aircraft
     for line in texthandle:                                 #iterate through text file
-        alliedaircraft.append(line.lower())                 #add the aircraft names to the list
+        alliedaircraft.append(line.strip())                 #add the aircraft names to the list
     axisaircraft = []
     texthandle2 = open("Aircraft - Axis.txt", 'r')
     for line in texthandle2:
