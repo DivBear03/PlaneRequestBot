@@ -210,7 +210,7 @@ while True:
             plane = plane.replace("'", "")
             if len(requestlist) > 0:
                 for n in range(len(requestlist)):
-                    if requestlist[n] == plane:
+                    if requestlist[n-1] == plane:
                         requestlist.pop(n)
                 sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
             else:
