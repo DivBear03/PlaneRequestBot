@@ -22,6 +22,8 @@ def search(plane):
         plane = plane.replace(" ", "")
         plane = plane.lower()
         plane = plane.replace("\n", "")
+        plane = plane.replace("(", "")
+        plane = plane.replace(")", "")
         return plane
     similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
     plane = cleanup2(plane)
@@ -57,10 +59,9 @@ def search(plane):
 
     samesims = []                                   #list to hold all top results with the same similarity
     samesims.append(sortedlist[0])                  #add the top one
-    for n in range(len(sortedlist)):
-        if sortedlist[n][1] == sortedlist[n-1][1]:  #if the current similarity is equal to the previous one
+    for n in range(1, len(sortedlist)):
+        if sortedlist[n][1] == samesims[0][1]:  #if the current similarity is equal to the similarity of the top result one
             samesims.append(sortedlist[n])          #add that plane and its similarity
-    
     shortestindex = 0                               #algorithm to determine what the plane with the shortest name is
     shortest = len(samesims[0][0])                  #set the shortest string length to be the first plane's string length
     for n in range(1, len(samesims)):               #iterate through the next terms of the list of planes with the same similarities
