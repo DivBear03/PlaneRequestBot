@@ -9,9 +9,16 @@ for line in texthandle:
 while True:
     similarities = {}
     plane = input("Please enter the plane name: ")
+    plane = plane.replace("-", "")
+    plane = plane.replace(" ", "")
+    plane = plane.lower()
     for plane1 in alliedaircraft:
-        similarity = difflib.SequenceMatcher(None, plane, plane1).ratio()
-        similarities[plane1] = similarity * 100
+        plane1 = plane1.replace("-", "")
+        plane1 = plane1.replace(" ", "")
+        plane1 = plane1.replace("\n", "")
+        if len(plane1) >= len(plane):
+            similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)]).ratio()
+            similarities[plane1] = similarity * 100
 
     sortedlist = list()                 #creating empty list to hold sorted users
     for thing in similarities.items():     #iterate through the keys and terms of usercount dictionary
