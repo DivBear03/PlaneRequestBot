@@ -32,4 +32,4 @@ while True:
             sortedlist[j+1] = item
             j = j-1
         sortedlist[j+1] = temp
-    print(sortedlist[0])
+    print(sortedlist[0][0])
