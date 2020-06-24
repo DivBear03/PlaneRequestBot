@@ -6,18 +6,18 @@ alliedaircraft = []
 texthandle = open("Aircraft - Allied.txt", 'r')
 for line in texthandle:
     alliedaircraft.append(line.lower())
-while True:
-    similarities = {}
-    plane = input("Please enter the plane name: ")
+def cleanup2(plane):
     plane = plane.replace("-", "")
     plane = plane.replace(" ", "")
     plane = plane.lower()
+    plane = plane.replace("\n", "")
+while True:
+    similarities = {}
+    plane = input("Please enter the plane name: ")
+    plane = cleanup2(plane)
     for plane1 in alliedaircraft:
-        plane1 = plane1.replace("-", "")
-        plane1 = plane1.replace(" ", "")
-        plane1 = plane1.replace("\n", "")
         if len(plane1) >= len(plane):
-            similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)]).ratio()
+            similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)).ratio()
             similarities[plane1] = similarity * 100
 
     sortedlist = list()                 #creating empty list to hold sorted users
