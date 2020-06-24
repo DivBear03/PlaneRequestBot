@@ -9,26 +9,26 @@ import itertools
 
 
 def search(plane):
-    alliedaircraft = []
-    texthandle = open("Aircraft - Allied.txt", 'r')
-    for line in texthandle:
-        alliedaircraft.append(line.lower())
-    def cleanup2(plane):
+    alliedaircraft = []             #all allied aircraft that could be considered useful
+    texthandle = open("Aircraft - Allied.txt", 'r')         #open file that contains all useful allied aircraft
+    for line in texthandle:                                 #iterate through text file
+        alliedaircraft.append(line.lower())                 #add the aircraft names to the list
+    def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
         plane = plane.replace("-", "")
         plane = plane.replace(" ", "")
         plane = plane.lower()
         plane = plane.replace("\n", "")
         return plane
-    similarities = {}
-    plane = cleanup2(plane)
-    for plane1 in alliedaircraft:
-        plane1 = cleanup2(plane1)
-        if plane == plane1:
-            similarities[plane1] = 100
+    similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
+    plane = cleanup2(plane)                                 #cleanup algorithm for removing whitespace
+    for plane1 in alliedaircraft:                           #iterate through all allied planes
+        plane1 = cleanup2(plane1)                           #cleanup the name
+        if plane == plane1:                                 #if they are a perfect match
+            similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
             break
-        elif len(plane1) >= len(plane):
-            similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)+1]).ratio()
-            similarities[plane1] = similarity * 100
+        elif len(plane1) >= len(plane):                     #if not a perfect match
+            similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)+1]).ratio()    #calculate percent match
+            similarities[plane1] = similarity * 100                                             #multiply by 100 for actual percent readings
     sortedlist = list()                 #creating empty list to hold sorted users
     for thing in similarities.items():     #iterate through the keys and terms of usercount dictionary
         sortedlist.append(thing)        #add each key,value pair to sortedlist
@@ -41,30 +41,32 @@ def search(plane):
             sortedlist[j+1] = item
             j = j-1
         sortedlist[j+1] = temp
-    if sortedlist[0][1] > 50: 
-        return sortedlist[0][0].replace("\n", "")
+    if sortedlist[0][1] > 50:                       #if the match found is reasonably comparable to the request
+        return sortedlist[0][0].replace("\n", "")   #return the plane with the highest match
+    else:
+        return "No match"
 
 
-class Request:
+'''class Request:
     def __init__(self, priority, plane):
         self.priority = priority
-        self.plane = plane
+        self.plane = plane'''
 
 
-path = 'C:\\Users\\esben\\WarThunderFlightModels'
+'''path = 'C:\\Users\\esben\\WarThunderFlightModels'
 folder = os.fsencode(path)
 filenames = []
 for file in os.listdir(folder):
     filename = os.fsdecode(file)
     if filename.endswith('.blk'):
         filename = filename.replace("_", " ")
-        filenames.append(filename[:len(filename)-4])
+        filenames.append(filename[:len(filename)-4])'''
 
 
-priorityusers = []                  #initializing the list of users with priority: mods, VIPs, etc
+'''priorityusers = []                  #initializing the list of users with priority: mods, VIPs, etc
 priorityhandle = open("VIPs.txt", 'r+')
 for line in priorityhandle:
-    priorityusers.append(line.strip())
+    priorityusers.append(line.strip())'''
 
 
 texthandle = open("logs.txt", 'a+')                                     #opening logs file
@@ -88,12 +90,12 @@ def time_convert(sec):
     return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
 
 
-def find(request):
+'''def find(request):
     possibilities = []
     for fm in filenames:
         if request in fm:
             possibilities.append(fm)
-    return possibilities
+    return possibilities'''
 
 
 server = 'irc.chat.twitch.tv'       #server address
@@ -215,12 +217,12 @@ while True:
             plane = re.findall("--request (.+)", message)                   #pull out the plane name
             plane = cleanup(plane)                                          #clean up the list object
             plane = plane.replace("'", "")                                  #replace single quotes with nothing
-            if user in priorityusers:
-                request = Request(True, plane)
-                sock.send(f"PRIVMSG {channel} :{plane} has been requested by priority user {user}\r\n".encode('utf-8'))
+            result = search(plane)
+            if result == "No match":
+                sock.send(f"PRIVMSG {channel} :Sorry, no match is found by algorithm\r\n".encode('utf-8'))
             else:
-                request = Request(False, plane)
-                sock.send(f"PRIVMSG {channel} :{plane} has been requested\r\n".encode('utf-8'))
+                requestlist.append(result)
+                sock.send(f"PRIVMSG {channel} :{result} has been requested\r\n".encode('utf-8'))
             '''checked = False
             for actual in filenames:
                 if plane in actual:
@@ -228,7 +230,6 @@ while True:
             if checked == False:
                 sock.send(f"PRIVMSG {channel} :No aircraft with that name exists\r\n".encode('utf-8'))
             else:'''
-            requestlist.append(request)                                       #add the plane name to the list of requested planes
             print(requestlist)              #print the list
 
 
