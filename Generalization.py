@@ -11,13 +11,18 @@ def cleanup2(plane):
     plane = plane.replace(" ", "")
     plane = plane.lower()
     plane = plane.replace("\n", "")
+    return plane
 while True:
     similarities = {}
     plane = input("Please enter the plane name: ")
     plane = cleanup2(plane)
     for plane1 in alliedaircraft:
-        if len(plane1) >= len(plane):
-            similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)).ratio()
+        plane1 = cleanup2(plane1)
+        if plane == plane1:
+            similarities[plane1] = 100
+            break
+        elif len(plane1) >= len(plane):
+            similarity = difflib.SequenceMatcher(None, plane, plane1[:len(plane)+1]).ratio()
             similarities[plane1] = similarity * 100
 
     sortedlist = list()                 #creating empty list to hold sorted users
@@ -32,4 +37,4 @@ while True:
             sortedlist[j+1] = item
             j = j-1
         sortedlist[j+1] = temp
-    print(sortedlist[0][0])
+    print(sortedlist[0][0].replace("\n", ""))
