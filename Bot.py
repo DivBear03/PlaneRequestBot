@@ -234,6 +234,8 @@ while True:
                 sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
         else:
             sock.send(f"PRIVMSG {channel} :You do not have permission to skip planes\r\n".encode('utf-8'))
+
+            
     '''elif "--add" in chat and user == "adamtheenginerd":
         newpriuser = re.findall("--add (.+)", chat)
         newpriuser = cleanup(newpriuser)
@@ -294,7 +296,7 @@ while True:
         elif "--commands" in chat:
             sock.send(f"PRIVMSG {channel} :Learn commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
 
-            
+
         '''elif "ssn" in message and count > 2:
             sock.send(f"PRIVMSG {channel} :Praise SSN!\r\n".encode('utf-8'))'''
 
