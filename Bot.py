@@ -42,6 +42,8 @@ def search(plane):
     sortedlist = list()                 #creating empty list to hold sorted users
     for thing in similarities.items():     #iterate through the keys and terms of usercount dictionary
         sortedlist.append(thing)        #add each key,value pair to sortedlist
+
+
     for i in range(1, len(sortedlist)):         #insertion sort algorithm
         nextElementValue = sortedlist[i][1]
         temp = sortedlist[i]
@@ -51,8 +53,22 @@ def search(plane):
             sortedlist[j+1] = item
             j = j-1
         sortedlist[j+1] = temp
-    if sortedlist[0][1] > 50:                       #if the match found is reasonably comparable to the request
-        return sortedlist[0][0].replace("\n", "")   #return the plane with the highest match
+
+
+    samesims = []                                   #list to hold all top results with the same similarity
+    samesims.append(sortedlist[0])                  #add the top one
+    for n in range(len(sortedlist)):
+        if sortedlist[n][1] == sortedlist[n-1][1]:  #if the current similarity is equal to the previous one
+            samesims.append(sortedlist[n])          #add that plane and its similarity
+    
+    shortestindex = 0                               #algorithm to determine what the plane with the shortest name is
+    shortest = len(samesims[0][0])                  #set the shortest string length to be the first plane's string length
+    for n in range(1, len(samesims)):               #iterate through the next terms of the list of planes with the same similarities
+        if len(samesims[n][0]) < shortest:          #if the present plane has a shorter string length
+            shortest = len(samesims[n][0])          #make the shortest length to be that length
+            shortestindex = n                       #set the index of the shortest string length to be that index
+    if samesims[shortestindex][1] > 50:                       #if the match found is reasonably comparable to the request
+        return samesims[shortestindex][0].replace("\n", "")   #return the plane with the highest match
     else:
         return "No match"
 
