@@ -95,7 +95,7 @@ priorityhandle = open("VIPs.txt", 'r+')
 for line in priorityhandle:
     priorityusers.append(line.strip())'''
 
-authorized = ["adamtheenginerd", "zlayer___", "kingsman784"]
+authorized = ["adamtheenginerd", "zlayer___"]
 
 texthandle = open("logs.txt", 'a+')                                     #opening logs file
 texthandle.write("Tracking start time: ")
@@ -254,13 +254,6 @@ while True:
             else:
                 requestlist.append(result)
                 sock.send(f"PRIVMSG {channel} :{result} has been requested\r\n".encode('utf-8'))
-            '''checked = False
-            for actual in filenames:
-                if plane in actual:
-                    checked = True
-            if checked == False:
-                sock.send(f"PRIVMSG {channel} :No aircraft with that name exists\r\n".encode('utf-8'))
-            else:'''
             print(requestlist)              #print the list
 
 
@@ -300,6 +293,8 @@ while True:
 
         elif "--commands" in chat:
             sock.send(f"PRIVMSG {channel} :Learn commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
+
+            
         '''elif "ssn" in message and count > 2:
             sock.send(f"PRIVMSG {channel} :Praise SSN!\r\n".encode('utf-8'))'''
 
