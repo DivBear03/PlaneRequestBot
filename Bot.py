@@ -105,6 +105,16 @@ def search(plane):                                                      #search 
     else:
         return "No match"
 
+def indexOf(plane, inputlist):
+    selected = 0
+    if len(inputlist) > 0:
+        for n in range(len(inputlist)):
+            if inputlist[n-1] == plane:
+                selected = n-1
+                return selected
+                break
+    return -1
+
 '''class Request:
     def __init__(self, priority, plane):
         self.priority = priority
@@ -225,19 +235,14 @@ while True:
             plane = re.findall("--skip\[(.+)\]", message)
             plane = cleanup(plane)
             plane = plane.replace("'", "")
-            selected = 0
-            if len(requestlist) > 0:
-                for n in range(len(requestlist)):
-                    if requestlist[n-1] == plane:
-                        selected = n-1
-                        break
-                requestlist.pop(selected)
-                if plane in requestlist:
-                    sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
-                else:
-                    sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
+            selected = indexOf(plane, requestlist)
+            requestlist.pop(selected)
+            if plane in requestlist:
+                sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
             else:
-                sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
+                sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
+        else:
+            sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
     elif "--delLast" in message or "--dellast" in message:
         if user in authorized:
