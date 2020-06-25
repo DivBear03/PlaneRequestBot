@@ -95,7 +95,7 @@ priorityhandle = open("VIPs.txt", 'r+')
 for line in priorityhandle:
     priorityusers.append(line.strip())'''
 
-authorized = ["adamtheenginerd", "zlayer___"]
+authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]
 
 texthandle = open("logs.txt", 'a+')                                     #opening logs file
 texthandle.write("Tracking start time: ")
@@ -152,6 +152,15 @@ feedback = False        #boolean to indicate whether the program is waiting for 
 
 requests = {}
 
+requestlist.append("A-26C-45")
+requestlist.append("ki-94-ii")
+requestlist.append("F4F-4")
+requestlist.append("P-47M-1-RE")
+requestlist.append("J29A")
+requestlist.append("ki-83")
+requestlist.append("fw 190 a-4")
+requestlist.append("Po-2")
+
 
 while True:
     
@@ -167,7 +176,6 @@ while True:
 
     if "--" not in chat:
         continue
-
 
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)                                                #clean up the list object
@@ -234,7 +242,7 @@ while True:
             if len(requestlist) > 0:
                 for n in range(len(requestlist)):
                     if requestlist[n-1] == plane:
-                        requestlist.pop(n)
+                        requestlist.pop(n-1)
                 sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
             else:
                 sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
