@@ -36,6 +36,7 @@ def search(plane):                                                      #search 
         plane = plane.replace(")", "")
         return plane
     
+    
     def gestalt(plane,plane1):
         return (100 * difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio())
     
@@ -91,29 +92,29 @@ def search(plane):                                                      #search 
     similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
     plane = cleanup2(plane)
 
-    foreign = False
-    if "usa" in plane or "ussr" in plane or 'japan' in plane or 'germany' in plane or 'italy' in plane or 'china' in plane or 'france' in plane or 'greatbritain' in plane:
-        foreign = True
+    # foreign = False
+    # if "usa" in plane or "ussr" in plane or 'japan' in plane or 'germany' in plane or 'italy' in plane or 'china' in plane or 'france' in plane or 'greatbritain' in plane:
+    #     foreign = True
 
 
-    if foreign == False:
-        for plane1 in aircraft:
-            sim = defSim(plane, plane1)
-            sim1 = isSim(plane,plane1)
-            sim2 = inSim(plane,plane1)
-            sim3 = mineditDist(plane, plane1)
-            plane1 = plane1.replace("\n", "")            
-            similarities[plane1] = (sim + sim1 + sim2 + .5*sim3)/4                                             
+    #if foreign == False:
+    for plane1 in aircraft:
+        sim = defSim(plane, plane1)
+        sim1 = isSim(plane,plane1)
+        sim2 = inSim(plane,plane1)
+        sim3 = mineditDist(plane, plane1)
+        plane1 = plane1.replace("\n", "")            
+        similarities[plane1] = (sim + sim1 + sim2 + .5*sim3)/4                                             
         
-    else:
-        for plane1 in aircraft:
-            if plane == cleanup2(plane1):
-                similarities[plane1] = 100
-                break
-            elif "[" in plane1 and len(plane) <= len(cleanup2(plane1)):
-                similarity = gestalt(plane, plane1)
-                plane1 = plane1.replace("\n", "")
-                similarities[plane1] = similarity * 100
+    # else:
+    #     for plane1 in aircraft:
+    #         if plane == cleanup2(plane1):
+    #             similarities[plane1] = 100
+    #             break
+    #         elif "[" in plane1 and len(plane) <= len(cleanup2(plane1)):
+    #             similarity = gestalt(plane, plane1)
+    #             plane1 = plane1.replace("\n", "")
+    #             similarities[plane1] = similarity * 100
 
 
     sortedlist = list()                 #creating empty list to hold sorted users
