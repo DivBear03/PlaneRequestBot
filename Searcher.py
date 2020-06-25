@@ -21,12 +21,9 @@ import scipy.stats
 
 def search(plane):                                                      #search algorithm
     aircraft = []             #all allied aircraft that could be considered useful
-    texthandle = open("Aircraft - Allied.txt", 'r')         #open file that contains all useful allied aircraft
+    texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
     for line in texthandle:                                 #iterate through text file
         aircraft.append(line.strip())                 #add the aircraft names to the list
-    texthandle2 = open("Aircraft - Axis.txt", 'r')
-    for line in texthandle2:
-        aircraft.append(line.strip())
     def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
         plane = plane.replace("-", "")
         plane = plane.replace(" ", "")
