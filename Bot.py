@@ -21,14 +21,10 @@ def time_convert(sec):                                                  #functio
     return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
 
 def search(plane):                                                      #search algorithm
-    alliedaircraft = []             #all allied aircraft that could be considered useful
-    texthandle = open("Aircraft - Allied.txt", 'r')         #open file that contains all useful allied aircraft
+    aircraft = []             #all allied aircraft that could be considered useful
+    texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
     for line in texthandle:                                 #iterate through text file
-        alliedaircraft.append(line.strip())                 #add the aircraft names to the list
-    axisaircraft = []
-    texthandle2 = open("Aircraft - Axis.txt", 'r')
-    for line in texthandle2:
-        axisaircraft.append(line.strip())
+        aircraft.append(line.strip())                 #add the aircraft names to the list
     def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
         plane = plane.replace("-", "")
         plane = plane.replace(" ", "")
@@ -46,7 +42,7 @@ def search(plane):                                                      #search 
 
 
     if foreign == False:
-        for plane1 in alliedaircraft:                           #iterate through all allied planes
+        for plane1 in aircraft:                           #iterate through all allied planes
             if plane == cleanup2(plane1):                                 #if they are a perfect match
                 similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
                 break
@@ -54,24 +50,9 @@ def search(plane):                                                      #search 
                 similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
                 plane1 = plane1.replace("\n", "")
                 similarities[plane1] = similarity * 100                                             #multiply by 100 for actual percent readings
-        for plane1 in axisaircraft:                           #iterate through all allied planes
-            if plane == cleanup2(plane1):                                 #if they are a perfect match
-                similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
-                break
-            elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
-                similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
-                plane1 = plane1.replace("\n", "")
-                similarities[plane1] = similarity * 100 
+
     else:
-        for plane1 in alliedaircraft:
-            if plane == cleanup2(plane1):
-                similarities[plane1] = 100
-                break
-            elif "[" in plane1 and len(plane) <= len(cleanup2(plane1)):         # if Ki-43-II [USA] has "[" and if 7 < 
-                similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()
-                plane1 = plane1.replace("\n", "")
-                similarities[plane1] = similarity * 100
-        for plane1 in axisaircraft:
+        for plane1 in aircraft:
             if plane == cleanup2(plane1):
                 similarities[plane1] = 100
                 break
@@ -79,7 +60,6 @@ def search(plane):                                                      #search 
                 similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()
                 plane1 = plane1.replace("\n", "")
                 similarities[plane1] = similarity * 100
-
 
     sortedlist = list()                 #creating empty list to hold sorted users
     for thing in similarities.items():     #iterate through the keys and terms of usercount dictionary
