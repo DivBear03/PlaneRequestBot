@@ -129,7 +129,7 @@ def time_convert(sec):
 server = 'irc.chat.twitch.tv'       #server address
 port = 6667                         #port number
 sock = socket.socket()              #creating socket for connection to twitch
-sock.settimeout(150.0)              #creating timeout timer
+sock.settimeout(240.0)              #creating timeout timer
 sock.connect((server, port))        #connecting to socket
 token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestbot user. Could be changed if you want to send from another twitch user account
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
@@ -235,7 +235,7 @@ while True:
         else:
             sock.send(f"PRIVMSG {channel} :You do not have permission to skip planes\r\n".encode('utf-8'))
 
-            
+
     '''elif "--add" in chat and user == "adamtheenginerd":
         newpriuser = re.findall("--add (.+)", chat)
         newpriuser = cleanup(newpriuser)
