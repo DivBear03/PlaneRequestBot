@@ -254,8 +254,15 @@ while True:
             if result == "No match":
                 sock.send(f"PRIVMSG {channel} :Sorry, no match is found by algorithm\r\n".encode('utf-8'))
             else:
-                requestlist.append(result)
-                sock.send(f"PRIVMSG {channel} :{result} has been requested\r\n".encode('utf-8'))
+                duplicate = False
+                for thing in requestlist:
+                    if thing == result:
+                        duplicate = True
+                if duplicate == True:
+                    sock.send(f"PRIVMSG {channel} :{result} is a duplicate\r\n".encode('utf-8'))
+                else:
+                    requestlist.append(result)
+                    sock.send(f"PRIVMSG {channel} :{result} has been requested\r\n".encode('utf-8'))
             print(requestlist)              #print the list
 
 
@@ -277,7 +284,7 @@ while True:
                 commands['--skip'] += 1
                 if len(requestlist) > 0:            #if there are planes in the requestlist
                     aircraft = requestlist.pop(0)
-                    sock.send(f"PRIVMSG {channel} :{aircraft} has been skipped\r\n".encpde('utf-8'))
+                    sock.send(f"PRIVMSG {channel} :{aircraft} has been skipped\r\n".encode('utf-8'))
                 else:
                     sock.send(f"PRIVMSG {channel} :No aircraft in request list\r\n".encode('utf-8'))
 
@@ -335,3 +342,7 @@ texthandle.close()      #closing connection to file
 sock.close()            #closing connection to Twitch IRC
 # Receiving message format :<user>!<user>@<user>.tmi.twitch.tv PRIVMSG <channel> :<message>
 # Sending message format  PRIVMSG <channel> :<message>
+
+
+
+#A-26C-45, ki-94-ii, F4F-4, A-26C-45, P-47M-1-RE, J29A, ki-83, fw 190 a-4, Po-2,
