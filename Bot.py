@@ -50,7 +50,7 @@ def search(plane):                                                      #search 
             if plane == cleanup2(plane1):                                 #if they are a perfect match
                 similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
                 break
-            elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
+            elif len(plane) <= len(cleanup2(plane)) and "[" not in plane1:                     #if not a perfect match
                 similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
                 plane1 = plane1.replace("\n", "")
                 similarities[plane1] = similarity * 100                                             #multiply by 100 for actual percent readings
@@ -67,7 +67,7 @@ def search(plane):                                                      #search 
             if plane == cleanup2(plane1):
                 similarities[plane1] = 100
                 break
-            elif "[" in plane1 and len(plane) <= len(cleanup2(plane1)):
+            elif "[" in plane1 and len(plane) <= len(cleanup2(plane1)):         # if Ki-43-II [USA] has "[" and if 7 < 
                 similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()
                 plane1 = plane1.replace("\n", "")
                 similarities[plane1] = similarity * 100
@@ -76,7 +76,7 @@ def search(plane):                                                      #search 
                 similarities[plane1] = 100
                 break
             elif "[" in plane1 and len(plane) <= len(cleanup2(plane1)):
-                similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane+1)]).ratio()
+                similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()
                 plane1 = plane1.replace("\n", "")
                 similarities[plane1] = similarity * 100
 

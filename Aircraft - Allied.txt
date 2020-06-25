@@ -18,9 +18,9 @@ P-39Q-5
 P-38E
 P-38G-1
 XP-38G
-Ki-43-II [USA]
+Ki-43 [USA]
 XP-55
-Ki-61-Ib [USA)]
+Ki-61 [USA)]
 P-51A
 P-43A-1
 PBM-3
@@ -223,8 +223,8 @@ P-63C-5 [USSR]
 La-11
 P-63A-10 [USSR]
 Yak-3 VK-107
-Spitfire Mk IXc [USSR]
-Fw 190 D-9 [USSR]
+Spitfire [USSR]
+Fw 190 [USSR]
 MiG-15bis ISH
 La-174
 MiG-17AS
@@ -300,7 +300,7 @@ Boston Mk I
 D. 520 [Great Britain]
 D. 521 [Great Britain]
 Martlet Mk IV
-Avenger Mk II [Great Britain]
+Avenger [Great Britain]
 Boomerang Mk I
 Boomerang Mk II
 Hudson Mk V
@@ -323,9 +323,9 @@ China
 Gladiator Mk I [China]
 CW-21
 P-66
-P-40E-1 [China]
+P-40E [China]
 P-43A-1
-P-47D-28 [China]
+P-47D [China]
 P-51D-20 [China]
 P-38L-1
 P-51K
