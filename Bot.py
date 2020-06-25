@@ -28,7 +28,7 @@ def search(plane):                                                      #search 
     axisaircraft = []
     texthandle2 = open("Aircraft - Axis.txt", 'r')
     for line in texthandle2:
-        axisaircraft.append(line.lower())
+        axisaircraft.append(line.strip())
     def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
         plane = plane.replace("-", "")
         plane = plane.replace(" ", "")
@@ -52,6 +52,7 @@ def search(plane):                                                      #search 
                 break
             elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
                 similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
+                plane1 = plane1.replace("\n", "")
                 similarities[plane1] = similarity * 100                                             #multiply by 100 for actual percent readings
         for plane1 in axisaircraft:                           #iterate through all allied planes
             if plane == cleanup2(plane1):                                 #if they are a perfect match
@@ -59,6 +60,7 @@ def search(plane):                                                      #search 
                 break
             elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
                 similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
+                plane1 = plane1.replace("\n", "")
                 similarities[plane1] = similarity * 100 
     else:
         for plane1 in alliedaircraft:
@@ -67,6 +69,7 @@ def search(plane):                                                      #search 
                 break
             elif "[" in plane1 and len(plane) <= len(cleanup2(plane1)):
                 similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()
+                plane1 = plane1.replace("\n", "")
                 similarities[plane1] = similarity * 100
 
 
@@ -98,7 +101,6 @@ def search(plane):                                                      #search 
             shortest = len(samesims[n][0])          #make the shortest length to be that length
             shortestindex = n                       #set the index of the shortest string length to be that index
     if samesims[shortestindex][1] > 70:             #if the match found is reasonably comparable to the request
-        samesims[shortestindex][0] = samesims[shortestindex][0].replace("\n", "")
         return samesims[shortestindex]              #return the plane with the highest match
     else:
         return "No match"
@@ -139,7 +141,7 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                        #channel name, must be all lowercase and have hashtag before channel name
+channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -161,6 +163,7 @@ while True:
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
+        print(chat)
     except:
         break
     count += 1
@@ -246,18 +249,22 @@ while True:
             result = search(plane)
             if result == "No match":
                 sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))
-                requests[plane] = result
+                requests[plane] = str(result)
             else:
-                requests[plane] = result
+                requests[plane] = str(result)
                 duplicate = False
                 for thing in requestlist:
                     if thing == result:
                         duplicate = True
                 if duplicate == True:
-                    sock.send(f"PRIVMSG {channel} :{result} is a duplicate\r\n".encode('utf-8'))
+                    planeresult = str(result[0])
+                    planeresult = planeresult.replace("\n", "")
+                    sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
                 else:
-                    requestlist.append(result)
-                    sock.send(f"PRIVMSG {channel} :{result} requested\r\n".encode('utf-8'))
+                    planeresult = str(result[0])
+                    planeresult = planeresult.replace("\n", "")
+                    requestlist.append(planeresult)
+                    sock.send(f"PRIVMSG {channel} :{planeresult} requested\r\n".encode('utf-8'))
             print(requestlist)              #print the list
 
 
