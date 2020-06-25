@@ -174,6 +174,12 @@ while True:
     startmessage = (len(user)) * 3 + len(channel) + 28                  #calculate starting index of message
     message = chat[startmessage:]                                       #pull out the message text
     print(user + ": " + message.rstrip())                               #print simplified version of user and message
+    if tracking == True and count > 2:                        #if tracking is turned on
+        if usercount.get(user, 0) == 0:         #check to see if the user already exists in the dictionary
+            usercount[user] = 1                 #if the user is not there, create a new term and make it equal to one
+        else:
+            usercount[user] = usercount[user] + 1       #otherwise, add one to the user's current count
+    
     if "--" not in chat:
         continue
 
@@ -210,7 +216,6 @@ while True:
                 usercount[user] = usercount[user] + 1  
             print("Tracking = " + str(tracking))
 
-
     elif chat.startswith("PING"):               #check for PING from Twitch IRC
         sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
 
@@ -233,7 +238,6 @@ while True:
                     sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
             else:
                 sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
-
 
     elif "--delLast" in message or "--dellast" in message:
         if user in authorized:
@@ -296,15 +300,13 @@ while True:
             sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
 
 
-        if tracking == True and count > 2:                        #if tracking is turned on
-            if usercount.get(user, 0) == 0:         #check to see if the user already exists in the dictionary
-                usercount[user] = 1                 #if the user is not there, create a new term and make it equal to one
-            else:
-                usercount[user] = usercount[user] + 1       #otherwise, add one to the user's current count
+        
 
 sortedlist = list()                 #creating empty list to hold sorted users
 for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
     sortedlist.append(thing)        #add each key,value pair to sortedlist
+
+
 for i in range(1, len(sortedlist)):         #insertion sort algorithm
     nextElementValue = sortedlist[i][1]
     temp = sortedlist[i]
@@ -318,12 +320,14 @@ texthandle.write("\n")
 for item in sortedlist:
     print(item[0], str(item[1]))
     texthandle.write(str(item[0])+": "+str(item[1])+" messages\n")        #writing sortedlist data to file
+
+
 texthandle.write("Number of requests: " + str(commands['--request']) + "\n")
 texthandle.write("Tracking end time: ")
 texthandle.write(str(datetime.now()) + "\n\n")
 
 for request in requests:
-    requesthandle.append(request, requests[request])
+    requesthandle.write(request + "---->" + requests[request])
 
 texthandle.close()      #closing connection to file
 sock.close()            #closing connection to Twitch IRC
