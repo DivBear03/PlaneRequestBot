@@ -106,12 +106,12 @@ def search(plane):                                                      #search 
         return "No match"
 
 def indexOf(plane, inputlist):
-    selected = 0
+    index = 0
     if len(inputlist) > 0:
         for n in range(len(inputlist)):
-            if inputlist[n-1] == plane:
-                selected = n-1
-                return selected
+            if inputlist[n] == plane:
+                index = n
+                return index
                 break
     return -1
 
