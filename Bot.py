@@ -1,6 +1,7 @@
 import socket           #importing useful modules
 import re
 import time
+import os 
 from datetime import datetime
 import difflib
 from difflib import SequenceMatcher
@@ -222,7 +223,7 @@ while True:
                 else:
                     sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
             else:
-                sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
+                sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
 
     elif "--dellastreq" in message:
@@ -237,7 +238,7 @@ while True:
             plane = plane.replace("'", "")                                  #replace single quotes with nothing
             result = search(plane)
             if result == "No match":
-                sock.send(f"PRIVMSG {channel} :Sorry, no match is found by algorithm\r\n".encode('utf-8'))
+                sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))
                 requests[plane] = result
             else:
                 requests[plane] = result
@@ -249,7 +250,7 @@ while True:
                     sock.send(f"PRIVMSG {channel} :{result} is a duplicate\r\n".encode('utf-8'))
                 else:
                     requestlist.append(result)
-                    sock.send(f"PRIVMSG {channel} :{result} has been requested\r\n".encode('utf-8'))
+                    sock.send(f"PRIVMSG {channel} :{result} requested\r\n".encode('utf-8'))
             print(requestlist)              #print the list
 
 
@@ -263,7 +264,7 @@ while True:
                     sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))          #send the string of requested planes to the chat
                     removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
                 else:
-                    sock.send(f"PRIVMSG {channel} :No planes in request list\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
+                    sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
 
 
         elif "--requests" in message:               #check for requests message. Same code as before, but first plane is not removed
@@ -274,7 +275,7 @@ while True:
             if len(requestlist) > 0:
                 sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))
             else:
-                sock.send(f"PRIVMSG {channel} :No planes in request list\r\n".encode('utf-8'))
+                sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
 
         elif "--commands" in chat:
