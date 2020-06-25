@@ -18,9 +18,9 @@ P-39Q-5
 P-38E
 P-38G-1
 XP-38G
-Ki-43-II (USA)
+Ki-43-II [USA]
 XP-55
-Ki-61-Ib (USA)
+Ki-61-Ib [USA)]
 P-51A
 P-43A-1
 PV-2D
@@ -35,7 +35,7 @@ P-63C-5
 P-61C-1
 P-61A-1
 XP-50
-A6M2 (USA)
+A6M2 [USA]
 BTD-1
 Bf 109 F-4
 Kingcobra
@@ -55,7 +55,7 @@ P-51D-20-NA
 XA-38
 Bong's P-38J-15
 F7F-3
-P-38K (USA)
+P-38K [USA]
 A-26C-45
 Lanovski's P-47M-1-RE
 A-26C-45DT
@@ -208,24 +208,24 @@ I-301
 I-153P
 Hurrican Mk IIB
 I-16 Type 28
-P-40E-1 (USSR)
+P-40E-1 [USSR]
 I-180S
 P-39K-1
 Il-2M (Avenger)
 B-25J-30
 Golovachev's Yak-9M
-P-63A-5 (USSR)
+P-63A-5 [USSR]
 Pokryshkin's P-39N-0
 Yak-3T
 P-47D-27
 TIS MA
 Dolgushin's La-7
-P-63C-5 (USSR)
+P-63C-5 [USSR]
 La-11
-P-63A-10 (USSR)
+P-63A-10 [USSR]
 Yak-3 VK-107
-Spitfire Mk IXc (USSR)
-Fw 190 D-9 (USSR)
+Spitfire Mk IXc [USSR]
+Fw 190 D-9 [USSR]
 MiG-15bis ISH
 La-174
 MiG-17AS
@@ -298,10 +298,10 @@ Swift F.7
 Tuck's Gladiator Mk II
 Wirraway
 Boston Mk I
-D. 520 (Great Britain)
-D. 521 (Great Britain)
+D. 520 [Great Britain]
+D. 521 [Great Britain]
 Martlet Mk IV
-Avenger Mk II (Great Britain)
+Avenger Mk II [Great Britain]
 Boomerang Mk I
 Boomerang Mk II
 Hudson Mk V
@@ -321,13 +321,13 @@ Spitfire FR Mk XIVe
 Meteor F Mk.8 Reaper
 Hunter FGA.9
 China
-Gladiator Mk I (China)
+Gladiator Mk I [China]
 CW-21
 P-66
-P-40E-1 (China)
+P-40E-1 [China]
 P-43A-1
-P-47D-28 (China)
-P-51D-20 (China)
+P-47D-28 [China]
+P-51D-20 [China]
 P-38L-1
 P-51K
 F-86F-30
@@ -335,33 +335,33 @@ F-86F-40
 F-100A
 F-104A
 F-104G
-I-15bis (China)
-I-153 M-62 (China)
+I-15bis [China]
+I-153 M-62 [China]
 I-16 Chung 28
-I-16 Type 5 (China)
-i-16 Type 10 (China)
-Ki-27 otsu (China)
-Ki-43-III ko (China)
-Ki-44-II hei (China)
-Ki-61-I otsu (China)
-I-16 Type 17 (China)
-La-9 (China)
-MiG-9 (China)
-MiG-9 L (China)
+I-16 Type 5 [China]
+i-16 Type 10 [China]
+Ki-27 otsu [China]
+Ki-43-III ko [China]
+Ki-44-II hei [China]
+Ki-61-I otsu [China]
+I-16 Type 17 [China]
+La-9 [China]
+MiG-9 [China]
+MiG-9 L [China]
 J-2
 J-4
 J-6A
 J-7II
-Hs 123 A-1 (China)
-B-25J-30 (China)
-Mosquito FB Mk 26 (China)
-Il-10 (1946) (China)
-F-84G-21-RE (China)
+Hs 123 A-1 [China]
+B-25J-30 [China]
+Mosquito FB Mk 26 [China]
+Il-10 (1946) [China]
+F-84G-21-RE [China]
 Hawk III
-H-81A-2 (China)
-Ki-45 hei/tei (China)
-A6M2 (China)
-Ki-84 ko (China)
+H-81A-2 [China]
+Ki-45 hei/tei [China]
+A6M2 [China]
+Ki-84 ko [China]
 Shenyang F-5
 France
 D.371
@@ -387,14 +387,14 @@ V-156-F
 Br.693AB2
 Potez 630
 Potez 631
-A-35B (France)
-F6F-5 (France)
-SB2C-5 (France)
-P-63C-5 (France)
-F6F-5N (France)
-AD-4 (France)
+A-35B [France]
+F6F-5 [France]
+SB2C-5 [France]
+P-63C-5 [France]
+F6F-5N [France]
+AD-4 [France]
 F4U-7
-F8F-1B (France)
+F8F-1B [France]
 M.D.450B Barouga
 F-84G-26-RE
 M.D.452 IIC
@@ -403,7 +403,7 @@ F-100D
 Pallier's D.510
 D.371 H.S.9
 M.B.152C1
-Yak-3 (France)
+Yak-3 [France]
 Challe's Yak9T
 NC.900
 S.O.8000 Narval

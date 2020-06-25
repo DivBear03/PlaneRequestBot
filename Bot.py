@@ -26,6 +26,10 @@ def search(plane):
         return plane
     similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
     plane = cleanup2(plane)
+
+    foreign = False
+    if "usa" in plane or "ussr" in plane or 'japan' in plane or 'germany' in plane 
+
     for plane1 in alliedaircraft:                           #iterate through all allied planes
         if plane == cleanup2(plane1):                                 #if they are a perfect match
             similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop

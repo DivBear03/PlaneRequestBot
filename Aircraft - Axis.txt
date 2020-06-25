@@ -65,49 +65,49 @@ Ho 229 V3
 Me 262 A-1/U4
 Ar 234 B-2
 Me 262 A-1a
-MiG-15bis (Germany)
-G.91 R/3 (Germany)
+MiG-15bis [Germany]
+G.91 R/3 [Germany]
 Ar 234 C-3
 Me 262 C-1a
 Me 262 C-2b
 CL-13A Mk 5
-MiG-19S (Germany)
+MiG-19S [Germany]
 CL-13B Mk.6
-MiG-21MF (Germany)
-F-86K (Germany)
-F-104G (Germany)
+MiG-21MF [Germany]
+F-86K [Germany]
+F-104G [Germany]
 Flegel's Bf 109 A
 He 51 B-2/H
-Marcolin's CR.42 CN (Germany)
+Marcolin's CR.42 CN [Germany]
 Fw 189 A-1
 Hawk H-75A-2
 He 112 B-1/U2
-CR.42 (Germany)
-G.50 Serie 2 (Germany)
-G.50 AS Serie 7 (Germany)
-C.200 serie 3 (Germany)
-C.200 serie 7 (Germany)
-C.202 (Germany)
+CR.42 [Germany]
+G.50 Serie 2 [Germany]
+G.50 AS Serie 7 [Germany]
+C.200 serie 3 [Germany]
+C.200 serie 7 [Germany]
+C.202 [Germany]
 He 112 B-2/U2
-IL-2 (1942) (Germany)
+IL-2 (1942) [Germany]
 Bf 109 E-7/U2
-Yak-1B (Germany)
+Yak-1B [Germany]
 Bf 110 C-6
 Bf 109 G-2
-P-47D (Germany)
+P-47D [Germany]
 Hs 129 B-2 (Romania)
-La-5FN (Germany)
+La-5FN [Germany]
 Ta 154 A-1
 Fw 190 D-13
 Do 335 B-2
 Bf 109 Z
-Tempest Mk V (Germany)
+Tempest Mk V [Germany]
 Fw 190 C
 Me 262 A-1a/U1
 He 162 A-1
-Sea Hawk Mk.100 (Germany)
+Sea Hawk Mk.100 [Germany]
 Me 262 A-2a
-G.91 R/4 (Germany)
+G.91 R/4 [Germany]
 Japan
 Ki-10-II C
 Ki-10-I
@@ -171,23 +171,23 @@ Ki-84 hei
 Kikka
 Ki-200
 R2Y2 Kai V1
-F-86F-30 (Japan)
+F-86F-30 [Japan]
 R2Y2 Kai V2
-F-86F-40 (Japan)
+F-86F-40 [Japan]
 R2Y2 kai V3
-F-104J (Japan)
+F-104J [Japan]
 T-2
 F-4EJ Phantom II
 Hagiri's A5M4
 A7He1
 Ki-27 otsu Tachiarai
 Ki-44-II otsu
-Bf 109 E-7 (Japan)
-F4U-1A (Japan)
+Bf 109 E-7 [Japan]
+F4U-1A [Japan]
 Ki-100-II
 Ki-44-1 34
 Ki-96
-Fw 190 A-5 (Japan)
+Fw 190 A-5 [Japan]
 A7M1 (NK9H)
 Ki-61-I hei Tada's
 J2M4 Kai
@@ -195,7 +195,7 @@ J2M5 30mm
 Ki-87
 Ki-94-II
 J6K1
-F-86F-40 JASDF (Japan)
+F-86F-40 JASDF [Japan]
 Italy
 CR.32
 CR.32 quater
@@ -203,7 +203,7 @@ Ba.65 (K.14) L
 CR.42
 G.50 serie 2
 G.50 AS serie 7
-Ju 87 R-2 (Italy)
+Ju 87 R-2 [Italy]
 C.200 serie 3
 C.200 serie 7
 Re.2000 serie 1
@@ -212,7 +212,7 @@ C.202
 Breda 88 (P.XI)
 Re.2002 Early
 C.202EC
-Ju 87 D-3 (Italy)
+Ju 87 D-3 [Italy]
 Re.2001 serie 1
 Re.2001 CB
 Re.2001 CN
@@ -223,23 +223,23 @@ G.55 serie 1
 Re.2005 serie 0
 C.205N2
 SM.91
-Bf 109 G-14/AS (Italy)
+Bf 109 G-14/AS [Italy]
 SM.92
 G.56
-Vampire FB 52A (Italy)
+Vampire FB 52A [Italy]
 G.91 pre-serie
-F-84G-21-RE (Italy)
+F-84G-21-RE [Italy]
 G.91 R/1
 CL-13 Mk.4
 G.91 YS
-F-86K (Italy)
-F-104S (Italy)
+F-86K [Italy]
+F-104S [Italy]
 Marcolin's C.R. 42 CN
 Cr.32 bis
 IAR-81C
 Re.2001 gruppo 22
 Hs 129 B-2 (Romania)
-Spitfire Mk Vb/trop (Italy)
+Spitfire Mk Vb/trop [Italy]
 Bf 109 G-2
 G.55S
 G.91 R/4
