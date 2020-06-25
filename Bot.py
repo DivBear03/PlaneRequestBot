@@ -214,7 +214,10 @@ while True:
                         selected = n-1
                         break
                 requestlist.pop(selected)
-                sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
+                if plane in requestlist:
+                    sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
+                else:
+                    sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
             else:
                 sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
 
