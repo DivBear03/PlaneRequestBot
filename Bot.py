@@ -131,7 +131,7 @@ texthandle.write(f"\n{channel}")
 
 
 requestlist = list()                                #creating empty list of requested planes
-go = True                                           #setting program to default enable at start, use --close command to disable bot
+go = False                                           #setting program to default enable at start, use --close command to disable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0}
@@ -154,15 +154,14 @@ while True:
     count += 1
     
 
-    if "--" not in chat:
-        continue
-
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)                                                #clean up the list object
     user = user.replace("'", "")                                        #remove single quotes
     startmessage = (len(user)) * 3 + len(channel) + 28                  #calculate starting index of message
     message = chat[startmessage:]                                       #pull out the message text
     print(user + ": " + message.rstrip())                                        #print simplified version of user and message
+    if "--" not in chat:
+        continue
     if "--disable" in chat:                 #check for disable command
         if user in authorized:
             go = False
@@ -208,15 +207,18 @@ while True:
             plane = re.findall("--skip\[(.+)\]", message)
             plane = cleanup(plane)
             plane = plane.replace("'", "")
+            selected = 0
             if len(requestlist) > 0:
                 for n in range(len(requestlist)):
                     if requestlist[n-1] == plane:
-                        requestlist.pop(n-1)
+                        selected = n-1
+                        break
+                requestlist.pop(selected)
                 sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
             else:
                 sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
 
-                
+
     elif "--dellastreq" in message:
         requestlist.pop(len(requestlist)-1)
 
@@ -256,16 +258,6 @@ while True:
                     removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
                 else:
                     sock.send(f"PRIVMSG {channel} :No planes in request list\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
-
-
-        elif "--skip" in message:                      #check for skip command, skip the first plane in the list
-            if user in authorized:
-                commands['--skip'] += 1
-                if len(requestlist) > 0:            #if there are planes in the requestlist
-                    aircraft = requestlist.pop(0)
-                    sock.send(f"PRIVMSG {channel} :{aircraft} has been skipped\r\n".encode('utf-8'))
-                else:
-                    sock.send(f"PRIVMSG {channel} :No aircraft in request list\r\n".encode('utf-8'))
 
 
         elif "--requests" in message:               #check for requests message. Same code as before, but first plane is not removed
