@@ -71,6 +71,14 @@ def search(plane):                                                      #search 
                 similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()
                 plane1 = plane1.replace("\n", "")
                 similarities[plane1] = similarity * 100
+        for plane1 in axisaircraft:
+            if plane == cleanup2(plane1):
+                similarities[plane1] = 100
+                break
+            elif "[" in plane1 and len(plane) <= len(cleanup2(plane1)):
+                similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane+1)]).ratio()
+                plane1 = plane1.replace("\n", "")
+                similarities[plane1] = similarity * 100
 
 
     sortedlist = list()                 #creating empty list to hold sorted users
@@ -332,7 +340,14 @@ texthandle.write("Tracking end time: ")
 texthandle.write(str(datetime.now()) + "\n\n")
 
 for request in requests:
-    requesthandle.write(request + "---->" + requests[request] + "\n")
+    buildstring = ""
+    buildstring += request
+    for n in range(23-len(request)):
+        buildstring += "-"
+    buildstring += ">"
+    buildstring += str(requests[request])
+    buildstring += "\n"
+    requesthandle.write(buildstring)
 
 texthandle.close()      #closing connection to file
 sock.close()            #closing connection to Twitch IRC

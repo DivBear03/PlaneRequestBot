@@ -214,7 +214,7 @@ Il-2M (Avenger)
 B-25J-30
 Golovachev's Yak-9M
 P-63A-5 [USSR]
-Pokryshkin's P-39N-0
+P-39N-0 [USSR]
 Yak-3T
 P-47D-27
 TIS MA
