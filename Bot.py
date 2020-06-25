@@ -116,14 +116,6 @@ def time_convert(sec):
     return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
 
 
-'''def find(request):
-    possibilities = []
-    for fm in filenames:
-        if request in fm:
-            possibilities.append(fm)
-    return possibilities'''
-
-
 server = 'irc.chat.twitch.tv'       #server address
 port = 6667                         #port number
 sock = socket.socket()              #creating socket for connection to twitch
@@ -149,16 +141,6 @@ feedback = False        #boolean to indicate whether the program is waiting for 
 '''timeout = time.time() + 20                     #manual timer for testing'''
 
 requests = {}
-
-requestlist.append("A-26C-45")
-requestlist.append("ki-94-ii")
-requestlist.append("F4F-4")
-requestlist.append("P-47M-1-RE")
-requestlist.append("J29A")
-requestlist.append("ki-83")
-requestlist.append("fw 190 a-4")
-requestlist.append("Po-2")
-
 
 while True:
     
@@ -186,8 +168,6 @@ while True:
             go = False
             commands['--disable'] += 1
             print("BotOn = " + str(go))
-        else:
-            sock.send(f"PRIVMSG {channel} :You do not have permission to disable me\r\n".encode('utf-8'))
 
 
     elif "--enable" in chat:                      #check for enable command
@@ -195,15 +175,10 @@ while True:
             go = True
             commands['--enable'] += 1
             print("BotOn = " + str(go))
-        else:
-            sock.send(f"PRIVMSG {channel} :You do not have permission to enable me\r\n".encode('utf-8'))
 
     elif "--end" in chat:                   #check for end program command
         if user in authorized:
-            break
-        else:
-            sock.send(f"PRIVMSG {channel} :You do not have permission to kill the bot\r\n".encode('utf-8'))
-        
+            break        
 
 
     elif '--track' in chat:                     #check for tracking start command
@@ -211,8 +186,6 @@ while True:
             tracking = True
             commands['--track'] += 1
             print("Tracking = " + str(tracking))
-        else:
-            sock.send(f"PRIVMSG {channel} :You do not have permission to initiate tracking\r\n".encode('utf-8'))
 
 
     elif '--stoptrack' in chat:                 #check for tracking end command
@@ -224,8 +197,6 @@ while True:
             else:
                 usercount[user] = usercount[user] + 1  
             print("Tracking = " + str(tracking))
-        else:
-            sock.send(f"PRIVMSG {channel} :You do not have permission to halt tracking\r\n".encode('utf-8'))
 
 
     elif chat.startswith("PING"):               #check for PING from Twitch IRC
@@ -244,9 +215,8 @@ while True:
                 sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
             else:
                 sock.send(f"PRIVMSG {channel} :No planes in requestlist\r\n".encode('utf-8'))
-        else:
-            sock.send(f"PRIVMSG {channel} :You do not have permission to skip planes\r\n".encode('utf-8'))
 
+                
     elif "--dellastreq" in message:
         requestlist.pop(len(requestlist)-1)
 
@@ -313,14 +283,6 @@ while True:
             sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
 
 
-        '''elif "ssn" in message and count > 2:
-            sock.send(f"PRIVMSG {channel} :Praise SSN!\r\n".encode('utf-8'))'''
-
-
-        '''elif "adam" in message or "Adam" in message and count > 2: 
-            sock.send(f"PRIVMSG {channel} :Praise AdamTheEnginerd!\r\n".encode('utf-8'))'''
-
-
         if tracking == True and count > 2:                        #if tracking is turned on
             if usercount.get(user, 0) == 0:         #check to see if the user already exists in the dictionary
                 usercount[user] = 1                 #if the user is not there, create a new term and make it equal to one
@@ -349,9 +311,3 @@ texthandle.write(str(datetime.now()) + "\n\n")
 
 texthandle.close()      #closing connection to file
 sock.close()            #closing connection to Twitch IRC
-# Receiving message format :<user>!<user>@<user>.tmi.twitch.tv PRIVMSG <channel> :<message>
-# Sending message format  PRIVMSG <channel> :<message>
-
-
-
-#A-26C-45, ki-94-ii, F4F-4, A-26C-45, P-47M-1-RE, J29A, ki-83, fw 190 a-4, Po-2,
