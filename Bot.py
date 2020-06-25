@@ -13,8 +13,14 @@ def cleanup(chat):                                                      #functio
     chat = chat.replace("\\r", "")
     return chat
 
+def time_convert(sec):                                                  #function for converting seconds into a readable time
+    mins = sec // 60
+    sec = sec % 60
+    hours = mins // 60
+    mins = mins % 60
+    return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
 
-def search(plane):
+def search(plane):                                                      #search algorithm
     alliedaircraft = []             #all allied aircraft that could be considered useful
     texthandle = open("Aircraft - Allied.txt", 'r')         #open file that contains all useful allied aircraft
     for line in texthandle:                                 #iterate through text file
@@ -91,17 +97,16 @@ def search(plane):
         if len(samesims[n][0]) < shortest:          #if the present plane has a shorter string length
             shortest = len(samesims[n][0])          #make the shortest length to be that length
             shortestindex = n                       #set the index of the shortest string length to be that index
-    if samesims[shortestindex][1] > 70:                       #if the match found is reasonably comparable to the request
-        return samesims[shortestindex][0].replace("\n", "")   #return the plane with the highest match
+    if samesims[shortestindex][1] > 70:             #if the match found is reasonably comparable to the request
+        samesims[shortestindex][0] = samesims[shortestindex][0].replace("\n", "")
+        return samesims[shortestindex]              #return the plane with the highest match
     else:
         return "No match"
-
 
 '''class Request:
     def __init__(self, priority, plane):
         self.priority = priority
         self.plane = plane'''
-
 
 '''path = 'C:\\Users\\esben\\WarThunderFlightModels'
 folder = os.fsencode(path)
@@ -112,40 +117,27 @@ for file in os.listdir(folder):
         filename = filename.replace("_", " ")
         filenames.append(filename[:len(filename)-4])'''
 
-
 '''priorityusers = []                  #initializing the list of users with priority: mods, VIPs, etc
 priorityhandle = open("VIPs.txt", 'r+')
 for line in priorityhandle:
     priorityusers.append(line.strip())'''
 
-authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]
+authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]     #users authorized for all commands except track
 
-texthandle = open("logs.txt", 'a+')                                     #opening logs file
+texthandle = open("logs.txt", 'a+')                 #opening logs file
 texthandle.write("Tracking start time: ")
-texthandle.write(str(datetime.now()))                                        #printing the start time of logging to the file each time the program is run
+texthandle.write(str(datetime.now()))               #printing the start time of logging to the file each time the program is run
 
+requesthandle = open("input-output.txt", 'a+')      #opening file for recording requests and the search results for algorithm improvement 
 
-requesthandle = open("input-output.txt", 'a+')
-
-
-
-
-def time_convert(sec):
-    mins = sec // 60
-    sec = sec % 60
-    hours = mins // 60
-    mins = mins % 60
-    return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
-
-
-server = 'irc.chat.twitch.tv'       #server address
-port = 6667                         #port number
-sock = socket.socket()              #creating socket for connection to twitch
-sock.settimeout(240.0)              #creating timeout timer
-sock.connect((server, port))        #connecting to socket
+server = 'irc.chat.twitch.tv'                       #server address
+port = 6667                                         #port number
+sock = socket.socket()                              #creating socket for connection to twitch
+sock.settimeout(240.0)                              #creating timeout timer
+sock.connect((server, port))                        #connecting to socket
 token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestbot user. Could be changed if you want to send from another twitch user account
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
-nickname = 'planerequestbot'                                       #doesn't really matter, could be anything
+nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
 channel = '#adamtheenginerd'                        #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
@@ -153,16 +145,14 @@ texthandle.write(f"\n{channel}")
 
 
 requestlist = list()                                #creating empty list of requested planes
-go = False                                           #setting program to default enable at start, use --close command to disable bot
+go = False                                          #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0}
 count = 0
-specialuser = ""        #variable to hold the username of the person who made a request that returns multiple possible planes
-feedback = False        #boolean to indicate whether the program is waiting for a feedback on index of list returned by --request command
 '''timeout = time.time() + 20                     #manual timer for testing'''
 
-requests = {}
+requests = {}                                       #dictionary to hold requests and results
 
 while True:
     
@@ -175,15 +165,15 @@ while True:
         break
     count += 1
     
-
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)                                                #clean up the list object
     user = user.replace("'", "")                                        #remove single quotes
     startmessage = (len(user)) * 3 + len(channel) + 28                  #calculate starting index of message
     message = chat[startmessage:]                                       #pull out the message text
-    print(user + ": " + message.rstrip())                                        #print simplified version of user and message
+    print(user + ": " + message.rstrip())                               #print simplified version of user and message
     if "--" not in chat:
         continue
+
     if "--disable" in chat:                 #check for disable command
         if user in authorized:
             go = False
@@ -201,13 +191,11 @@ while True:
         if user in authorized:
             break        
 
-
     elif '--track' in chat:                     #check for tracking start command
         if user == "adamtheenginerd":
             tracking = True
             commands['--track'] += 1
             print("Tracking = " + str(tracking))
-
 
     elif '--stoptrack' in chat:                 #check for tracking end command
         if user == "adamtheenginerd":
@@ -244,8 +232,9 @@ while True:
                 sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
 
-    elif "--dellastreq" in message:
-        requestlist.pop(len(requestlist)-1)
+    elif "--delLast" in message or "--dellast" in message:
+        if user in authorized:
+            requestlist.pop(len(requestlist)-1)
 
     if go == True:                              #all code after this only runs if the bot is enabled
 
