@@ -246,7 +246,8 @@ while True:
 
     elif "--delLast" in message or "--dellast" in message:
         if user in authorized:
-            requestlist.pop(len(requestlist)-1)
+            plane = requestlist.pop(len(requestlist)-1)
+            sock.send(f"PRIVMSG {channel} :{plane} deleted\r\n".encode('utf-8'))
 
     if go == True:                              #all code after this only runs if the bot is enabled
 
