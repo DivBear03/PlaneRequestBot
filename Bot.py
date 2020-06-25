@@ -2,10 +2,8 @@ import socket           #importing useful modules
 import re
 import time
 from datetime import datetime
-import os
 import difflib
 from difflib import SequenceMatcher
-import itertools
 
 
 def search(plane):
