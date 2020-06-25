@@ -6,6 +6,13 @@ from datetime import datetime
 import difflib
 from difflib import SequenceMatcher
 
+def cleanup(chat):                                                      #function for cleaning up a list converted to a strings
+    chat = str(chat)
+    chat = chat.replace("[", "")
+    chat = chat.replace("]", "")
+    chat = chat.replace("\\r", "")
+    return chat
+
 
 def search(plane):
     alliedaircraft = []             #all allied aircraft that could be considered useful
@@ -28,22 +35,35 @@ def search(plane):
     plane = cleanup2(plane)
 
     foreign = False
-    if "usa" in plane or "ussr" in plane or 'japan' in plane or 'germany' in plane 
+    if "usa" in plane or "ussr" in plane or 'japan' in plane or 'germany' in plane or 'italy' in plane or 'china' in plane or 'france' in plane or 'greatbritain' in plane:
+        foreign = True
 
-    for plane1 in alliedaircraft:                           #iterate through all allied planes
-        if plane == cleanup2(plane1):                                 #if they are a perfect match
-            similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
-            break
-        elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
-            similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
-            similarities[plane1] = similarity * 100                                             #multiply by 100 for actual percent readings
-    for plane1 in axisaircraft:                           #iterate through all allied planes
-        if plane == cleanup2(plane1):                                 #if they are a perfect match
-            similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
-            break
-        elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
-            similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
-            similarities[plane1] = similarity * 100 
+
+    if foreign == False:
+        for plane1 in alliedaircraft:                           #iterate through all allied planes
+            if plane == cleanup2(plane1):                                 #if they are a perfect match
+                similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
+                break
+            elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
+                similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
+                similarities[plane1] = similarity * 100                                             #multiply by 100 for actual percent readings
+        for plane1 in axisaircraft:                           #iterate through all allied planes
+            if plane == cleanup2(plane1):                                 #if they are a perfect match
+                similarities[plane1] = 100                      #set similarity percentage to 100 and break the while loop
+                break
+            elif len(plane) <= len(cleanup2(plane)):                     #if not a perfect match
+                similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()    #calculate percent match
+                similarities[plane1] = similarity * 100 
+    else:
+        for plane1 in alliedaircraft:
+            if plane == cleanup2(plane1):
+                similarities[plane1] = 100
+                break
+            elif "[" in plane1 and len(plane) <= len(cleanup2(plane1)):
+                similarity = difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio()
+                similarities[plane1] = similarity * 100
+
+
     sortedlist = list()                 #creating empty list to hold sorted users
     for thing in similarities.items():     #iterate through the keys and terms of usercount dictionary
         sortedlist.append(thing)        #add each key,value pair to sortedlist
@@ -108,12 +128,6 @@ texthandle.write(str(datetime.now()))                                        #pr
 requesthandle = open("input-output.txt", 'a+')
 
 
-def cleanup(chat):                                                      #function for cleaning up a list converted to a strings
-    chat = str(chat)
-    chat = chat.replace("[", "")
-    chat = chat.replace("]", "")
-    chat = chat.replace("\\r", "")
-    return chat
 
 
 def time_convert(sec):
