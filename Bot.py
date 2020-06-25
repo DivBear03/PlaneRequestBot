@@ -66,7 +66,7 @@ def search(plane):
         if len(samesims[n][0]) < shortest:          #if the present plane has a shorter string length
             shortest = len(samesims[n][0])          #make the shortest length to be that length
             shortestindex = n                       #set the index of the shortest string length to be that index
-    if samesims[shortestindex][1] > 50:                       #if the match found is reasonably comparable to the request
+    if samesims[shortestindex][1] > 70:                       #if the match found is reasonably comparable to the request
         return samesims[shortestindex][0].replace("\n", "")   #return the plane with the highest match
     else:
         return "No match"
