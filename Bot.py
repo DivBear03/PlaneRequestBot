@@ -247,13 +247,8 @@ while True:
         else:
             sock.send(f"PRIVMSG {channel} :You do not have permission to skip planes\r\n".encode('utf-8'))
 
-
-    '''elif "--add" in chat and user == "adamtheenginerd":
-        newpriuser = re.findall("--add (.+)", chat)
-        newpriuser = cleanup(newpriuser)
-        newpriuser = newpriuser.replace("'", "")
-        priorityusers.append(newpriuser)'''
-
+    elif "--dellastreq" in message:
+        requestlist.pop(len(requestlist)-1)
 
     if go == True:                              #all code after this only runs if the bot is enabled
 
