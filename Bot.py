@@ -150,18 +150,24 @@ specialuser = ""        #variable to hold the username of the person who made a 
 feedback = False        #boolean to indicate whether the program is waiting for a feedback on index of list returned by --request command
 '''timeout = time.time() + 20                     #manual timer for testing'''
 
+requests = {}
+
 
 while True:
     
     '''if time.time() > timeout:
         break'''
-
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
     except:
         break
     count += 1
+    
+
+    if "--" not in chat:
+        continue
+
 
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)                                                #clean up the list object
@@ -253,7 +259,9 @@ while True:
             result = search(plane)
             if result == "No match":
                 sock.send(f"PRIVMSG {channel} :Sorry, no match is found by algorithm\r\n".encode('utf-8'))
+                requests[plane] = result
             else:
+                requests[plane] = result
                 duplicate = False
                 for thing in requestlist:
                     if thing == result:
