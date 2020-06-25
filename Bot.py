@@ -100,6 +100,9 @@ texthandle.write("Tracking start time: ")
 texthandle.write(str(datetime.now()))                                        #printing the start time of logging to the file each time the program is run
 
 
+requesthandle = open("input-output.txt", 'a+')
+
+
 def cleanup(chat):                                                      #function for cleaning up a list converted to a strings
     chat = str(chat)
     chat = chat.replace("[", "")
@@ -303,6 +306,9 @@ for item in sortedlist:
 texthandle.write("Number of requests: " + str(commands['--request']) + "\n")
 texthandle.write("Tracking end time: ")
 texthandle.write(str(datetime.now()) + "\n\n")
+
+for request in requests:
+    requesthandle.append(request, requests[request])
 
 texthandle.close()      #closing connection to file
 sock.close()            #closing connection to Twitch IRC
