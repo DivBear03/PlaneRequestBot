@@ -173,7 +173,6 @@ while True:
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
-        print(chat)
     except:
         break
     count += 1
@@ -333,7 +332,7 @@ texthandle.write("Tracking end time: ")
 texthandle.write(str(datetime.now()) + "\n\n")
 
 for request in requests:
-    requesthandle.write(request + "---->" + requests[request])
+    requesthandle.write(request + "---->" + requests[request] + "\n")
 
 texthandle.close()      #closing connection to file
 sock.close()            #closing connection to Twitch IRC
