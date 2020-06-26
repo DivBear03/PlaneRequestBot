@@ -6,6 +6,14 @@ from datetime import datetime
 import difflib
 from difflib import SequenceMatcher
 
+aircraft = []
+texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
+for line in texthandle:                                 #iterate through text file
+    aircraft.append(line.strip())                 #add the aircraft names to the list
+bombers = []
+bombhandle = open("Bomber_Blacklist.txt", 'r')
+for line in bombhandle:
+    bombers.append(line.strip())
 def cleanup(chat):                                                      #function for cleaning up a list converted to a strings
     chat = str(chat)
     chat = chat.replace("[", "")
@@ -21,14 +29,7 @@ def time_convert(sec):                                                  #functio
     return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
 
 def search(plane):                                                      #search algorithm
-    aircraft = []             #all allied aircraft that could be considered useful
-    texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
-    for line in texthandle:                                 #iterate through text file
-        aircraft.append(line.strip())                 #add the aircraft names to the list
-    bombers = []
-    bombhandle = open("Bomber_Blacklist.txt", 'r')
-    for line in bombhandle:
-        bombers.append(line.strip())
+    
     def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
         plane = plane.replace("-", "")
         plane = plane.replace(" ", "")
@@ -56,6 +57,7 @@ def search(plane):                                                      #search 
                 break
     if preliminary == False:
         return "No match"
+        
     similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
 
     foreign = False
