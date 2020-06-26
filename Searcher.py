@@ -8,7 +8,8 @@ import socket           #importing useful modules
 import re
 import time
 import os 
-from datetime import datetime
+import datetime
+from datetime import timedelta
 import difflib
 from difflib import SequenceMatcher
 import scipy.stats
@@ -25,12 +26,9 @@ bombers = []
 bombhandle = open("Bomber_Blacklist.txt", 'r')
 for line in bombhandle:
     bombers.append(line.strip())
-def time_convert(sec):                                                  #function for converting seconds into a readable time
-    mins = sec // 60
-    sec = sec % 60
-    hours = mins // 60
-    mins = mins % 60
-    return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
+def time_convert(time_diff):                                                  #function for converting seconds into a readable time
+    execution_time = time_diff.total_seconds()
+    return execution_time
 def search(plane):                                                      #search algorithm
     
 
@@ -43,6 +41,8 @@ def search(plane):                                                      #search 
         plane = plane.replace(")", "")
         return plane
     
+    plane = cleanup2(plane)
+
     for plane1 in bombers:
         substring = cleanup2(plane1)[:len(plane)]
         if plane in substring:
@@ -168,6 +168,6 @@ while True:
     a = input("Search for:")
     if "end" in a:
         break
-    startrequesttime = time.time()
+    startrequesttime = datetime.datetime.now()
     print(search(a))
-    print(time_convert(time.time() - startrequesttime))
+    print(time_convert(datetime.datetime.now()-startrequesttime))

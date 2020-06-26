@@ -3,6 +3,7 @@ import re
 import time
 import os 
 from datetime import datetime
+from datetime import timedelta
 import difflib
 from difflib import SequenceMatcher
 
@@ -27,6 +28,10 @@ def time_convert(sec):                                                  #functio
     hours = mins // 60
     mins = mins % 60
     return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
+
+def millitime(time_diff):                                                  #function for converting seconds into a readable time
+    execution_time = time_diff.total_seconds()
+    return execution_time
 
 def search(plane):                                                      #search algorithm
     
@@ -261,7 +266,7 @@ while True:
     if go == True:                              #all code after this only runs if the bot is enabled
 
         if "--request " in message:                                         #checking for request command
-            startrequesttime = time.time()
+            startrequesttime = datetime.now()
             commands['--request'] += 1
             plane = re.findall("--request (.+)", message)                   #pull out the plane name
             plane = cleanup(plane)                                          #clean up the list object
@@ -269,11 +274,11 @@ while True:
             result = search(plane)
             if result == "No match":
                 sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))
-                print(time_convert(time.time() - startrequesttime))
+                print(millitime(datetime.now()-startrequesttime))
                 requests[plane] = str(result)
             elif result == "Bombers are useless":
                 sock.send(f"PRIVMSG {channel} :Bombers are useless\r\n".encode('utf-8'))
-                print(time_convert(time.time() - startrequesttime))
+                print(millitime(datetime.now()-startrequesttime))
                 requests[plane] = str(result)
             else:
                 requests[plane] = str(result)
@@ -281,12 +286,12 @@ while True:
                 if indexOf(planeresult, requestlist) > -1:
                     planeresult = planeresult.replace("\n", "")
                     sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
-                    print(time_convert(time.time() - startrequesttime))
+                    print(millitime(datetime.now()-startrequesttime))
                 else:
                     planeresult = planeresult.replace("\n", "")
                     requestlist.append(planeresult)
                     sock.send(f"PRIVMSG {channel} :{planeresult} requested\r\n".encode('utf-8'))
-                    print(time_convert(time.time() - startrequesttime))
+                    print(millitime(datetime.now()-startrequesttime))
             print(requestlist)              #print the list
 
 
