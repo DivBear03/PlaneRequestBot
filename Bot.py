@@ -265,24 +265,6 @@ def indexOf(plane, inputlist):
                 break
     return -1
 
-'''class Request:
-    def __init__(self, priority, plane):
-        self.priority = priority
-        self.plane = plane'''
-
-'''path = 'C:\\Users\\esben\\WarThunderFlightModels'
-folder = os.fsencode(path)
-filenames = []
-for file in os.listdir(folder):
-    filename = os.fsdecode(file)
-    if filename.endswith('.blk'):
-        filename = filename.replace("_", " ")
-        filenames.append(filename[:len(filename)-4])'''
-
-'''priorityusers = []                  #initializing the list of users with priority: mods, VIPs, etc
-priorityhandle = open("VIPs.txt", 'r+')
-for line in priorityhandle:
-    priorityusers.append(line.strip())'''
 
 authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]     #users authorized for all commands except track
 
@@ -408,12 +390,9 @@ while True:
             plane = plane.replace("'", "")                                  #replace single quotes with nothing
             result = search2(plane)
             if result == "No match":
-                sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))
-                print(millitime(datetime.now()-startrequesttime))
                 requests[plane] = str(result)
             elif result == "Bombers are useless":
                 sock.send(f"PRIVMSG {channel} :Bombers are useless\r\n".encode('utf-8'))
-                print(millitime(datetime.now()-startrequesttime))
                 requests[plane] = str(result)
             else:
                 requests[plane] = str(result)
@@ -421,12 +400,10 @@ while True:
                 if indexOf(planeresult, requestlist) > -1:
                     planeresult = planeresult.replace("\n", "")
                     sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
-                    print(millitime(datetime.now()-startrequesttime))
                 else:
                     planeresult = planeresult.replace("\n", "")
                     requestlist.append(planeresult)
-                    sock.send(f"PRIVMSG {channel} :{planeresult} requested\r\n".encode('utf-8'))
-                    print(millitime(datetime.now()-startrequesttime))
+                    sock.send(f"PRIVMSG {channel} :Roger that! {planeresult} requested\r\n".encode('utf-8'))
             print(requestlist)              #print the list
 
 
@@ -484,7 +461,7 @@ texthandle.write("Number of requests: " + str(commands['--request']) + "\n")
 texthandle.write("Tracking end time: ")
 texthandle.write(str(datetime.now()) + "\n\n")
 
-for request in requests:
+for request in requests:                        #writing requests and results to the input-output file for debugging purposes
     buildstring = ""
     buildstring += request
     for n in range(23-len(request)):
