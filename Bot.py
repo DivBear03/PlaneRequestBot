@@ -299,7 +299,7 @@ count = 0
 
 requests = {}                                       #dictionary to hold requests and results
 
-confirmations = ['Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
+confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'The enemy is attacking our base! We must reinforce its defenses!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 
 while True:
     
