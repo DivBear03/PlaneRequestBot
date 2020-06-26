@@ -39,15 +39,13 @@ def search(plane):                                                      #search 
         plane = plane.replace(")", "")
         return plane
     
-    plane = cleanup2(plane)
-    print(plane)
+    plane = cleanup2(plane)                                 #bomber check
     for plane1 in bombers:
         substring = cleanup2(plane1)[:len(plane)]
         if plane in substring:
-            print(substring)
             return "Bombers are useless"
 
-    preliminary = True
+    preliminary = True                                      #logic gate to save time: users penalized if they don't match the first four characters of their request
     if len(plane) <= 4:
         for plane1 in aircraft:
             if plane not in cleanup2(plane1):
