@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 import difflib
 from difflib import SequenceMatcher
+import random
 import scipy.stats
 
 aircraft = []
@@ -298,6 +299,8 @@ count = 0
 
 requests = {}                                       #dictionary to hold requests and results
 
+confirmations = ['Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
+
 while True:
     
     '''if time.time() > timeout:
@@ -403,7 +406,8 @@ while True:
                 else:
                     planeresult = planeresult.replace("\n", "")
                     requestlist.append(planeresult)
-                    sock.send(f"PRIVMSG {channel} :Roger that! {planeresult} requested\r\n".encode('utf-8'))
+                    confirmation = random.randint(0, len(confirmations)-1)
+                    sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
             print(requestlist)              #print the list
 
 
