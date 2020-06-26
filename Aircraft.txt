@@ -23,7 +23,6 @@ Ki-61-Ib [USA]
 Ki-61-1b [USA]
 P-51A
 P-43A-1
-PBM-3
 P-40C
 P-51
 P-47D-25
@@ -55,9 +54,7 @@ XA-38
 Bong's P-38J-15
 F7F-3
 P-38K [USA]
-A-26C-45
 Lanovski's P-47M-1-RE
-A-26C-45DT
 P-59A
 A2D-1
 AU-1
@@ -95,12 +92,9 @@ F9F-2
 F9F-5
 F9F-8
 F3H-2
-OS2U-1
-OS2U-3
 SB2U-2
 SB2U-3
 SBD-3
-TBF-1C
 A-36
 A-20G-25
 SB2C-1C
@@ -113,11 +107,8 @@ AD-4
 F3D-1
 A-4B
 FJ-4B
-TBD-1
 B-25J-1
 B-25J-20
-B-57A
-B-57B
 F-86F-35
 F-89B
 F-89D
@@ -382,7 +373,6 @@ V-156-F
 Br.693AB2
 Potez 630
 Potez 631
-A-35B [France]
 F6F-5 [France]
 SB2C-5 [France]
 P-63C-5 [France]
@@ -417,8 +407,6 @@ J29A
 J26F
 J32B
 J35D
-B17B
-B17A
 A21A-3
 A21RB
 J28B
@@ -434,7 +422,6 @@ He 51 B-1
 He 51 C-1
 He 51 C-1/L
 Do 17 Z-7
-Hs 123 A-1
 Bf 109 E-1
 He 112 V-5
 Do 217 J-1
@@ -542,8 +529,6 @@ Ki-10-I
 Ki-10-II
 Ki-10-I C
 Ki-32
-D3A1
-F1M2
 A5M4
 Ki-27 otsu
 J1N1
@@ -553,30 +538,23 @@ A6M2-N
 Ki-43-I
 Ki-43-II
 Ki-45 otsu
-B6N1 Model 11
-B6N2 Model 12
-B6N2a Model 12ko
 N1K1
 Ki-44-I
 Ki-44-II hei
 Ki-45 tei
-D4Y1
 A6M2 mod 11
 A6M2
 Ki-61-I ko
 Ki-61-I otsu
 Ki-100
 Ki-45 hei
-D4Y2
 J2M2
 Ki-109
-D4Y3 ko
 A6M3
 A6M3 mod 22
 A6M3 mod 22Ko
 Ki-43-iii otsu
 Ki-102 otsu
-B7A2
 A6M5
 A6M5 otsu
 Ki-61-I hei
@@ -589,7 +567,6 @@ N1K2-J
 N1K2-Ja
 Ki-84 ko
 J5N1
-P1Y1 mod. 11
 J2M3
 J2M5
 Ki-84 otsu

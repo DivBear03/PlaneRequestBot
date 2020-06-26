@@ -25,6 +25,10 @@ def search(plane):                                                      #search 
     texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
     for line in texthandle:                                 #iterate through text file
         aircraft.append(line.strip())                 #add the aircraft names to the list
+    bombers = []
+    bombhandle = open("Bomber_Blacklist.txt", 'r')
+    for line in bombhandle:
+        bombers.append(line.strip())
     def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
         plane = plane.replace("-", "")
         plane = plane.replace(" ", "")
@@ -35,6 +39,13 @@ def search(plane):                                                      #search 
         return plane
     
     plane = cleanup2(plane)
+    print(plane)
+    for plane1 in bombers:
+        substring = cleanup2(plane1)[:len(plane)]
+        if plane in substring:
+            print(substring)
+            return "Bombers are useless"
+
     preliminary = True
     if len(plane) <= 4:
         for plane1 in aircraft:
@@ -156,7 +167,7 @@ texthandle.write(f"\n{channel}")
 
 
 requestlist = list()                                #creating empty list of requested planes
-go = False                                          #setting program to default disable at start, use --enable command to enable bot
+go = True                                          #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0}
@@ -257,6 +268,9 @@ while True:
             result = search(plane)
             if result == "No match":
                 sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))
+                requests[plane] = str(result)
+            elif result == "Bombers are uselss":
+                sock.send(f"PRIVMSG {channel} :Bombers are useless\r\n".encode('utf-8'))
                 requests[plane] = str(result)
             else:
                 requests[plane] = str(result)
