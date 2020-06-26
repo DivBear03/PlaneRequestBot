@@ -110,7 +110,7 @@ def search(plane):                                                      #search 
         if len(samesims[n][0]) < shortest:          #if the present plane has a shorter string length
             shortest = len(samesims[n][0])          #make the shortest length to be that length
             shortestindex = n                       #set the index of the shortest string length to be that index
-    if samesims[shortestindex][1] > 70:             #if the match found is reasonably comparable to the request
+    if samesims[shortestindex][1] > 60:             #if the match found is reasonably comparable to the request
         return samesims[shortestindex]              #return the plane with the highest match
     else:
         return "No match"
@@ -261,6 +261,7 @@ while True:
     if go == True:                              #all code after this only runs if the bot is enabled
 
         if "--request " in message:                                         #checking for request command
+            startrequesttime = time.time()
             commands['--request'] += 1
             plane = re.findall("--request (.+)", message)                   #pull out the plane name
             plane = cleanup(plane)                                          #clean up the list object
@@ -268,9 +269,11 @@ while True:
             result = search(plane)
             if result == "No match":
                 sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))
+                print(time_convert(time.time() - startrequesttime))
                 requests[plane] = str(result)
             elif result == "Bombers are useless":
                 sock.send(f"PRIVMSG {channel} :Bombers are useless\r\n".encode('utf-8'))
+                print(time_convert(time.time() - startrequesttime))
                 requests[plane] = str(result)
             else:
                 requests[plane] = str(result)
@@ -278,10 +281,12 @@ while True:
                 if indexOf(planeresult, requestlist) > -1:
                     planeresult = planeresult.replace("\n", "")
                     sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
+                    print(time_convert(time.time() - startrequesttime))
                 else:
                     planeresult = planeresult.replace("\n", "")
                     requestlist.append(planeresult)
                     sock.send(f"PRIVMSG {channel} :{planeresult} requested\r\n".encode('utf-8'))
+                    print(time_convert(time.time() - startrequesttime))
             print(requestlist)              #print the list
 
 

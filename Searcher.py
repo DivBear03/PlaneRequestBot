@@ -17,13 +17,27 @@ import scipy.stats
 #task: add algorithm which separts alpha and numeric components of string and scores each individually, then recombines scores into one
 #task: within numeric component, look for roman numerals
 
-
-
+aircraft = []             #all allied aircraft that could be considered useful
+texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
+for line in texthandle:                                 #iterate through text file
+    aircraft.append(line.strip())                 #add the aircraft names to the list
+bombers = []
+bombhandle = open("Bomber_Blacklist.txt", 'r')
+for line in bombhandle:
+    bombers.append(line.strip())
+def time_convert(sec):                                                  #function for converting seconds into a readable time
+    mins = sec // 60
+    sec = sec % 60
+    hours = mins // 60
+    mins = mins % 60
+    return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
 def search(plane):                                                      #search algorithm
-    aircraft = []             #all allied aircraft that could be considered useful
-    texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
-    for line in texthandle:                                 #iterate through text file
-        aircraft.append(line.strip())                 #add the aircraft names to the list
+    
+    for plane1 in bombers:
+        substring = cleanup2(plane1)[:len(plane)]
+        if plane in substring:
+            return "Bombers are useless"
+
     def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
         plane = plane.replace("-", "")
         plane = plane.replace(" ", "")
@@ -154,4 +168,6 @@ while True:
     a = input("Search for:")
     if "end" in a:
         break
+    startrequesttime = time.time()
     print(search(a))
+    print(time_convert(time.time() - startrequesttime))

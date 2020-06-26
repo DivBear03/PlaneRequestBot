@@ -17,10 +17,8 @@ P-38E
 P-38G-1
 XP-38G
 Ki-43-II [USA]
-Ki-43-2 [USA]
 XP-55
 Ki-61-Ib [USA]
-Ki-61-1b [USA]
 P-51A
 P-43A-1
 P-40C
