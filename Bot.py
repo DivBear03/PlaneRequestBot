@@ -33,8 +33,18 @@ def search(plane):                                                      #search 
         plane = plane.replace("(", "")
         plane = plane.replace(")", "")
         return plane
-    similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
+    
     plane = cleanup2(plane)
+    preliminary = False
+    if len(plane) <= 4:
+        for plane1 in aircraft:
+            if plane not in cleanup2(plane1):
+                preliminary = True
+            else:
+                preliminary = False
+    if preliminary:
+        return "No match"
+    similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
 
     foreign = False
     if "usa" in plane or "ussr" in plane or 'japan' in plane or 'germany' in plane or 'italy' in plane or 'china' in plane or 'france' in plane or 'greatbritain' in plane:

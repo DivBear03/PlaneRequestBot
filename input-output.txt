@@ -51,3 +51,8 @@ p-63a10 ussr----------->('P-63A-10 [USSR]', 95.23809523809523)
 spitfire ussr---------->('Spitfire [USSR]', 96.0)
 fw 190 d9 ussr--------->('Fw 190 [USSR]', 81.81818181818183)
 tempest vickers-------->('Tempest Mk V (Vickers)', 82.75862068965517)
+bf 109 usa------------->('Bf 109 F-4 [USA]', 70.58823529411765)
+spitfire ussr---------->('Spitfire [USSR]', 96.0)
+b-29------------------->No match
+spitfire mk ixc ussr--->('Spitfire LF Mk IX [USA]', 80.0)
+tu-2------------------->('T-2', 80.0)

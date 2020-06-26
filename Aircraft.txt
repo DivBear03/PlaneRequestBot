@@ -8,7 +8,6 @@ P-36G
 Galer's F3F-2
 Thach's F2A-1
 Rasmussen's P-36A
-B-10B
 P-40F-10
 P-40E-1
 P-400
@@ -223,7 +222,7 @@ P-63C-5 [USSR]
 La-11
 P-63A-10 [USSR]
 Yak-3 VK-107
-Spitfire [USSR]
+Spitfire Mk IXc [USSR]
 Fw 190 [USSR]
 MiG-15bis ISH
 La-174
