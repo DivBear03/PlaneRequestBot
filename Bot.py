@@ -287,7 +287,6 @@ channel = '#kingsman784'                            #channel name, must be all l
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
-
 requestlist = list()                                #creating empty list of requested planes
 go = True                                          #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
@@ -332,7 +331,6 @@ while True:
             commands['--disable'] += 1
             print("BotOn = " + str(go))
 
-
     elif "--enable" in chat:                      #check for enable command
         if user in authorized:
             go = True
@@ -361,7 +359,6 @@ while True:
 
     elif chat.startswith("PING"):               #check for PING from Twitch IRC
         sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
-
 
     elif "--skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
         if user in authorized:
@@ -409,7 +406,6 @@ while True:
                     sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
             print(requestlist)              #print the list
 
-
         elif "--reqdel" in message:             #checking for reqdel command
             if user in authorized:
                 commands['--reqdel'] += 1
@@ -422,7 +418,6 @@ while True:
                 else:
                     sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
 
-
         elif "--requests" in message:               #check for requests message. Same code as before, but first plane is not removed
             commands['--requests'] += 1
             buildstring = ""
@@ -433,17 +428,12 @@ while True:
             else:
                 sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
-
         elif "--commands" in chat:
             sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
-
-
-        
 
 sortedlist = list()                 #creating empty list to hold sorted users
 for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
     sortedlist.append(thing)        #add each key,value pair to sortedlist
-
 
 for i in range(1, len(sortedlist)):         #insertion sort algorithm
     nextElementValue = sortedlist[i][1]
@@ -458,7 +448,6 @@ texthandle.write("\n")
 for item in sortedlist:
     print(item[0], str(item[1]))
     texthandle.write(str(item[0])+": "+str(item[1])+" messages\n")        #writing sortedlist data to file
-
 
 texthandle.write("Number of requests: " + str(commands['--request']) + "\n")
 texthandle.write("Tracking end time: ")
