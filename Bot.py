@@ -35,14 +35,15 @@ def search(plane):                                                      #search 
         return plane
     
     plane = cleanup2(plane)
-    preliminary = False
+    preliminary = True
     if len(plane) <= 4:
         for plane1 in aircraft:
             if plane not in cleanup2(plane1):
-                preliminary = True
-            else:
                 preliminary = False
-    if preliminary:
+            else:
+                preliminary = True
+                break
+    if preliminary == False:
         return "No match"
     similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
 
