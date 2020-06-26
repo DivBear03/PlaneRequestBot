@@ -57,7 +57,7 @@ def search(plane):                                                      #search 
                 break
     if preliminary == False:
         return "No match"
-        
+
     similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
 
     foreign = False
@@ -271,7 +271,7 @@ while True:
             if result == "No match":
                 sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))
                 requests[plane] = str(result)
-            elif result == "Bombers are uselss":
+            elif result == "Bombers are useless":
                 sock.send(f"PRIVMSG {channel} :Bombers are useless\r\n".encode('utf-8'))
                 requests[plane] = str(result)
             else:
