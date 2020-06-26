@@ -193,7 +193,7 @@ LaGG-3-4
 LaGG-3-34
 I-301
 I-153P
-Hurrican Mk IIB
+Hurricane Mk IIB
 I-16 Type 28
 P-40E-1 [USSR]
 I-180S
@@ -220,7 +220,7 @@ Fury Mk I
 Fury Mk II
 Hurricane Mk IIb/trop
 Hurricane Mk IV
-Hurrican Mk I/L
+Hurricane Mk I/L
 Typhoon Mk Ia
 Typhoon Mk Ib/L
 Tempest Mk V
