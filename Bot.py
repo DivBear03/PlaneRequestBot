@@ -266,7 +266,6 @@ def indexOf(plane, inputlist):
                 break
     return -1
 
-
 authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]     #users authorized for all commands except track
 
 texthandle = open("logs.txt", 'a+')                 #opening logs file
