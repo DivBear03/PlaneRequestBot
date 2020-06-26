@@ -33,10 +33,6 @@ def time_convert(sec):                                                  #functio
     return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
 def search(plane):                                                      #search algorithm
     
-    for plane1 in bombers:
-        substring = cleanup2(plane1)[:len(plane)]
-        if plane in substring:
-            return "Bombers are useless"
 
     def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
         plane = plane.replace("-", "")
@@ -47,6 +43,10 @@ def search(plane):                                                      #search 
         plane = plane.replace(")", "")
         return plane
     
+    for plane1 in bombers:
+        substring = cleanup2(plane1)[:len(plane)]
+        if plane in substring:
+            return "Bombers are useless"
     
     def gestalt(plane,plane1):
         return (100 * difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio())
