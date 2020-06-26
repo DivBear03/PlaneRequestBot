@@ -260,16 +260,11 @@ while True:
                 requests[plane] = str(result)
             else:
                 requests[plane] = str(result)
-                duplicate = False
-                for thing in requestlist:
-                    if thing == result:
-                        duplicate = True
-                if duplicate == True:
-                    planeresult = str(result[0])
+                planeresult = str(result[0])
+                if indexOf(planeresult, requestlist) > -1:
                     planeresult = planeresult.replace("\n", "")
                     sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
                 else:
-                    planeresult = str(result[0])
                     planeresult = planeresult.replace("\n", "")
                     requestlist.append(planeresult)
                     sock.send(f"PRIVMSG {channel} :{planeresult} requested\r\n".encode('utf-8'))
