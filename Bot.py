@@ -23,8 +23,7 @@ rmnsDict = {}
 with open("RMNS_NUMS_DICT.txt", 'r') as dfile:
     for line in dfile:
         pieces = line.split("$")
-        rmnsDict.update({pieces[0] : pieces[1]})
-        
+        rmnsDict.update({pieces[0] : pieces[1].replace("\n", "")})
 def cleanup(chat):                                                      #function for cleaning up a list converted to a strings
     chat = str(chat)
     chat = chat.replace("[", "")
@@ -425,19 +424,25 @@ while True:
             else:
                 requests[plane] = str(result)
                 planeresult = str(result[0])
-                if indexOf(planeresult, requestlist) > -1:
-                    planeresult = planeresult.replace("\n", "")
-                    sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
-                elif result in rmnsDict:
-                    if indexOf(rmnsDict[result],requestlist) > -1:
-                        sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
-                
                 planeresult = planeresult.replace("\n", "")
-                requestlist.append(planeresult)
-                confirmation = random.randint(0, len(confirmations)-1)
-                sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
-            print(requestlist)              #print the list
-
+                try:
+                    print(rmnsDict[planeresult])
+                except:
+                    print("Not roman numeral")
+                if indexOf(planeresult, requestlist) > -1:
+                    sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
+                elif planeresult in rmnsDict:
+                    if rmnsDict[planeresult] in requestlist:
+                        sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
+                    else:
+                        requestlist.append(planeresult)
+                        confirmation = random.randint(0, len(confirmations)-1)
+                        sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
+                else:
+                    requestlist.append(planeresult)
+                    confirmation = random.randint(0, len(confirmations)-1)
+                    sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
+                    print(requestlist)              #print the list
 
 sortedlist = list()                 #creating empty list to hold sorted users
 for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
