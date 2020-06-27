@@ -269,8 +269,8 @@ def indexOf(plane, inputlist):
                 break
     return -1
 
-def indexOf(plane, inputdict):
-    keys = inputdict.keys()
+def indexDict(plane, inputdict):
+    keys = list(inputdict.keys())
     index = 0
     if len(keys) > 0:
         for n in range(len(keys)):
@@ -446,7 +446,7 @@ while True:
                         sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))   #send duplicate message
                     else:
                         confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
-                        if indexOf(planeresult, rmnsDict) > 54:
+                        if indexDict(planeresult, rmnsDict) > 54:
                             requestlist.append(rmnsDict[planeresult])
                             original = rmnsDict[planeresult]
                             sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {original} requested!\r\n".encode('utf-8'))
