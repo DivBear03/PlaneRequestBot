@@ -191,6 +191,7 @@ def search2(plane):
 
 
     if foreign == False:
+        
         for plane1 in aircraft:
                 
             sim1 = isSim(plane,plane1)       
