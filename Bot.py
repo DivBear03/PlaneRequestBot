@@ -102,9 +102,11 @@ def mineditDist(plane,plane1):
 
 def search(plane):                                                      #search algorithm
     
-    
-    
     plane = cleanup2(plane)                                 #bomber check
+
+    if len(plane) <= 2:
+        return "No match"
+
     for plane1 in bombers:
         substring = cleanup2(plane1)[:len(plane)]
         if plane in substring:
@@ -183,6 +185,9 @@ def search(plane):                                                      #search 
 def search2(plane):
     
     plane = cleanup2(plane)
+
+    if len(plane) <= 2:
+        return "No match"
 
     for plane1 in bombers:
         substring = cleanup2(plane1)[:len(plane)]
@@ -295,7 +300,7 @@ count = 0
 
 requests = {}                                       #dictionary to hold requests and results
 
-confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'The enemy is attacking our base! We must reinforce its defenses!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
+confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 
 while True:
     
@@ -414,32 +419,26 @@ while True:
             plane = re.findall("--request (.+)", message)                   #pull out the plane name
             plane = cleanup(plane)                                          #clean up the list object
             plane = plane.replace("'", "")                                  #replace single quotes with nothing
-            result = search2(plane)
-            if result == "No match":
-                requests[plane] = str(result)
-                sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))
-            elif result == "Bombers are useless":
-                sock.send(f"PRIVMSG {channel} :Bombers are useless\r\n".encode('utf-8'))
-                requests[plane] = str(result)
+            result = search2(plane)                                         #perform search algorithm
+            requests[plane] = str(result)
+            if result == "No match":                                        #if match is not above threshold, algo returns "No match"
+                sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))   #send chat
+            elif result == "Bombers are useless":                           #if algo determines that the request is a bomber
+                sock.send(f"PRIVMSG {channel} :Bombers are useless\r\n".encode('utf-8'))    #send chat message
             else:
-                requests[plane] = str(result)
-                planeresult = str(result[0])
-                planeresult = planeresult.replace("\n", "")
-                try:
-                    print(rmnsDict[planeresult])
-                except:
-                    print("Not roman numeral")
-                if indexOf(planeresult, requestlist) > -1:
-                    sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
-                elif planeresult in rmnsDict:
-                    if rmnsDict[planeresult] in requestlist:
-                        sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
+                planeresult = str(result[0])                                #pull out the actual plane
+                planeresult = planeresult.replace("\n", "")                 #replace newline character
+                if indexOf(planeresult, requestlist) > -1:                  #if the plane is in the requestlist already
+                    sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))   #duplicate message to chat
+                elif planeresult in rmnsDict:                               #if it is a roman numeral plane with mulitple correct versions
+                    if rmnsDict[planeresult] in requestlist:                #and if the counterpart of the planeresult is already in the request list
+                        sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))   #send duplicate message
                     else:
-                        requestlist.append(planeresult)
-                        confirmation = random.randint(0, len(confirmations)-1)
-                        sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
+                        requestlist.append(planeresult)                     #Otherwise, add the request to the request list
+                        confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
+                        sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))     #confirmation message
                 else:
-                    requestlist.append(planeresult)
+                    requestlist.append(planeresult)                         #same as above
                     confirmation = random.randint(0, len(confirmations)-1)
                     sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
                     print(requestlist)              #print the list
