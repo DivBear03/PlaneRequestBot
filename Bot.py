@@ -273,7 +273,7 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -355,12 +355,17 @@ while True:
             plane = re.findall("--skip\[(.+)\]", message)
             plane = cleanup(plane)
             plane = plane.replace("'", "")
-            selected = indexOf(plane, requestlist)
-            requestlist.pop(selected)
-            if plane in requestlist:
-                sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
-            else:
-                sock.send(f"PRIVMSG {channel} :{plane} has been skipped\r\n".encode('utf-8'))
+            try:
+                plane = int(plane)
+                skipped = requestlist.pop(plane)
+                sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
+            except:
+                selected = indexOf(plane, requestlist)
+                skipped = requestlist.pop(selected)
+                if skipped in requestlist:
+                    sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
+                else:
+                    sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
         else:
             sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
@@ -404,6 +409,7 @@ while True:
             result = search2(plane)
             if result == "No match":
                 requests[plane] = str(result)
+                sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))
             elif result == "Bombers are useless":
                 sock.send(f"PRIVMSG {channel} :Bombers are useless\r\n".encode('utf-8'))
                 requests[plane] = str(result)
