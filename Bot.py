@@ -35,16 +35,67 @@ def millitime(time_diff):                                                  #func
     execution_time = time_diff.total_seconds()
     return execution_time
 
+def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
+    plane = plane.replace("-", "")
+    plane = plane.replace(" ", "")
+    plane = plane.lower()
+    plane = plane.replace("\n", "")
+    plane = plane.replace("(", "")
+    plane = plane.replace(")", "")
+    return plane
+
+def gestalt(plane,plane1):
+    return (100 * difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio())
+
+def defSim(plane, plane1):
+    return gestalt(plane, plane1)
+
+def inSim(plane,plane1):
+    if plane in cleanup2(plane1):
+        return 100
+    else:
+        return defSim(plane,plane1)
+
+def isSim(plane, plane1):
+    if plane == cleanup2(plane1):
+        return 110
+    else:
+        return defSim(plane,plane1)
+
+def orderSim():
+    pass
+    
+def compSim():
+    pass
+    
+def mineditDist(plane,plane1):
+    plane1 = cleanup2(plane1)
+    len1 = len(plane) +1
+    len2 = len(plane1) +1    
+    matrix = [[0 for x in range(len1+1)] for y in range(len2+1)]
+        
+    for x in range(len2+1):
+        matrix[x][0] = x
+    for y in range(len1+1):
+        matrix[0][y] = y
+
+    for xx in range(1,len2):
+        for yy in range(1,len1):
+                
+            if plane1[xx-1] == plane[yy-1]:
+                matrix[xx][yy] = matrix[xx-1][yy-1]
+            else:
+                matrix[xx][yy] = min([matrix[xx-1][yy],matrix[xx][yy-1],matrix[xx-1][yy-1]]) + 1
+                #print(xx,yy,matrix[xx][yy])   
+    dist = matrix[len2-1][len1-1]
+        
+    ret = scipy.stats.norm(0,3).pdf(dist)/scipy.stats.norm(0,3).pdf(0)
+
+    return ret*100
+
 def search(plane):                                                      #search algorithm
     
-    def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
-        plane = plane.replace("-", "")
-        plane = plane.replace(" ", "")
-        plane = plane.lower()
-        plane = plane.replace("\n", "")
-        plane = plane.replace("(", "")
-        plane = plane.replace(")", "")
-        return plane
+    
     
     plane = cleanup2(plane)                                 #bomber check
     for plane1 in bombers:
@@ -123,15 +174,6 @@ def search(plane):                                                      #search 
         return "No match"
 
 def search2(plane):
-        
-    def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
-        plane = plane.replace("-", "")
-        plane = plane.replace(" ", "")
-        plane = plane.lower()
-        plane = plane.replace("\n", "")
-        plane = plane.replace("(", "")
-        plane = plane.replace(")", "")
-        return plane
     
     plane = cleanup2(plane)
 
@@ -139,59 +181,7 @@ def search2(plane):
         substring = cleanup2(plane1)[:len(plane)]
         if plane in substring:
             return "Bombers are useless"
-    
-    def gestalt(plane,plane1):
-        return (100 * difflib.SequenceMatcher(None, plane, cleanup2(plane1)[:len(plane)+1]).ratio())
-    
-    def defSim(plane, plane1):
-        return gestalt(plane, plane1)
-    
-    def inSim(plane,plane1):
-        if plane in cleanup2(plane1):
-            return 100
-        else:
-            return defSim(plane,plane1)
-    
-    def isSim(plane, plane1):
-        if plane == cleanup2(plane1):
-            return 110
-        else:
-            return defSim(plane,plane1)    
-    
-    def orderSim():
-        pass
-    
-    def compSim():
-        pass
-    
-    def mineditDist(plane,plane1):
-        plane1 = cleanup2(plane1)
-        len1 = len(plane) +1
-        len2 = len(plane1) +1
-        
-        matrix = [[0 for x in range(len1+1)] for y in range(len2+1)]
-        
-        for x in range(len2+1):
-            matrix[x][0] = x
-        for y in range(len1+1):
-            matrix[0][y] = y
-        
-        for xx in range(1,len2):
-            for yy in range(1,len1):
-                
-                if plane1[xx-1] == plane[yy-1]:
-                    matrix[xx][yy] = matrix[xx-1][yy-1]
-                else:
-                    matrix[xx][yy] = min([matrix[xx-1][yy],matrix[xx][yy-1],matrix[xx-1][yy-1]]) + 1
-                #print(xx,yy,matrix[xx][yy])   
-        dist = matrix[len2-1][len1-1]
-        
-        ret = scipy.stats.norm(0,3).pdf(dist)/scipy.stats.norm(0,3).pdf(0)
-
-        return ret*100
-                    
-                    
-                    
+  
     similarities = {}                                       #dictionary for holding all the planes and their respective match percentages
     plane = cleanup2(plane)
 
@@ -283,7 +273,7 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -379,6 +369,30 @@ while True:
             plane = requestlist.pop(len(requestlist)-1)
             sock.send(f"PRIVMSG {channel} :{plane} deleted\r\n".encode('utf-8'))
 
+    elif "--reqdel" in message:             #checking for reqdel command
+        if user in authorized:
+            commands['--reqdel'] += 1
+            buildstring = ""                    #create empty string that will show the list of requested planes
+            for plane in requestlist:           #iterate through the planes in the list
+                buildstring += plane + ", "     #add the plane to the string and a comma
+            if len(requestlist) > 0:            #if there are planes in the requestlist
+                sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))          #send the string of requested planes to the chat
+                removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
+            else:
+                sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
+
+    elif "--requests" in message:               #check for requests message. Same code as before, but first plane is not removed
+            commands['--requests'] += 1
+            buildstring = ""
+            for plane in requestlist:
+                buildstring += plane + ", "
+            if len(requestlist) > 0:
+                sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))
+            else:
+                sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
+
+    elif "--commands" in chat:
+        sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
     if go == True:                              #all code after this only runs if the bot is enabled
 
         if "--request " in message:                                         #checking for request command
@@ -406,30 +420,6 @@ while True:
                     sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
             print(requestlist)              #print the list
 
-        elif "--reqdel" in message:             #checking for reqdel command
-            if user in authorized:
-                commands['--reqdel'] += 1
-                buildstring = ""                    #create empty string that will show the list of requested planes
-                for plane in requestlist:           #iterate through the planes in the list
-                    buildstring += plane + ", "     #add the plane to the string and a comma
-                if len(requestlist) > 0:            #if there are planes in the requestlist
-                    sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))          #send the string of requested planes to the chat
-                    removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
-                else:
-                    sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
-
-        elif "--requests" in message:               #check for requests message. Same code as before, but first plane is not removed
-            commands['--requests'] += 1
-            buildstring = ""
-            for plane in requestlist:
-                buildstring += plane + ", "
-            if len(requestlist) > 0:
-                sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))
-            else:
-                sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
-
-        elif "--commands" in chat:
-            sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
 
 sortedlist = list()                 #creating empty list to hold sorted users
 for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary

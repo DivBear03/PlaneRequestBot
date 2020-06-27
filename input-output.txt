@@ -1,1 +1,5 @@
 Request                 Result, Similarity Score
+p-51------------------->('P-51', 90.0)
+b-29------------------->Bombers are useless
+pb4y------------------->Bombers are useless
+p-51d-30--------------->('P-51D-30', 90.0)
