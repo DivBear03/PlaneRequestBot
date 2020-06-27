@@ -1,0 +1,110 @@
+Fury Mk I$Fury Mk 1
+Fury Mk II$Fury Mk 2
+Hurricane Mk IIb/trop$Hurricane Mk 2b/trop
+Hurricane Mk IV$Hurricane Mk 4
+Hurricane Mk I/L$Hurricane Mk 1/L
+Typhoon Mk Ia$Typhoon Mk 1a
+Typhoon Mk Ib/L$Typhoon Mk 1b/L
+Tempest Mk V$Tempest Mk 5
+Tempest Mk V (Vickers)$Tempest Mk 5 (Vickers)
+Tempest Mk II$Tempest Mk 2
+Gladiator Mk IIF$Gladiator Mk 2F
+Gladiator Mk IIS$Gladiator Mk 2S
+Gladiator Mk II$Gladiator Mk 2
+Spitfire Mk Ia$Spitfire Mk 1a
+Spitfire Mk IIa$Spitfire Mk 2a
+Spitfire Mk IIb$Spitfire Mk 2b
+Spitfire Mk Vb/trop$Spitfire Mk 5b/trop
+Spitfire Mk Vb$Spitfire Mk 5b
+Spitfire Mk Vc/trop$Spitfire Mk 5c/trop
+Spitfire Mk Vc$Spitfire Mk 5c
+Spitfire F Mk IX$Spitfire F Mk 9
+Spitfire F Mk XVI$Spitfire F Mk 16
+Spitfire LF Mk IX$Spitfire LF Mk 9
+Spitfire F Mk XIVe$Spitfire F Mk 14e
+Spitfire F Mk XVIII$Spitfire F Mk 18
+Nimrod Mk I$Nimrod Mk 1
+Nimrod Mk II$Nimrod Mk 2
+Sea Gladiator Mk I$Sea Gladiator Mk 1
+Sea Hurricane IB$Sea Hurricane 1B
+Sea Hurricane Mk IC$Sea Hurricane Mk 1C
+Firefly F Mk I$Firefly F Mk 1
+Firefly FR Mk V$Firefly FR Mk 5
+Firebrand TF Mk IV$Firebrand TF Mk 4
+Seafire F Mk XVII$Seafire F Mk 17
+Beaufighter Mk VIc$Beaufighter Mk 6c
+Beaufighter Mk X$Beaufighter Mk 10
+Mosquito FB Mk VI$Mosquito FB Mk 6
+Mosquito FB Mk XVIII$Mosquito FB Mk 18
+Whirlwind Mk I$Whirlwind Mk 1
+Hornet Mk III$Hornet Mk 3
+Tuck's Gladiator Mk II$Tuck's Gladiator Mk 2
+Boston Mk I$Boston Mk 1
+Martlet Mk IV$Martlet Mk 4
+Boomerang Mk I$Boomerang Mk 1
+Boomerang Mk II$Boomerang Mk 2
+Hudson Mk V$Hudson Mk 5
+Spitfire Mk IIa Ventura$Spitfire Mk 2a Ventura
+Corsair F Mk II$Corsair F Mk 2
+Typhoon Mk Ib$Typhoon Mk 1b
+Hellcat Mk II$Hellcat Mk 2
+Mustang Mk IA$Mustang Mk 1A
+Spitfire F Mk IXc$Spitfire F Mk 9c
+Plagis' Spitfire LF MK IXc$Plagis' Spitfire LF MK 9c
+Spitfire F Mk XIVc$Spitfire F Mk 14c
+Spitfire FR Mk XIVe$Spitfire FR Mk 14e
+Fury Mk 1$Fury Mk I
+Fury Mk 2$Fury Mk II
+Hurricane Mk 2b/trop$Hurricane Mk IIb/trop
+Hurricane Mk 4$Hurricane Mk IV
+Hurricane Mk 1/L$Hurricane Mk I/L
+Typhoon Mk 1a$Typhoon Mk Ia
+Typhoon Mk 1b/L$Typhoon Mk Ib/L
+Tempest Mk 5$Tempest Mk V
+Tempest Mk 5 (Vickers)$Tempest Mk V (Vickers)
+Tempest Mk 2$Tempest Mk II
+Gladiator Mk 2F$Gladiator Mk IIF
+Gladiator Mk 2S$Gladiator Mk IIS
+Gladiator Mk 2$Gladiator Mk II
+Spitfire Mk 1a$Spitfire Mk Ia
+Spitfire Mk 2a$Spitfire Mk IIa
+Spitfire Mk 2b$Spitfire Mk IIb
+Spitfire Mk 5b/trop$Spitfire Mk Vb/trop
+Spitfire Mk 5b$Spitfire Mk Vb
+Spitfire Mk 5c/trop$Spitfire Mk Vc/trop
+Spitfire Mk 5c$Spitfire Mk Vc
+Spitfire F Mk 9$Spitfire F Mk IX
+Spitfire F Mk 16$Spitfire F Mk XVI
+Spitfire LF Mk 9$Spitfire LF Mk IX
+Spitfire F Mk 14e$Spitfire F Mk XIVe
+Spitfire F Mk 18$Spitfire F Mk XVIII
+Nimrod Mk 1$Nimrod Mk I
+Nimrod Mk 2$Nimrod Mk II
+Sea Gladiator Mk 1$Sea Gladiator Mk I
+Sea Hurricane 1B$Sea Hurricane IB
+Sea Hurricane Mk 1C$Sea Hurricane Mk IC
+Firefly F Mk 1$Firefly F Mk I
+Firefly FR Mk 5$Firefly FR Mk V
+Firebrand TF Mk 4$Firebrand TF Mk IV
+Seafire F Mk 17$Seafire F Mk XVII
+Beaufighter Mk 6c$Beaufighter Mk VIc
+Beaufighter Mk 10$Beaufighter Mk X
+Mosquito FB Mk 6$Mosquito FB Mk VI
+Mosquito FB Mk 18$Mosquito FB Mk XVIII
+Whirlwind Mk 1$Whirlwind Mk I
+Hornet Mk 3$Hornet Mk III
+Tuck's Gladiator Mk 2$Tuck's Gladiator Mk II
+Boston Mk 1$Boston Mk I
+Martlet Mk 4$Martlet Mk IV
+Boomerang Mk 1$Boomerang Mk I
+Boomerang Mk 2$Boomerang Mk II
+Hudson Mk 5$Hudson Mk V
+Spitfire Mk 2a Ventura$Spitfire Mk IIa Ventura
+Corsair F Mk 2$Corsair F Mk II
+Typhoon Mk 1b$Typhoon Mk Ib
+Hellcat Mk 2$Hellcat Mk II
+Mustang Mk 1A$Mustang Mk IA
+Spitfire F Mk 9c$Spitfire F Mk IXc
+Plagis' Spitfire LF MK 9c$Plagis' Spitfire LF MK IXc
+Spitfire F Mk 14c$Spitfire F Mk XIVc
+Spitfire FR Mk 14e$Spitfire FR Mk XIVe
