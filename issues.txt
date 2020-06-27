@@ -1,0 +1,3 @@
+p38l --> P-38L-1 instead of P-38L-5-LO
+p38g --> XP-38G instead of P-38G-1
+fw 190 usa --> Fw 190 [USSR] instead of Fw 190 A-8 [USA]
