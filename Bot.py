@@ -269,6 +269,17 @@ def indexOf(plane, inputlist):
                 break
     return -1
 
+def indexOf(plane, inputdict):
+    keys = inputdict.keys()
+    index = 0
+    if len(keys) > 0:
+        for n in range(len(keys)):
+            if keys[n] == plane:
+                index = n
+                return index
+                break
+    return -1
+
 authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]     #users authorized for all commands except track
 
 texthandle = open("logs.txt", 'a+')                 #opening logs file

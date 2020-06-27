@@ -170,5 +170,5 @@ while True:
     if "end" in a:
         break
     startrequesttime = datetime.datetime.now()
-    print(search(a))
+    print(search2(a))
     print(time_convert(datetime.datetime.now()-startrequesttime))
