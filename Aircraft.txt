@@ -217,36 +217,36 @@ Fw 190 [USSR]
 MiG-15bis ISH
 La-174
 MiG-17AS
-Fury Mk I
-Fury Mk II
-Hurricane Mk IIb/trop
-Hurricane Mk IV
-Hurricane Mk I/L
-Typhoon Mk Ia
-Typhoon Mk Ib/L
-Tempest Mk V
-Tempest Mk V (Vickers)
-Tempest Mk II
+Fury Mk I|Fury Mk 1
+Fury Mk II|Fury Mk 2
+Hurricane Mk IIb/trop|Hurricane Mk 2b/trop
+Hurricane Mk IV|Hurricane Mk 4
+Hurricane Mk I/L|Hurricane Mk 1/L
+Typhoon Mk Ia|Typhoon Mk 1a
+Typhoon Mk Ib/L|Typhoon Mk 1b/L
+Tempest Mk V|Tempest Mk 5
+Tempest Mk V (Vickers)|Tempest Mk 5 (Vickers)
+Tempest Mk II|Tempest Mk 2
 Vampire FB 5
 Venom FB.4
 Hunter F.1
 Hunter F.6
 Phantom FGR.2
-Gladiator Mk IIF
-Gladiator Mk IIS
-Gladiator Mk II
-Spitfire Mk Ia
-Spitfire Mk IIa
-Spitfire Mk IIb
-Spitfire Mk Vb/trop
-Spitfire Mk Vb
-Spitfire Mk Vc/trop
-Spitfire Mk Vc
-Spitfire F Mk IX
-Spitfire F Mk XVI
-Spitfire LF Mk IX
-Spitfire F Mk XIVe
-Spitfire F Mk XVIII
+Gladiator Mk IIF|Gladiator Mk 2F
+Gladiator Mk IIS|Gladiator Mk 2S
+Gladiator Mk II|Gladiator Mk 2
+Spitfire Mk Ia|Spitfire Mk 1a
+Spitfire Mk IIa|Spitfire Mk 2a
+Spitfire Mk IIb|Spitfire Mk 2b
+Spitfire Mk Vb/trop|Spitfire Mk 5b/trop
+Spitfire Mk Vb|Spitfire Mk 5b
+Spitfire Mk Vc/trop|Spitfire Mk 5c/trop
+Spitfire Mk Vc|Spitfire Mk 5c
+Spitfire F Mk IX|Spitfire F Mk 9
+Spitfire F Mk XVI|Spitfire F Mk 16
+Spitfire LF Mk IX|Spitfire LF Mk 9
+Spitfire F Mk XIVe|Spitfire F Mk 14e
+Spitfire F Mk XVIII|Spitfire F Mk 18
 Spitfire F Mk 22
 Spitfire F Mk 24
 Meteor F Mk 3
@@ -256,15 +256,15 @@ Meteor F Mk 4 G.41G
 Meteor F Mk 4 G.41K
 Javelin F.(A.W.) Mk.9
 Lightning F.6
-Nimrod Mk I
-Nimrod Mk II
-Sea Gladiator Mk I
-Sea Hurricane IB
-Sea Hurricane Mk IC
-Firefly F Mk I
-Firefly FR Mk V
-Firebrand TF Mk IV
-Seafire F Mk XVII
+Nimrod Mk I|Nimrod Mk 1
+Nimrod Mk II|Nimrod Mk 2
+Sea Gladiator Mk I|Sea Gladiator Mk 1
+Sea Hurricane IB|Sea Hurricane Mk 1B
+Sea Hurricane Mk IC|Sea Hurricane Mk 1C
+Firefly F Mk I|Firefly F Mk 1
+Firefly FR Mk V|Firefly FR Mk 5
+Firebrand TF Mk IV|Firebrand TF Mk 4
+Seafire F Mk XVII|Seafire F Mk 17
 Seafire FR 47
 Sea Fury FB 11
 Attacker Fb 1
@@ -272,19 +272,19 @@ Sea Hawk FGA.6
 Sea Venom FAW 20
 Scimitar F Mk.1
 Phantom FG. Mk1
-Beaufighter Mk VIc
-Beaufighter Mk X
-Mosquito FB Mk VI
-Mosquito FB Mk XVIII
+Beaufighter Mk VIc|Beaufighter Mk 6c
+Beaufighter Mk X|Beaufighter Mk 10
+Mosquito FB Mk VI|Mosquito FB Mk 6
+Mosquito FB Mk XVIII|Mosquito FB Mk 18
 Beaufighter Mk 21
 Whirlwind Mk I
 Brigand B 1
-Hornet Mk III
+Hornet Mk III|Hornet Mk 3
 Swift F.1
 Swift F.7
-Tuck's Gladiator Mk II
+Tuck's Gladiator Mk II|Tuck's Gladiator Mk 2
 Wirraway
-Boston Mk I
+Boston Mk I|Boston Mk 1
 D. 520 [Great Britain]
 D. 521 [Great Britain]
 Martlet Mk IV
@@ -307,7 +307,7 @@ MB.5
 Spitfire FR Mk XIVe
 Meteor F Mk.8 Reaper
 Hunter FGA.9
-Fury Mk 1
+
 Fury Mk 2
 Hurricane Mk 2b/trop
 Hurricane Mk 4
