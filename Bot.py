@@ -445,9 +445,14 @@ while True:
                     if rmnsDict[planeresult] in requestlist:                #and if the counterpart of the planeresult is already in the request list
                         sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))   #send duplicate message
                     else:
-                        requestlist.append(planeresult)                     #Otherwise, add the request to the request list
                         confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
-                        sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))     #confirmation message
+                        if indexOf(planeresult, rmnsDict) > 54:
+                            requestlist.append(rmnsDict[planeresult])
+                            original = rmnsDict[planeresult]
+                            sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {original} requested!\r\n".encode('utf-8'))
+                        else:
+                            requestlist.append(planeresult)                     #Otherwise, add the request to the request list
+                            sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))     #confirmation message
                 else:
                     requestlist.append(planeresult)                         #same as above
                     confirmation = random.randint(0, len(confirmations)-1)
