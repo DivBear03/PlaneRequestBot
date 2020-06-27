@@ -407,8 +407,8 @@ while True:
             for plane in requestlist:           #iterate through the planes in the list
                 buildstring += plane + ", "     #add the plane to the string and a comma
             if len(requestlist) > 0:            #if there are planes in the requestlist
-                removedplane = requestlist.pop(0)
                 sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))          #send the string of requested planes to the chat
+                removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
             else:
                 sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
 
