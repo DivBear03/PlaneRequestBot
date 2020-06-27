@@ -16,9 +16,9 @@ P-39Q-5
 P-38E
 P-38G-1
 XP-38G
-Ki-43-II [USA]|Ki-43-2 [USA]
+Ki-43-II [USA]
 XP-55
-Ki-61-Ib [USA]|Ki-61-1b [USA]
+Ki-61-Ib [USA]
 P-51A
 P-43A-1
 P-40C
@@ -46,7 +46,7 @@ P-51H-5-NA
 P-47M-1-RE
 Fw 190 A-8 [USA]
 P-51D-10
-Spitfire LF Mk IX [USA]|Spitfire LF Mk 9 [USA]
+Spitfire LF Mk IX [USA]
 P-51D-20-NA
 XA-38
 Bong's P-38J-15
@@ -217,36 +217,36 @@ Fw 190 [USSR]
 MiG-15bis ISH
 La-174
 MiG-17AS
-Fury Mk I|Fury Mk 1
-Fury Mk II|Fury Mk 2
-Hurricane Mk IIb/trop|Hurricane Mk 2b/trop
-Hurricane Mk IV|Hurricane Mk 4
-Hurricane Mk I/L|Hurricane Mk 1/L
-Typhoon Mk Ia|Typhoon Mk 1a
-Typhoon Mk Ib/L|Typhoon Mk 1b/L
-Tempest Mk V|Tempest Mk 5
-Tempest Mk V (Vickers)|Tempest Mk 5 (Vickers)
-Tempest Mk II|Tempest Mk 2
+Fury Mk I
+Fury Mk II
+Hurricane Mk IIb/trop
+Hurricane Mk IV
+Hurricane Mk I/L
+Typhoon Mk Ia
+Typhoon Mk Ib/L
+Tempest Mk V
+Tempest Mk V (Vickers)
+Tempest Mk II
 Vampire FB 5
 Venom FB.4
 Hunter F.1
 Hunter F.6
 Phantom FGR.2
-Gladiator Mk IIF|Gladiator Mk 2F
-Gladiator Mk IIS|Gladiator Mk 2S
-Gladiator Mk II|Gladiator Mk 2
-Spitfire Mk Ia|Spitfire Mk 1a
-Spitfire Mk IIa|Spitfire Mk 2a
-Spitfire Mk IIb|Spitfire Mk 2b
-Spitfire Mk Vb/trop|Spitfire Mk 5b/trop
-Spitfire Mk Vb|Spitfire Mk 5b
-Spitfire Mk Vc/trop|Spitfire Mk 5c/trop
-Spitfire Mk Vc|Spitfire Mk 5c
-Spitfire F Mk IX|Spitfire F Mk 9
-Spitfire F Mk XVI|Spitfire F Mk 16
-Spitfire LF Mk IX|Spitfire LF Mk 9
-Spitfire F Mk XIVe|Spitfire F Mk 14e
-Spitfire F Mk XVIII|Spitfire F Mk 18
+Gladiator Mk IIF
+Gladiator Mk IIS
+Gladiator Mk II
+Spitfire Mk Ia
+Spitfire Mk IIa
+Spitfire Mk IIb
+Spitfire Mk Vb/trop
+Spitfire Mk Vb
+Spitfire Mk Vc/trop
+Spitfire Mk Vc
+Spitfire F Mk IX
+Spitfire F Mk XVI
+Spitfire LF Mk IX
+Spitfire F Mk XIVe
+Spitfire F Mk XVIII
 Spitfire F Mk 22
 Spitfire F Mk 24
 Meteor F Mk 3
@@ -256,15 +256,15 @@ Meteor F Mk 4 G.41G
 Meteor F Mk 4 G.41K
 Javelin F.(A.W.) Mk.9
 Lightning F.6
-Nimrod Mk I|Nimrod Mk 1
-Nimrod Mk II|Nimrod Mk 2
-Sea Gladiator Mk I|Sea Gladiator Mk 1
-Sea Hurricane IB|Sea Hurricane Mk 1B
-Sea Hurricane Mk IC|Sea Hurricane Mk 1C
-Firefly F Mk I|Firefly F Mk 1
-Firefly FR Mk V|Firefly FR Mk 5
-Firebrand TF Mk IV|Firebrand TF Mk 4
-Seafire F Mk XVII|Seafire F Mk 17
+Nimrod Mk I
+Nimrod Mk II
+Sea Gladiator Mk I
+Sea Hurricane IB
+Sea Hurricane Mk IC
+Firefly F Mk I
+Firefly FR Mk V
+Firebrand TF Mk IV
+Seafire F Mk XVII
 Seafire FR 47
 Sea Fury FB 11
 Attacker Fb 1
@@ -272,42 +272,42 @@ Sea Hawk FGA.6
 Sea Venom FAW 20
 Scimitar F Mk.1
 Phantom FG. Mk1
-Beaufighter Mk VIc|Beaufighter Mk 6c
-Beaufighter Mk X|Beaufighter Mk 10
-Mosquito FB Mk VI|Mosquito FB Mk 6
-Mosquito FB Mk XVIII|Mosquito FB Mk 18
+Beaufighter Mk VIc
+Beaufighter Mk X
+Mosquito FB Mk VI
+Mosquito FB Mk XVIII
 Beaufighter Mk 21
 Whirlwind Mk I
 Brigand B 1
-Hornet Mk III|Hornet Mk 3
+Hornet Mk III
 Swift F.1
 Swift F.7
-Tuck's Gladiator Mk II|Tuck's Gladiator Mk 2
+Tuck's Gladiator Mk II
 Wirraway
-Boston Mk I|Boston Mk 1
+Boston Mk I
 D. 520 [Great Britain]
 D. 521 [Great Britain]
-Martlet Mk IV|Martlet Mk 4
+Martlet Mk IV
 Avenger [Great Britain]
-Boomerang Mk I|Boomerang Mk 1
-Boomerang Mk II|Boomerang Mk 2
-Hudson Mk V|Hudson Mk 5
-Spitfire Mk IIa Ventura|Spitfire Mk 2a Ventura
-Corsair F Mk II|Corsair F Mk 2
-Typhoon Mk Ib|Typhoon Mk 1b
-Hellcat Mk II|Hellcat Mk 2
+Boomerang Mk I
+Boomerang Mk II
+Hudson Mk V
+Spitfire Mk IIa Ventura
+Corsair F Mk II
+Typhoon Mk Ib
+Hellcat Mk II
 Whirlwind P.9
-Mustang Mk IA|Mustang Mk 1A
-Spitfire F Mk IXc|Spitfire F Mk 9c
+Mustang Mk IA
+Spitfire F Mk IXc
 Firecrest
-Plagis' Spitfire LF MK IXc|Plagis' Spitfire LF Mk 9c
+Plagis' Spitfire LF MK IXc
 Wyvern
-Spitfire F Mk XIVc|Spitfire F Mk 14c
+Spitfire F Mk XIVc
 MB.5
-Spitfire FR Mk XIVe|Spitfire FR Mk XIVe
+Spitfire FR Mk XIVe
 Meteor F Mk.8 Reaper
 Hunter FGA.9
-Gladiator Mk I [China]|Gladiator Mk 1 [China]
+Gladiator Mk I [China]
 CW-21
 P-66
 P-40E [China]
@@ -327,9 +327,9 @@ I-16 Chung 28
 I-16 Type 5 [China]
 i-16 Type 10 [China]
 Ki-27 otsu [China]
-Ki-43-III ko [China]|Ki-43-3 ko [China]
-Ki-44-II hei [China]|Ki-44-2 hei [China]
-Ki-61-I otsu [China]|Ki-61-1 otsu [China]
+Ki-43-III ko [China]
+Ki-44-II hei [China]
+Ki-61-I otsu [China]
 I-16 Type 17 [China]
 La-9 [China]
 MiG-9 [China]
@@ -343,7 +343,7 @@ B-25J-30 [China]
 Mosquito FB Mk 26 [China]
 Il-10 (1946) [China]
 F-84G-21-RE [China]
-Hawk III|Hawk 3
+Hawk III
 H-81A-2 [China]
 Ki-45 hei/tei [China]
 A6M2 [China]
@@ -363,9 +363,9 @@ M.B.157
 VB.10C-1
 VB.10-02
 M.D.450B Ouragar
-M.D.452 IIA|M.D.452 2A
+M.D.452 IIA
 Super Mystere B2
-Mirage IIIC|Mirage 3C
+Mirage IIIC
 D.500
 D.501
 V-156-F
@@ -381,7 +381,7 @@ F4U-7
 F8F-1B [France]
 M.D.450B Barouga
 F-84G-26-RE
-M.D.452 IIC|M.D.452 2C
+M.D.452 IIC
 F-86K
 F-100D
 Pallier's D.510
@@ -391,7 +391,7 @@ Yak-3 [France]
 Challe's Yak9T
 NC.900
 S.O.8000 Narval
-Vautour IIA IDF/AF|Vautour 2A IDF/AF
+Vautour IIA IDF/AF
 J8A
 J6B
 J11
@@ -534,17 +534,17 @@ J1N1
 B5N2
 Ki-45 ko
 A6M2-N
-Ki-43-I|Ki-43-1
-Ki-43-II|Ki-43-2
+Ki-43-I
+Ki-43-II
 Ki-45 otsu
 N1K1
-Ki-44-I|Ki-44-1
-Ki-44-II hei|Ki-44-2 hei
+Ki-44-I
+Ki-44-II hei
 Ki-45 tei
 A6M2 mod 11
 A6M2
-Ki-61-I ko|Ki-61-1 ko
-Ki-61-I otsu|Ki-61-1 otsu
+Ki-61-I ko
+Ki-61-I otsu
 Ki-100
 Ki-45 hei
 J2M2
@@ -552,15 +552,15 @@ Ki-109
 A6M3
 A6M3 mod 22
 A6M3 mod 22Ko
-Ki-43-III otsu|Ki-43-3 otsu
+Ki-43-iii otsu
 Ki-102 otsu
 A6M5
 A6M5 otsu
-Ki-61-I hei|Ki-61-1 hei
-Ki-61-I tei|Ki-61-1 tei
+Ki-61-I hei
+Ki-61-I tei
 Ki-108
 A7M2
-Ki-61-II|Ki-61-2
+Ki-61-II
 N1K1-Ja
 N1K2-J
 N1K2-Ja
@@ -581,23 +581,23 @@ F-86F-40 [Japan]
 R2Y2 kai V3
 F-104J [Japan]
 T-2
-F-4EJ Phantom II|F-4EJ Phantom 2
+F-4EJ Phantom II
 Hagiri's A5M4
 A7He1
 Ki-27 otsu Tachiarai
-Ki-44-II otsu|Ki-44-2 otsu
+Ki-44-II otsu
 Bf 109 E-7 [Japan]
 F4U-1A [Japan]
-Ki-100-II|Ki-100-2
+Ki-100-II
 Ki-44-1 34
 Ki-96
 Fw 190 A-5 [Japan]
 A7M1 (NK9H)
-Ki-61-I hei Tada's|Ki-61-1 hei Tada's
+Ki-61-I hei Tada's
 J2M4 Kai
 J2M5 30mm
 Ki-87
-Ki-94-II|Ki-94-2
+Ki-94-II
 J6K1
 F-86F-40 JASDF [Japan]
 CR.32
