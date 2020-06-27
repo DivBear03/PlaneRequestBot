@@ -17,6 +17,15 @@ bombers = []
 bombhandle = open("Bomber_Blacklist.txt", 'r')
 for line in bombhandle:
     bombers.append(line.strip())
+#Populating Roman numeral duplicate checking dictionary:
+rmnsDict = {}
+    
+with open("RMNS_NUMS_DICT.txt", 'r') as dfile:
+    for line in dfile:
+        print(line)
+        pieces = line.split("$")
+        rmnsDict.update({pieces[0] : pieces[1]})
+        
 def cleanup(chat):                                                      #function for cleaning up a list converted to a strings
     chat = str(chat)
     chat = chat.replace("[", "")
@@ -420,11 +429,14 @@ while True:
                 if indexOf(planeresult, requestlist) > -1:
                     planeresult = planeresult.replace("\n", "")
                     sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
-                else:
-                    planeresult = planeresult.replace("\n", "")
-                    requestlist.append(planeresult)
-                    confirmation = random.randint(0, len(confirmations)-1)
-                    sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
+                elif result in rmnsDict:
+                    if indexOf(rmnsDict[result],requestlist) > -1:
+                        sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
+                
+                planeresult = planeresult.replace("\n", "")
+                requestlist.append(planeresult)
+                confirmation = random.randint(0, len(confirmations)-1)
+                sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
             print(requestlist)              #print the list
 
 
