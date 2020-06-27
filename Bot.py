@@ -424,6 +424,11 @@ while True:
 
     elif "--commands" in chat:
         sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
+    
+    elif "--clear" in chat:
+        requestlist.clear()
+        sock.send(f"PRIVMSG {channel} :Request list has been cleared\r\n".encode('utf-8'))
+
     if go == True:                              #all code after this only runs if the bot is enabled
 
         if "--request " in message:                                         #checking for request command
