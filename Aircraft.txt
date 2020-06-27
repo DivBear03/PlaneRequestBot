@@ -227,11 +227,6 @@ Typhoon Mk Ib/L
 Tempest Mk V
 Tempest Mk V (Vickers)
 Tempest Mk II
-Vampire FB 5
-Venom FB.4
-Hunter F.1
-Hunter F.6
-Phantom FGR.2
 Gladiator Mk IIF
 Gladiator Mk IIS
 Gladiator Mk II
@@ -247,15 +242,6 @@ Spitfire F Mk XVI
 Spitfire LF Mk IX
 Spitfire F Mk XIVe
 Spitfire F Mk XVIII
-Spitfire F Mk 22
-Spitfire F Mk 24
-Meteor F Mk 3
-Sea Meteor F Mk 3
-Meteor F Mk 4 G.41F
-Meteor F Mk 4 G.41G
-Meteor F Mk 4 G.41K
-Javelin F.(A.W.) Mk.9
-Lightning F.6
 Nimrod Mk I
 Nimrod Mk II
 Sea Gladiator Mk I
@@ -265,28 +251,15 @@ Firefly F Mk I
 Firefly FR Mk V
 Firebrand TF Mk IV
 Seafire F Mk XVII
-Seafire FR 47
-Sea Fury FB 11
-Attacker Fb 1
-Sea Hawk FGA.6
-Sea Venom FAW 20
-Scimitar F Mk.1
-Phantom FG. Mk1
 Beaufighter Mk VIc
 Beaufighter Mk X
 Mosquito FB Mk VI
 Mosquito FB Mk XVIII
-Beaufighter Mk 21
 Whirlwind Mk I
-Brigand B 1
 Hornet Mk III
-Swift F.1
-Swift F.7
 Tuck's Gladiator Mk II
 Wirraway
 Boston Mk I
-D. 520 [Great Britain]
-D. 521 [Great Britain]
 Martlet Mk IV
 Avenger [Great Britain]
 Boomerang Mk I
@@ -296,17 +269,13 @@ Spitfire Mk IIa Ventura
 Corsair F Mk II
 Typhoon Mk Ib
 Hellcat Mk II
-Whirlwind P.9
 Mustang Mk IA
 Spitfire F Mk IXc
 Firecrest
 Plagis' Spitfire LF MK IXc
 Wyvern
 Spitfire F Mk XIVc
-MB.5
 Spitfire FR Mk XIVe
-Meteor F Mk.8 Reaper
-Hunter FGA.9
 Fury Mk 1
 Fury Mk 2
 Hurricane Mk 2b/trop
