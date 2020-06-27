@@ -22,7 +22,6 @@ rmnsDict = {}
     
 with open("RMNS_NUMS_DICT.txt", 'r') as dfile:
     for line in dfile:
-        print(line)
         pieces = line.split("$")
         rmnsDict.update({pieces[0] : pieces[1]})
         
