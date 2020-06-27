@@ -307,6 +307,96 @@ MB.5
 Spitfire FR Mk XIVe
 Meteor F Mk.8 Reaper
 Hunter FGA.9
+Fury Mk 1
+Fury Mk 2
+Hurricane Mk 2b/trop
+Hurricane Mk 4
+Hurricane Mk 1/L
+Typhoon Mk 1a
+Typhoon Mk 1b/L
+Tempest Mk 5
+Tempest Mk 5 (Vickers)
+Tempest Mk 2
+Vampire FB 5
+Venom FB.4
+Hunter F.1
+Hunter F.6
+Phantom FGR.2
+Gladiator Mk 2F
+Gladiator Mk 2S
+Gladiator Mk 2
+Spitfire Mk 1a
+Spitfire Mk 2a
+Spitfire Mk 2b
+Spitfire Mk 5b/trop
+Spitfire Mk 5b
+Spitfire Mk 5c/trop
+Spitfire Mk 5c
+Spitfire F Mk 9
+Spitfire F Mk 16
+Spitfire LF Mk 9
+Spitfire F Mk 14e
+Spitfire F Mk 18
+Spitfire F Mk 22
+Spitfire F Mk 24
+Meteor F Mk 3
+Sea Meteor F Mk 3
+Meteor F Mk 4 G.41F
+Meteor F Mk 4 G.41G
+Meteor F Mk 4 G.41K
+Javelin F.(A.W.) Mk.9
+Lightning F.6
+Nimrod Mk 1
+Nimrod Mk 2
+Sea Gladiator Mk 1
+Sea Hurricane 1B
+Sea Hurricane Mk 1C
+Firefly F Mk 1
+Firefly FR Mk 5
+Firebrand TF Mk 4
+Seafire F Mk 17
+Seafire FR 47
+Sea Fury FB 11
+Attacker Fb 1
+Sea Hawk FGA.6
+Sea Venom FAW 20
+Scimitar F Mk.1
+Phantom FG. Mk1
+Beaufighter Mk 6c
+Beaufighter Mk 10
+Mosquito FB Mk 6
+Mosquito FB Mk 18
+Beaufighter Mk 21
+Whirlwind Mk 1
+Brigand B 1
+Hornet Mk 3
+Swift F.1
+Swift F.7
+Tuck's Gladiator Mk 2
+Wirraway
+Boston Mk 1
+D. 520 [Great Britain]
+D. 521 [Great Britain]
+Martlet Mk 4
+Avenger [Great Britain]
+Boomerang Mk 1
+Boomerang Mk 2
+Hudson Mk 5
+Spitfire Mk 2a Ventura
+Corsair F Mk 2
+Typhoon Mk 1b
+Hellcat Mk 2
+Whirlwind P.9
+Mustang Mk 1A
+Spitfire F Mk 9c
+Firecrest
+Plagis' Spitfire LF MK 9c
+Wyvern
+Spitfire F Mk 14c
+MB.5
+Spitfire FR Mk 14e
+Meteor F Mk.8 Reaper
+Hunter FGA.9
 Gladiator Mk I [China]
 CW-21
 P-66
