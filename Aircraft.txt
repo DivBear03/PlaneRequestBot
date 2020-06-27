@@ -16,9 +16,9 @@ P-39Q-5
 P-38E
 P-38G-1
 XP-38G
-Ki-43-II [USA]
+Ki-43-II [USA]|Ki-43-2 [USA]
 XP-55
-Ki-61-Ib [USA]
+Ki-61-Ib [USA]|Ki-61-1b [USA]
 P-51A
 P-43A-1
 P-40C
@@ -46,7 +46,7 @@ P-51H-5-NA
 P-47M-1-RE
 Fw 190 A-8 [USA]
 P-51D-10
-Spitfire LF Mk IX [USA]
+Spitfire LF Mk IX [USA]|Spitfire LF Mk 9 [USA]
 P-51D-20-NA
 XA-38
 Bong's P-38J-15
