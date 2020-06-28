@@ -9,6 +9,26 @@ from difflib import SequenceMatcher
 import random
 import scipy.stats
 
+class Action:
+    def __init__(self, add, delete, plane, index, time):
+        self.add = add
+        self.delete = delete
+        self.plane = plane
+        self.index = index
+        self.time = time
+    def getAdd(self):
+        return self.add
+    def getDelete(self):
+        return self.delete
+    def getPlane(self):
+        return self.plane
+    def getIndex(self):
+        return self.index
+    def getTime(self):
+        return self.time
+
+actions = []
+
 aircraft = []
 texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
 for line in texthandle:                                 #iterate through text file
