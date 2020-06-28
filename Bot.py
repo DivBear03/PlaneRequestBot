@@ -9,8 +9,8 @@ from difflib import SequenceMatcher
 import random
 import scipy.stats
 
-'''class Action:
-    def __init__(self, add, delete, plane, index, time):
+class Action:
+    def __init__(self, add, delete, plane, index):
         self.add = add
         self.delete = delete
         self.plane = plane
@@ -24,10 +24,8 @@ import scipy.stats
         return self.plane
     def getIndex(self):
         return self.index
-    def getTime(self):
-        return self.time'''
 
-#actions = []
+actions = []
 
 aircraft = []
 texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
@@ -317,7 +315,7 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -325,9 +323,9 @@ requestlist = list()                                #creating empty list of requ
 go = True                                          #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
-commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0}
+commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0}
 count = 0
-'''timeout = time.time() + 20                     #manual timer for testing'''
+timeout = time.time() + 720                     #manual timer for testing'''
 
 requests = {}                                       #dictionary to hold requests and results
 
@@ -337,8 +335,15 @@ sock.send(f"PRIVMSG {channel} :Howdy\r\n".encode('utf-8'))
 
 while True:
     
-    '''if time.time() > timeout:
-        break'''
+    if time.time() > timeout:
+        sock.close()
+        sock = socket.socket()                              #creating socket for connection to twitch
+        sock.settimeout(240.0)
+        sock.connect((server, port))
+        sock.send(f"PASS {token}\n".encode('utf-8'))
+        sock.send(f"NICK {nickname}\n".encode('utf-8'))
+        sock.send(f"JOIN {channel}\n".encode('utf-8'))
+        timeout = time.time() + 600
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
@@ -405,8 +410,8 @@ while True:
                 plane = int(plane)
                 skipped = requestlist.pop(plane)
                 sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
-                #obj = Action(False, True, skipped, plane, datetime.datetime.now())
-                #actions.append(obj)
+                obj = Action(False, True, skipped, plane)
+                actions.insert(0, obj)
             except:
                 selected = indexOf(plane, requestlist)
                 skipped = requestlist.pop(selected)
@@ -414,8 +419,8 @@ while True:
                     sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
                 else:
                     sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
-                    #obj = Action(False, True, skipped, selected, datetime.datetime.now())
-                    #actions.append(obj)
+                    obj = Action(False, True, skipped, selected)
+                    actions.insert(0, obj)
         else:
             sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
@@ -479,21 +484,28 @@ while True:
                             confirmation = random.randint(0, len(confirmations)-1)
                             if indexDict(planeresult, rmnsDict) > 54:
                                 requestlist.append(rmnsDict[planeresult])
-                                original = rmnsDict[planeresult]
-                                sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {original} requested\r\n".encode('utf-8'))
                             else:
                                 requestlist.append(planeresult)
-                                sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
                     else:
                         requestlist.append(planeresult)                         #same as above
-                        confirmation = random.randint(0, len(confirmations)-1)
-                        sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
                         print(requestlist)              #print the list
+
+    elif "--undo" in message:
+        if user in authorized:
+            if len(actions) > 0:
+                obj = actions[0]
+                if obj.getAdd():
+                    requestlist.pop(obj.getIndex())
+                elif obj.getDelete():
+                    requestlist.insert(obj.getIndex(), obj.getPlane())
+                actions.pop(0)
+            else:
+                sock.send(f"PRIVMSG {channel} :No previous actions\r\n".encode('utf-8'))
+            print(requestlist)
 
     if go == True:                              #all code after this only runs if the bot is enabled
 
         if "--request " in message:                                         #checking for request command
-            startrequesttime = datetime.now()
             commands['--request'] += 1
             plane = re.findall("--request (.+)", message)                   #pull out the plane name
             plane = cleanup(plane)                                          #clean up the list object
@@ -518,17 +530,19 @@ while True:
                             requestlist.append(rmnsDict[planeresult])
                             original = rmnsDict[planeresult]
                             sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {original} requested!\r\n".encode('utf-8'))
-                            #obj = Action(True, False, original, len(requestlist)-1, datetime.datetime.now())
-                            #actions.append(obj)
+                            obj = Action(True, False, original, len(requestlist)-1)
+                            actions.insert(0, obj)
                         else:
                             requestlist.append(planeresult)                     #Otherwise, add the request to the request list
                             sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))     #confirmation message
-                            #obj = Action(True, False, planeresult, len(requestlist)-1, datetime.datetime.now())
-                            #actions.append(obj)
+                            obj = Action(True, False, planeresult, len(requestlist)-1)
+                            actions.insert(0, obj)
                 else:
                     requestlist.append(planeresult)                         #same as above
                     confirmation = random.randint(0, len(confirmations)-1)
                     sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
+                    obj = Action(True, False, planeresult, len(requestlist)-1)
+                    actions.insert(0, obj)
                     print(requestlist)              #print the list
 
 sortedlist = list()                 #creating empty list to hold sorted users
