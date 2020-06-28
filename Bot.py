@@ -9,7 +9,7 @@ from difflib import SequenceMatcher
 import random
 import scipy.stats
 
-class Action:
+'''class Action:
     def __init__(self, add, delete, plane, index, time):
         self.add = add
         self.delete = delete
@@ -25,9 +25,9 @@ class Action:
     def getIndex(self):
         return self.index
     def getTime(self):
-        return self.time
+        return self.time'''
 
-actions = []
+#actions = []
 
 aircraft = []
 texthandle = open("Aircraft.txt", 'r')         #open file that contains all useful allied aircraft
@@ -405,8 +405,8 @@ while True:
                 plane = int(plane)
                 skipped = requestlist.pop(plane)
                 sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
-                obj = Action(False, True, skipped, plane, datetime.datetime.now())
-                actions.append(obj)
+                #obj = Action(False, True, skipped, plane, datetime.datetime.now())
+                #actions.append(obj)
             except:
                 selected = indexOf(plane, requestlist)
                 skipped = requestlist.pop(selected)
@@ -414,8 +414,8 @@ while True:
                     sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
                 else:
                     sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
-                    obj = Action(False, True, skipped, selected, datetime.datetime.now())
-                    actions.append(obj)
+                    #obj = Action(False, True, skipped, selected, datetime.datetime.now())
+                    #actions.append(obj)
         else:
             sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
