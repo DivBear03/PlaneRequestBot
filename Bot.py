@@ -358,32 +358,32 @@ while True:
         else:
             usercount[user] = usercount[user] + 1       #otherwise, add one to the user's current count
     
-    if "--" not in chat:
+    if "--" not in message:
         continue
 
-    if "--disable" in chat:                 #check for disable command
+    if "--disable" in message:                 #check for disable command
         if user in authorized:
             go = False
             commands['--disable'] += 1
             print("BotOn = " + str(go))
 
-    elif "--enable" in chat:                      #check for enable command
+    elif "--enable" in message:                      #check for enable command
         if user in authorized:
             go = True
             commands['--enable'] += 1
             print("BotOn = " + str(go))
 
-    elif "--end" in chat:                   #check for end program command
+    elif "--end" in message:                   #check for end program command
         if user in authorized:
             break        
 
-    elif '--track' in chat:                     #check for tracking start command
+    elif '--track' in message:                     #check for tracking start command
         if user == "adamtheenginerd":
             tracking = True
             commands['--track'] += 1
             print("Tracking = " + str(tracking))
 
-    elif '--stoptrack' in chat:                 #check for tracking end command
+    elif '--stoptrack' in message:                 #check for tracking end command
         if user == "adamtheenginerd":
             tracking = False
             commands['--stoptrack'] += 1
@@ -405,6 +405,8 @@ while True:
                 plane = int(plane)
                 skipped = requestlist.pop(plane)
                 sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
+                obj = Action(False, True, skipped, plane, datetime.datetime.now())
+                actions.append(obj)
             except:
                 selected = indexOf(plane, requestlist)
                 skipped = requestlist.pop(selected)
@@ -412,6 +414,8 @@ while True:
                     sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
                 else:
                     sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
+                    obj = Action(False, True, skipped, selected, datetime.datetime.now())
+                    actions.append(obj)
         else:
             sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
@@ -442,12 +446,20 @@ while True:
             else:
                 sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
-    elif "--commands" in chat:
+    elif "--commands" in message:
         sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
     
-    elif "--clear" in chat:
+    elif "--clear" in message:
         requestlist.clear()
         sock.send(f"PRIVMSG {channel} :Request list has been cleared\r\n".encode('utf-8'))
+
+    elif "--undo" in message:
+        if len(actions) > 0:
+            obj = actions[0]
+            if obj.getAdd():
+                requestlist.pop(obj.getIndex())
+            elif obj.getDelete():
+                requestlist.insert(obj.getIndex(), obj.getPlane())
 
     if go == True:                              #all code after this only runs if the bot is enabled
 
