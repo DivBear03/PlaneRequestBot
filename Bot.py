@@ -324,7 +324,10 @@ tracking = True                                     #setting tracking to True as
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0}
 count = 0
-timeout = time.time() + 720                     #manual timer for testing'''
+timeout = time.time() + 600                     #anti-disconnect timer
+
+reminder = time.time() + 2700                   #timer for sending --requests command reminder
+reminders = True
 
 requests = {}                                       #dictionary to hold requests and results
 
@@ -342,7 +345,12 @@ while True:
         sock.send(f"NICK {nickname}\n".encode('utf-8'))
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
         timeout = time.time() + 600
+    if time.time() > reminder and reminders == True:
+        sock.send(f"PRIVMSG {channel} :Hello. Plane requests can be made with the --request command\r\n".encode('utf-8'))
     
+    if commands['--request'] == 10:
+        reminders = False
+
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
