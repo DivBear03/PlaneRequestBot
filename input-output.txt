@@ -1,1 +1,6 @@
 Request                 Result, Similarity Score
+spitfire f mk 24------->('Spitfire F Mk 24', 90.0)
+p-51------------------->('P-51', 90.0)
+p-51h------------------>('P-51H-5-NA', 77.02607769085236)
+f4u4b------------------>('F4U-4B', 90.0)
+be-6------------------->Bombers are useless

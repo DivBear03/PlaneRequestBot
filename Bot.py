@@ -334,7 +334,7 @@ sock.send(f"PRIVMSG {channel} :Howdy\r\n".encode('utf-8'))
 
 while True:
     
-    if time.time() > timeout:
+    if time.time() > timeout:                               #Contingency against disconnection from IRC
         sock.close()
         sock = socket.socket()                              #creating socket for connection to twitch
         sock.connect((server, port))
