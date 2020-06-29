@@ -194,7 +194,7 @@ LaGG-3-4
 LaGG-3-34
 I-301
 I-153P
-Hurricane Mk IIB
+Hurricane Mk IIB [USSR]
 I-16 Type 28
 P-40E-1 [USSR]
 I-180S
@@ -245,7 +245,7 @@ Spitfire F Mk XVIII
 Nimrod Mk I
 Nimrod Mk II
 Sea Gladiator Mk I
-Sea Hurricane IB
+Sea Hurricane Mk IB
 Sea Hurricane Mk IC
 Firefly F Mk I
 Firefly FR Mk V
@@ -259,7 +259,6 @@ Whirlwind Mk I
 Hornet Mk III
 Tuck's Gladiator Mk II
 Wirraway
-Boston Mk I
 Martlet Mk IV
 Avenger [Great Britain]
 Boomerang Mk I
@@ -427,7 +426,6 @@ Super Mystere B2
 Mirage IIIC
 D.500
 D.501
-V-156-F
 Br.693AB2
 Potez 630
 Potez 631

@@ -37,6 +37,7 @@ def cleanup2(plane):                                    #function for cleaning u
     plane = plane.replace("\n", "")
     plane = plane.replace("(", "")
     plane = plane.replace(")", "")
+    plane = plane.replace(".", "")
     return plane
 
 def gestalt(plane,plane1):
@@ -92,7 +93,7 @@ def search2(plane):
     
     plane = cleanup2(plane)
 
-    if len(plane) <= 2:
+    if len(plane) <= 2 and plane != "j2" and plane != "j4" and plane != "j6" and plane != "j7" and plane != "t2":
         return "No match"
 
     for plane1 in bombers:
@@ -164,7 +165,6 @@ def search2(plane):
         return samesims[shortestindex]              #return the plane with the highest match
     else:
         return "No match"
-
 
 while True:
     a = input("Search for:")
