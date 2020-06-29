@@ -42,6 +42,7 @@ with open("RMNS_NUMS_DICT.txt", 'r') as dfile:
     for line in dfile:
         pieces = line.split("$")
         rmnsDict.update({pieces[0] : pieces[1].replace("\n", "")})
+
 def cleanup(chat):                                                      #function for cleaning up a list converted to a strings
     chat = str(chat)
     chat = chat.replace("[", "")
@@ -200,7 +201,7 @@ def search(plane):                                                      #search 
     else:
         return "No match"
 
-def search2(plane):
+def search2(plane):                                                     #better search algorithm
     
     plane = cleanup2(plane)
 
