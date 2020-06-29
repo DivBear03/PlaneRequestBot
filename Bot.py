@@ -503,7 +503,7 @@ while True:
                 sock.send(f"PRIVMSG {channel} :No previous actions\r\n".encode('utf-8'))
             print(requestlist)
 
-    if go == True:                              #all code after this only runs if the bot is enabled
+    if go == True:                              #--request command only works when go is True
 
         if "--request " in message:                                         #checking for request command
             commands['--request'] += 1
