@@ -309,7 +309,6 @@ requesthandle = open("input-output.txt", 'a+')      #opening file for recording 
 server = 'irc.chat.twitch.tv'                       #server address
 port = 6667                                         #port number
 sock = socket.socket()                              #creating socket for connection to twitch
-sock.settimeout(240.0)                              #creating timeout timer
 sock.connect((server, port))                        #connecting to socket
 token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestbot user. Could be changed if you want to send from another twitch user account
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
@@ -338,7 +337,6 @@ while True:
     if time.time() > timeout:
         sock.close()
         sock = socket.socket()                              #creating socket for connection to twitch
-        sock.settimeout(240.0)
         sock.connect((server, port))
         sock.send(f"PASS {token}\n".encode('utf-8'))
         sock.send(f"NICK {nickname}\n".encode('utf-8'))
