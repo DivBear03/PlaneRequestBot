@@ -314,7 +314,7 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -482,10 +482,16 @@ while True:
                             confirmation = random.randint(0, len(confirmations)-1)
                             if indexDict(planeresult, rmnsDict) > 54:
                                 requestlist.append(rmnsDict[planeresult])
+                                obj = Action(True, False, rmnsDict[planeresult], len(requestlist)-1)
+                                actions.insert(0, obj)
                             else:
                                 requestlist.append(planeresult)
+                                obj = Action(True, False, planeresult, len(requestlist)-1)
+                                actions.insert(0, obj)
                     else:
                         requestlist.append(planeresult)                         #same as above
+                        obj = Action(True, False, planeresult, len(requestlist)-1)
+                        actions.insert(0, obj)
                         print(requestlist)              #print the list
 
     elif "--undo" in message:
