@@ -330,7 +330,7 @@ requests = {}                                       #dictionary to hold requests
 
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 
-sock.send(f"PRIVMSG {channel} :Howdy\r\n".encode('utf-8'))
+sock.send(f"PRIVMSG {channel} :Howdy. Plane requests can be made with the --request command\r\n".encode('utf-8'))
 
 while True:
     
@@ -342,6 +342,7 @@ while True:
         sock.send(f"NICK {nickname}\n".encode('utf-8'))
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
         timeout = time.time() + 600
+    
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
