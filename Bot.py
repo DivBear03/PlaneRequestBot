@@ -430,6 +430,7 @@ while True:
         if user in authorized:
             plane = requestlist.pop(len(requestlist)-1)
             sock.send(f"PRIVMSG {channel} :{plane} deleted\r\n".encode('utf-8'))
+            actions.insert(0, Action(False, True, plane, len(requestlist)-1))
 
     elif "--reqdel" in message or "—reqdel" in message:             #checking for reqdel command
         if user in authorized:
