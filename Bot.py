@@ -404,26 +404,27 @@ while True:
 
     elif "--skip[" in message or "—skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
         if user in authorized:
-            plane = re.findall("skip\[(.+)\]", message)
-            plane = cleanup(plane)
-            plane = plane.replace("'", "")
-            try:
-                plane = int(plane)
-                skipped = requestlist.pop(plane)
-                sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
-                obj = Action(False, True, skipped, plane)
-                actions.insert(0, obj)
-            except:
-                selected = indexOf(plane, requestlist)
-                skipped = requestlist.pop(selected)
-                if skipped in requestlist:
-                    sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
-                else:
+            if len(requestlist) > 0:
+                plane = re.findall("skip\[(.+)\]", message)
+                plane = cleanup(plane)
+                plane = plane.replace("'", "")
+                try:
+                    plane = int(plane)
+                    skipped = requestlist.pop(plane)
                     sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
-                    obj = Action(False, True, skipped, selected)
+                    obj = Action(False, True, skipped, plane)
                     actions.insert(0, obj)
-        else:
-            sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
+                except:
+                    selected = indexOf(plane, requestlist)
+                    skipped = requestlist.pop(selected)
+                    if skipped in requestlist:
+                        sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
+                    else:
+                        sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
+                        obj = Action(False, True, skipped, selected)
+                        actions.insert(0, obj)
+            else:
+                sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
     elif "--delLast" in message or "--dellast" in message or "—delLast" in message or "—dellast" in message:
         if user in authorized:
