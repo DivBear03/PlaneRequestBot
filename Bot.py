@@ -458,8 +458,9 @@ while True:
         sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
     
     elif "--clear" in message:
-        requestlist.clear()
-        sock.send(f"PRIVMSG {channel} :Request list has been cleared\r\n".encode('utf-8'))
+        if user in authorized:
+            requestlist.clear()
+            sock.send(f"PRIVMSG {channel} :Request list has been cleared\r\n".encode('utf-8'))
 
     elif "--batchrequest" in message:
         if user in authorized:
