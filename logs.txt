@@ -1,11 +1,3 @@
-Tracking start time: 2020-06-29 17:15:12.992564
-#adamtheenginerd
-adamtheenginerd: 20 messages
-: 5 messages
-planerequestbot: 1 messages
-Number of requests: 3
-Tracking end time: 2020-06-29 17:34:15.652788
-
 Tracking start time: 2020-06-29 20:23:27.632306
 #adamtheenginerd
 vuldahviing: 157 messages
