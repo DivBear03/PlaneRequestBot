@@ -159,7 +159,6 @@ LaGG-3-11
 LaGG-3-35
 LaGG-3-66
 La-5
-Po-2
 BB-1
 Su-2 MV-5
 Su-2 TSS-1
