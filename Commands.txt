@@ -1,5 +1,8 @@
 --request <planename>
-	Adds the plane name to the running list of requested planes
+	Adds the plane name to the running list of requested planes if match is found using search algorithm
+--batchrequest <plane1>,<plane2>,<plane3>,etc.
+	Adds all planes to the request list if matches are found
+	Returns error messages for duplicates. Won't reply for no matches or bombers
 --requests
 	Shows the list of requested planes without deleting the 1st one afterward
 --reqdel
@@ -7,10 +10,14 @@
 	If you want to skip the present plane, use --skip command
 --skip [<insert aircraft name here>]
 	Skips the aircraft specified. Replies "<aircraft> has been skipped"
+--skip[<list index>]
+	Skips the aircraft at the specified list index
+	Ex: if requestlist = P-51, P-51D-30, P-51H-5-NA
+	--skip[0] skips P-51
+	--skip[0] again would delete P-51D-30 since it moved up
+	requestlist = P-51H-5-NA
 --commands
 	Prints the Google Site that has all the commands listed on it
---skip
-	Removes the first one. Replies "<aircraft> has been skipped"
 --enable
 	Enables the bot
 --disable
