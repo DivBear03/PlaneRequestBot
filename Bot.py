@@ -324,7 +324,7 @@ requestlist = list()                                #creating empty list of requ
 go = True                                          #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
-commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0}
+commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0}
 count = 0
 timeout = time.time() + 600                     #anti-disconnect timer
 
@@ -404,6 +404,7 @@ while True:
 
     elif "--skip[" in message or "—skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
         if user in authorized:
+            commands['--skip'] += 1
             if len(requestlist) > 0:
                 plane = re.findall("skip\[(.+)\]", message)
                 plane = cleanup(plane)
@@ -428,6 +429,7 @@ while True:
 
     elif "--delLast" in message or "--dellast" in message or "—delLast" in message or "—dellast" in message:
         if user in authorized:
+            commands['--dellast'] += 1
             plane = requestlist.pop(len(requestlist)-1)
             sock.send(f"PRIVMSG {channel} :{plane} deleted\r\n".encode('utf-8'))
             actions.insert(0, Action(False, True, plane, len(requestlist)-1))
