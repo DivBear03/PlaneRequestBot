@@ -364,32 +364,32 @@ while True:
         else:
             usercount[user] = usercount[user] + 1       #otherwise, add one to the user's current count
     
-    if "--" not in message:
+    if "--" not in message and "—" not in message:
         continue
 
-    if "--disable" in message:                 #check for disable command
+    if "--disable" in message or "—disable" in message:                 #check for disable command
         if user in authorized:
             go = False
             commands['--disable'] += 1
             print("BotOn = " + str(go))
 
-    elif "--enable" in message:                      #check for enable command
+    elif "--enable" in message or "—enable" in message:                      #check for enable command
         if user in authorized:
             go = True
             commands['--enable'] += 1
             print("BotOn = " + str(go))
 
-    elif "--end" in message:                   #check for end program command
+    elif "--end" in message or "—end" in message:                   #check for end program command
         if user in authorized:
             break        
 
-    elif '--track' in message:                     #check for tracking start command
+    elif '--track' in message or "—track" in message:                     #check for tracking start command
         if user == "adamtheenginerd":
             tracking = True
             commands['--track'] += 1
             print("Tracking = " + str(tracking))
 
-    elif '--stoptrack' in message:                 #check for tracking end command
+    elif '--stoptrack' in message or "—stoptrack" in message:                 #check for tracking end command
         if user == "adamtheenginerd":
             tracking = False
             commands['--stoptrack'] += 1
@@ -402,9 +402,9 @@ while True:
     elif chat.startswith("PING"):               #check for PING from Twitch IRC
         sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
 
-    elif "--skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
+    elif "--skip[" in message or "—skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
         if user in authorized:
-            plane = re.findall("--skip\[(.+)\]", message)
+            plane = re.findall("skip\[(.+)\]", message)
             plane = cleanup(plane)
             plane = plane.replace("'", "")
             try:
@@ -425,12 +425,12 @@ while True:
         else:
             sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
-    elif "--delLast" in message or "--dellast" in message:
+    elif "--delLast" in message or "--dellast" in message or "—delLast" in message or "—dellast" in message:
         if user in authorized:
             plane = requestlist.pop(len(requestlist)-1)
             sock.send(f"PRIVMSG {channel} :{plane} deleted\r\n".encode('utf-8'))
 
-    elif "--reqdel" in message:             #checking for reqdel command
+    elif "--reqdel" in message or "—reqdel" in message:             #checking for reqdel command
         if user in authorized:
             commands['--reqdel'] += 1
             buildstring = ""                    #create empty string that will show the list of requested planes
@@ -444,7 +444,7 @@ while True:
             else:
                 sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
 
-    elif "--requests" in message:               #check for requests message. Same code as before, but first plane is not removed
+    elif "--requests" in message or "—requests" in message:               #check for requests message. Same code as before, but first plane is not removed
         commands['--requests'] += 1
         buildstring = ""
         for plane in requestlist:
@@ -454,15 +454,15 @@ while True:
         else:
             sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
-    elif "--commands" in message:
+    elif "--commands" in message or "—commands" in message:
         sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
     
-    elif "--clear" in message:
+    elif "--clear" in message or "—clear" in message:
         if user in authorized:
             requestlist.clear()
             sock.send(f"PRIVMSG {channel} :Request list has been cleared\r\n".encode('utf-8'))
 
-    elif "--batchrequest" in message:
+    elif "--batchrequest" in message or "—batchrequest" in message:
         if user in authorized:
             commands['--batchrequest'] += 1
             batch = re.findall("--batchrequest (.+)", message)
@@ -500,7 +500,7 @@ while True:
                         actions.insert(0, obj)
                         print(requestlist)              #print the list
 
-    elif "--undo" in message:
+    elif "--undo" in message or "—undo" in message:
         if user in authorized:
             if len(actions) > 0:
                 obj = actions[0]
@@ -515,9 +515,9 @@ while True:
 
     if go == True:                              #--request command only works when go is True
 
-        if "--request " in message:                                         #checking for request command
+        if "--request " in message or "—request" in message:                                         #checking for request command
             commands['--request'] += 1
-            plane = re.findall("--request (.+)", message)                   #pull out the plane name
+            plane = re.findall("request (.+)", message)                   #pull out the plane name
             plane = cleanup(plane)                                          #clean up the list object
             plane = plane.replace("'", "")                                  #replace single quotes with nothing
             result = search2(plane)                                         #perform search algorithm
