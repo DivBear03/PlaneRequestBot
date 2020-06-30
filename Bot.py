@@ -328,9 +328,6 @@ commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--re
 count = 0
 timeout = time.time() + 600                     #anti-disconnect timer
 
-reminder = time.time() + 2700                   #timer for sending --requests command reminder
-reminders = True
-
 requests = {}                                       #dictionary to hold requests and results
 
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
@@ -347,11 +344,6 @@ while True:
         sock.send(f"NICK {nickname}\n".encode('utf-8'))
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
         timeout = time.time() + 600
-    if time.time() > reminder and reminders == True:
-        sock.send(f"PRIVMSG {channel} :Hello. Plane requests can be made with the --request command\r\n".encode('utf-8'))
-    
-    if commands['--request'] == 10:
-        reminders = False
 
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
@@ -447,6 +439,8 @@ while True:
             if len(requestlist) > 0:            #if there are planes in the requestlist
                 sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))          #send the string of requested planes to the chat
                 removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
+                obj = Action(False, True, removedplane, 0)
+                actions.insert(0, obj)
             else:
                 sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
 

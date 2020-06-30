@@ -11,7 +11,7 @@ B-29A-BN
 PV-2D
 PBM-3
 Do 17 E-1
-D0 17 Z-2
+Do 17 Z-2
 He 111 H-3
 Ju 88 A-1
 Ju 88 A-4
@@ -23,6 +23,7 @@ Do 217 E-2
 Do 217 E-4
 Do 217 K-1
 Do 217 M-1
+Do 217 N-2
 Ju 188 A-2
 He 177 A-5
 Ju 288 C
