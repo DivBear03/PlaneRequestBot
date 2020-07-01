@@ -24,6 +24,11 @@ class Action:
         return self.plane
     def getIndex(self):
         return self.index
+class Clear:
+    def __init__(self, planelist):
+        self.planelist = planelist
+    def getPlaneList(self):
+        return self.planelist
 
 actions = []
 
@@ -316,7 +321,7 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -411,19 +416,25 @@ while True:
                 plane = plane.replace("'", "")
                 try:
                     plane = int(plane)
+                    print(plane)
                     skipped = requestlist.pop(plane)
                     sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
-                    obj = Action(False, True, skipped, plane)
-                    actions.insert(0, obj)
+                    actions.insert(0, Action(False, True, skipped, plane))
                 except:
-                    selected = indexOf(plane, requestlist)
-                    skipped = requestlist.pop(selected)
-                    if skipped in requestlist:
-                        sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
+                    planeresult = search2(plane)
+                    print(planeresult)
+                    if planeresult == "No match" or planeresult == "Bombers are useless":
+                        planeresult = str(planeresult)
+                        sock.send(f"PRIVMSG {channel} :Skip failed; {planeresult}\r\n".encode('utf-8'))
                     else:
-                        sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
-                        obj = Action(False, True, skipped, selected)
-                        actions.insert(0, obj)
+                        plane = planeresult[0]
+                        selected = indexOf(plane, requestlist)
+                        skipped = requestlist.pop(selected)
+                        if search2(plane)[0] in requestlist:
+                            sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
+                        else:
+                            sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
+                            actions.insert(0, Action(False, True, skipped, selected))
             else:
                 sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
 
@@ -443,8 +454,7 @@ while True:
             if len(requestlist) > 0:            #if there are planes in the requestlist
                 sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))          #send the string of requested planes to the chat
                 removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
-                obj = Action(False, True, removedplane, 0)
-                actions.insert(0, obj)
+                actions.insert(0, Action(False, True, removedplane, 0))
             else:
                 sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
 
@@ -463,8 +473,14 @@ while True:
     
     elif "--clear" in message or "—clear" in message:
         if user in authorized:
+            planelist = []
+            for n in range(len(requestlist)):
+                planelist.append(requestlist[n])
+            obj = Clear(planelist)
+            actions.insert(0, obj)
             requestlist.clear()
             sock.send(f"PRIVMSG {channel} :Request list has been cleared\r\n".encode('utf-8'))
+            print(requestlist)
 
     elif "--batchrequest" in message or "—batchrequest" in message:
         if user in authorized:
@@ -508,10 +524,14 @@ while True:
         if user in authorized:
             if len(actions) > 0:
                 obj = actions[0]
-                if obj.getAdd():
-                    requestlist.pop(obj.getIndex())
-                elif obj.getDelete():
-                    requestlist.insert(obj.getIndex(), obj.getPlane())
+                if type(obj) == Clear:
+                    for plane in obj.getPlaneList():
+                        requestlist.append(plane)
+                elif type(obj) == Action:
+                    if obj.getAdd():
+                        requestlist.pop(obj.getIndex())
+                    elif obj.getDelete():
+                        requestlist.insert(obj.getIndex(), obj.getPlane())
                 actions.pop(0)
             else:
                 sock.send(f"PRIVMSG {channel} :No previous actions\r\n".encode('utf-8'))
