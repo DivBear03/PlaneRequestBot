@@ -321,7 +321,7 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -357,6 +357,9 @@ while True:
         break
     count += 1
     
+    if count == 7:
+        sock.send(f"PRIVMSG {channel} :Howdy. Plane requests can be made with the --request command\r\n".encode('utf-8'))
+
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)                                                #clean up the list object
     user = user.replace("'", "")                                        #remove single quotes
