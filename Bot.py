@@ -306,7 +306,8 @@ def indexDict(plane, inputdict):
     return -1
 
 authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]     #users authorized for all commands except track
-
+banned = []
+bannedObj = []
 texthandle = open("logs.txt", 'a+')                 #opening logs file
 texthandle.write("Tracking start time: ")
 texthandle.write(str(datetime.now()))               #printing the start time of logging to the file each time the program is run
@@ -338,7 +339,7 @@ requests = {}                                       #dictionary to hold requests
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 
 while True:
-    
+
     if time.time() > timeout:                               #Contingency against disconnection from IRC
         sock.close()
         sock = socket.socket()                              #creating socket for connection to twitch
@@ -357,11 +358,14 @@ while True:
     count += 1
 
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
-    user = cleanup(user)                                                #clean up the list object
+    user = cleanup(user)
+    user = cleanup2(user)                                                #clean up the list object
     user = user.replace("'", "")                                        #remove single quotes
     startmessage = (len(user)) * 3 + len(channel) + 28                  #calculate starting index of message
     message = chat[startmessage:]                                       #pull out the message text
     print(user + ": " + message.rstrip())                               #print simplified version of user and message
+    if user in banned:
+        continue
 
     if tracking == True and count > 2:                        #if tracking is turned on
         if usercount.get(user, 0) == 0:         #check to see if the user already exists in the dictionary
