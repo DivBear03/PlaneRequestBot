@@ -321,7 +321,7 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -337,8 +337,6 @@ requests = {}                                       #dictionary to hold requests
 
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 
-sock.send(f"PRIVMSG {channel} :Howdy. Plane requests can be made with the --request command\r\n".encode('utf-8'))
-
 while True:
     
     if time.time() > timeout:                               #Contingency against disconnection from IRC
@@ -353,12 +351,10 @@ while True:
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
+        print(chat.replace("\n", ""))
     except:
         break
     count += 1
-    
-    if count == 7:
-        sock.send(f"PRIVMSG {channel} :Howdy. Plane requests can be made with the --request command\r\n".encode('utf-8'))
 
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)                                                #clean up the list object
@@ -366,12 +362,20 @@ while True:
     startmessage = (len(user)) * 3 + len(channel) + 28                  #calculate starting index of message
     message = chat[startmessage:]                                       #pull out the message text
     print(user + ": " + message.rstrip())                               #print simplified version of user and message
+    possiblessn = message[:3]
+    print(possiblessn)
     if tracking == True and count > 2:                        #if tracking is turned on
         if usercount.get(user, 0) == 0:         #check to see if the user already exists in the dictionary
             usercount[user] = 1                 #if the user is not there, create a new term and make it equal to one
         else:
             usercount[user] = usercount[user] + 1       #otherwise, add one to the user's current count
     
+    if message.startswith('ssn'):
+        sock.send(f"PRIVMSG {channel} :Praise ssn!\r\n".encode('utf-8'))
+
+    if "!merch" in message:
+        sock.send(f"PRIVMSG {channel} :Adam-scented condoms when!\r\n".encode('utf-8'))
+
     if "--" not in message and "—" not in message:
         continue
 
@@ -539,13 +543,6 @@ while True:
             else:
                 sock.send(f"PRIVMSG {channel} :No previous actions\r\n".encode('utf-8'))
             print(requestlist)
-
-
-    elif message.lower().startswith("ssn"):
-        sock.send(f"PRIVMSG {channel} :Praise ssn!\r\n".encode('utf-8'))
-
-    elif "!merch" in message.lower():
-        sock.send(f"PRIVMSG {channel} :Adam-scented condoms when?\r\n".encode('utf-8'))
 
     if go == True:                              #--request command only works when go is True
 
