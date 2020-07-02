@@ -362,8 +362,7 @@ while True:
     startmessage = (len(user)) * 3 + len(channel) + 28                  #calculate starting index of message
     message = chat[startmessage:]                                       #pull out the message text
     print(user + ": " + message.rstrip())                               #print simplified version of user and message
-    possiblessn = message[:3]
-    print(possiblessn)
+
     if tracking == True and count > 2:                        #if tracking is turned on
         if usercount.get(user, 0) == 0:         #check to see if the user already exists in the dictionary
             usercount[user] = 1                 #if the user is not there, create a new term and make it equal to one
