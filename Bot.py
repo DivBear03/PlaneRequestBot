@@ -374,7 +374,7 @@ while True:
         sock.send(f"PRIVMSG {channel} :Praise ssn!\r\n".encode('utf-8'))
 
     if "!merch" in message:
-        sock.send(f"PRIVMSG {channel} :Adam-scented condoms when!\r\n".encode('utf-8'))
+        sock.send(f"PRIVMSG {channel} :Adam-scented condoms when?\r\n".encode('utf-8'))
 
     if "--" not in message and "—" not in message:
         continue
