@@ -540,6 +540,10 @@ while True:
                 sock.send(f"PRIVMSG {channel} :No previous actions\r\n".encode('utf-8'))
             print(requestlist)
 
+
+    elif message.lower().startswith("ssn"):
+        sock.send(f"PRIVMSG {channel} :Praise ssn!\r\n".encode('utf-8'))
+
     if go == True:                              #--request command only works when go is True
 
         if "--request " in message or "—request" in message:                                         #checking for request command
