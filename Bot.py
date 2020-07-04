@@ -382,6 +382,22 @@ while True:
     if "--" not in message and "—" not in message:
         continue
 
+    elif "--topsimp" in message or "—topsimp" in message:
+        sortedlist = list()                 #creating empty list to hold sorted users
+        for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
+            sortedlist.append(thing)        #add each key,value pair to sortedlist
+
+        for i in range(1, len(sortedlist)):         #insertion sort algorithm
+            nextElementValue = sortedlist[i][1]
+            temp = sortedlist[i]
+            j = i-1
+            while j >= 0 and sortedlist[j][1] < nextElementValue:
+                item = sortedlist[j]
+                sortedlist[j+1] = item
+                j = j-1
+            sortedlist[j+1] = temp
+        sock.send(f"PRIVMSG {channel} :{sortedlist[0][0]} is the top simp with {sortedlist[0][1]} messages\r\n".encode('utf-8'))
+
     if "--disable" in message or "—disable" in message:                 #check for disable command
         if user in authorized:
             go = False
