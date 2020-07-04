@@ -382,7 +382,7 @@ while True:
     if "--" not in message and "—" not in message:
         continue
 
-    elif "--topsimp" in message or "—topsimp" in message:
+    if "--topsimp" in message or "—topsimp" in message:
         sortedlist = list()                 #creating empty list to hold sorted users
         for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
             sortedlist.append(thing)        #add each key,value pair to sortedlist
