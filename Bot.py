@@ -311,11 +311,12 @@ def add(string, dictionary):
         dictionary[string] = dictionary[string] + 1
 
 writerequests = dict()
-overallhandle = open("AllRequests.txt", "r+")
-for line in overallhandle:
-    (key, val) = line.split(",")
-    val = val.replace("\n", "")
-    writerequests[key] = val
+with open("AllRequests.txt", "r+") as overallhandle:
+    for line in overallhandle:
+        (key, val) = line.split(",")
+        val = val.replace("\n", "")
+        val = int(val)
+        writerequests[key] = val
 
 authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]     #users authorized for all commands except track
 banned = []
@@ -334,7 +335,7 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -649,8 +650,9 @@ for request in requests:                        #writing requests and results to
     buildstring += "\n"
     requesthandle.write(buildstring)
 
-for request in writerequests.items():
-    overallhandle.write(str(request[0] + "," + request[1]))
+with open("AllRequests.txt", "r+") as overallhandle:
+    for request in writerequests.items():
+        overallhandle.write(request[0] + "," + str(request[1]) + "\n")
 
 requesthandle.close()
 overallhandle.close()
