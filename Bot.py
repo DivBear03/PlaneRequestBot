@@ -42,7 +42,6 @@ for line in bombhandle:
     bombers.append(line.strip())
 #Populating Roman numeral duplicate checking dictionary:
 rmnsDict = {}
-    
 with open("RMNS_NUMS_DICT.txt", 'r') as dfile:
     for line in dfile:
         pieces = line.split("$")
@@ -305,6 +304,19 @@ def indexDict(plane, inputdict):
                 break
     return -1
 
+def add(string, dictionary):
+    if dictionary.get(string, 0) == 0:         #check to see if the user already exists in the dictionary
+        dictionary[string] = 1                 #if the user is not there, create a new term and make it equal to one
+    else:
+        dictionary[string] = dictionary[string] + 1
+
+writerequests = dict()
+overallhandle = open("AllRequests.txt", "r+")
+for line in overallhandle:
+    (key, val) = line.split(",")
+    val = val.replace("\n", "")
+    writerequests[key] = val
+
 authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]     #users authorized for all commands except track
 banned = []
 bannedObj = []
@@ -352,7 +364,6 @@ while True:
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
-        print(chat.replace("\n", ""))
     except:
         break
     count += 1
@@ -368,10 +379,7 @@ while True:
         continue
 
     if tracking == True and count > 2:                        #if tracking is turned on
-        if usercount.get(user, 0) == 0:         #check to see if the user already exists in the dictionary
-            usercount[user] = 1                 #if the user is not there, create a new term and make it equal to one
-        else:
-            usercount[user] = usercount[user] + 1       #otherwise, add one to the user's current count
+        add(user, usercount)
     
     if message.startswith('ssn'):
         sock.send(f"PRIVMSG {channel} :Praise ssn!\r\n".encode('utf-8'))
@@ -536,14 +544,17 @@ while True:
                                 requestlist.append(rmnsDict[planeresult])
                                 obj = Action(True, False, rmnsDict[planeresult], len(requestlist)-1)
                                 actions.insert(0, obj)
+                                add(rmnsDict[planeresult], writerequests)
                             else:
                                 requestlist.append(planeresult)
                                 obj = Action(True, False, planeresult, len(requestlist)-1)
                                 actions.insert(0, obj)
+                                add(planeresult, writerequests)
                     else:
                         requestlist.append(planeresult)                         #same as above
                         obj = Action(True, False, planeresult, len(requestlist)-1)
                         actions.insert(0, obj)
+                        add(planeresult, writerequests)
                         print(requestlist)              #print the list
 
     elif "--undo" in message or "—undo" in message:
@@ -590,19 +601,19 @@ while True:
                             requestlist.append(rmnsDict[planeresult])
                             original = rmnsDict[planeresult]
                             sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {original} requested!\r\n".encode('utf-8'))
-                            obj = Action(True, False, original, len(requestlist)-1)
-                            actions.insert(0, obj)
+                            actions.insert(0, Action(True, False, original, len(requestlist)-1))
+                            add(original, writerequests)
                         else:
                             requestlist.append(planeresult)                     #Otherwise, add the request to the request list
                             sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))     #confirmation message
-                            obj = Action(True, False, planeresult, len(requestlist)-1)
-                            actions.insert(0, obj)
+                            actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
+                            add(planeresult, writerequests)
                 else:
                     requestlist.append(planeresult)                         #same as above
                     confirmation = random.randint(0, len(confirmations)-1)
                     sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
-                    obj = Action(True, False, planeresult, len(requestlist)-1)
-                    actions.insert(0, obj)
+                    actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
+                    add(planeresult, writerequests)
                     print(requestlist)              #print the list
 
 sortedlist = list()                 #creating empty list to hold sorted users
@@ -638,5 +649,10 @@ for request in requests:                        #writing requests and results to
     buildstring += "\n"
     requesthandle.write(buildstring)
 
+for request in writerequests.items():
+    overallhandle.write(str(request[0] + "," + request[1]))
+
+requesthandle.close()
+overallhandle.close()
 texthandle.close()      #closing connection to file
 sock.close()            #closing connection to Twitch IRC
