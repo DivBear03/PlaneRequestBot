@@ -617,8 +617,8 @@ while True:
                     add(planeresult, writerequests)
                     print(requestlist)              #print the list
 
-sortedlist = list()                 #creating empty list to hold sorted users
-for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
+sortedlist = list()                         #creating empty list to hold sorted users
+for thing in usercount.items():             #iterate through the keys and terms of usercount dictionary
     sortedlist.append(thing)        #add each key,value pair to sortedlist
 
 for i in range(1, len(sortedlist)):         #insertion sort algorithm
@@ -640,7 +640,7 @@ texthandle.write("Number of requests: " + str(commands['--request']) + "\n")
 texthandle.write("Tracking end time: ")
 texthandle.write(str(datetime.now()) + "\n\n")
 
-for request in requests:                        #writing requests and results to the input-output file for debugging purposes
+for request in requests:                                    #writing requests and results to the input-output file for debugging purposes
     buildstring = ""
     buildstring += request
     for n in range(23-len(request)):
@@ -650,7 +650,20 @@ for request in requests:                        #writing requests and results to
     buildstring += "\n"
     requesthandle.write(buildstring)
 
-with open("AllRequests.txt", "r+") as overallhandle:
+with open("AllRequests.txt", "r+") as overallhandle:        #writing overall requests to the permanent record
+    sortedlist2 = list()
+    for thing in writerequests.items():
+        sortedlist2.append(thing)
+    for i in range(1, len(sortedlist2)):         #insertion sort algorithm
+        nextElementValue = sortedlist2[i][1]
+        temp = sortedlist2[i]
+        j = i-1
+        while j >= 0 and sortedlist2[j][1] < nextElementValue:
+            item = sortedlist2[j]
+            sortedlist2[j+1] = item
+            j = j-1
+        sortedlist2[j+1] = temp
+    texthandle.write("\n")
     for request in writerequests.items():
         overallhandle.write(request[0] + "," + str(request[1]) + "\n")
 
