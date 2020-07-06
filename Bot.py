@@ -331,6 +331,7 @@ server = 'irc.chat.twitch.tv'                       #server address
 port = 6667                                         #port number
 sock = socket.socket()                              #creating socket for connection to twitch
 sock.connect((server, port))                        #connecting to socket
+sock.settimeout(270.0)
 token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestbot user. Could be changed if you want to send from another twitch user account
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
@@ -357,6 +358,7 @@ while True:
         sock.close()
         sock = socket.socket()                              #creating socket for connection to twitch
         sock.connect((server, port))
+        sock.settimeout(270.0)
         sock.send(f"PASS {token}\n".encode('utf-8'))
         sock.send(f"NICK {nickname}\n".encode('utf-8'))
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
