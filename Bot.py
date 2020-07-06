@@ -8,6 +8,7 @@ import difflib
 from difflib import SequenceMatcher
 import random
 import scipy.stats
+from random import randrange
 
 class Action:
     def __init__(self, add, delete, plane, index):
@@ -341,12 +342,14 @@ sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twi
 texthandle.write(f"\n{channel}")
 
 requestlist = list()                                #creating empty list of requested planes
-go = True                                          #setting program to default disable at start, use --enable command to enable bot
+go = True                                           #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0}
 count = 0
-timeout = time.time() + 600                     #anti-disconnect timer
+timeout = time.time() + 600                         #anti-disconnect timer
+
+DelAfterRand = False                                     #Whether or not to delete queue entry after --pick 
 
 requests = {}                                       #dictionary to hold requests and results
 
@@ -582,7 +585,14 @@ while True:
             print(requestlist)
 
     if go == True:                              #--request command only works when go is True
-
+        
+        if "--pick" in message:
+            if user in authorized:
+                try:
+                    sock.send(f"PRIVMSG {channel} :{requestlist[randrange(len(cars)]} has been chosen by the gods\r\n".encode('utf-8'))
+                except:
+                    continue
+                                                                
         if "--request " in message or "—request" in message:                                         #checking for request command
             commands['--request'] += 1
             plane = re.findall("request (.+)", message)                   #pull out the plane name
