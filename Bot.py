@@ -375,7 +375,11 @@ while True:
     user = user.replace("'", "")                                        #remove single quotes
     startmessage = (len(user)) * 3 + len(channel) + 28                  #calculate starting index of message
     message = chat[startmessage:]                                       #pull out the message text
-    print(user + ": " + message.rstrip())                               #print simplified version of user and message
+    try:
+        print(user + ": " + message.rstrip())                               #print simplified version of user and message
+    except:
+        add(user, usercount)
+        continue
     if user in banned:
         continue
 
