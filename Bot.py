@@ -589,7 +589,7 @@ while True:
         if "--pick" in message:
             if user in authorized:
                 try:
-                    sock.send(f"PRIVMSG {channel} :{requestlist[randrange(len(cars)]} has been chosen by the gods\r\n".encode('utf-8'))
+                    sock.send(f"PRIVMSG {channel} :{requestlist[randrange(len(requestlist))]} has been chosen by the gods\r\n".encode('utf-8'))
                 except:
                     continue
                                                                 
