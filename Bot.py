@@ -665,9 +665,9 @@ for i in range(1, len(sortedlist)):         #insertion sort algorithm
         j = j-1
     sortedlist[j+1] = temp
 texthandle.write("\n")
+texthandle.write("{0:<12}{1:>12}\n".format("Username", "Messages"))
 for item in sortedlist:
     print(item[0], str(item[1]))
-    texthandle.write("{0:<12}{1:>12}\n".format("Username", "Messages"))
     texthandle.write("{0:<20}{1:>4}\n".format(str(item[0]), str(item[1])))        #writing sortedlist data to file
 
 texthandle.write("Number of requests: " + str(commands['--request']) + "\n")
