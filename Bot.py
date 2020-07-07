@@ -337,15 +337,18 @@ token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
+
+def socksend(message):
+    sock.send(f"PRIVMSG {channel} :{message}".encode('utf-8'))
 
 requestlist = list()                                #creating empty list of requested planes
 go = True                                           #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
-commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0}
+commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0, '--topsimp':0}
 count = 0
 timeout = time.time() + 600                         #anti-disconnect timer
 
@@ -383,24 +386,30 @@ while True:
     try:
         print(user + ": " + message.rstrip())                               #print simplified version of user and message
     except:
-        add(user, usercount)
+        if tracking == True and count > 2:
+            add(user, usercount)
         continue
+    
+    if chat.startswith("PING"):               #check for PING from Twitch IRC
+        sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
+
     if user in banned:
         continue
 
     if tracking == True and count > 2:                        #if tracking is turned on
         add(user, usercount)
     
-    if message.startswith('ssn'):
-        sock.send(f"PRIVMSG {channel} :Praise ssn!\r\n".encode('utf-8'))
+    if message.startswith('ssn') or message.startswith("SSN"):
+        socksend("Praise ssn!\r\n")
 
     if "!merch" in message:
-        sock.send(f"PRIVMSG {channel} :Adam-scented condoms when?\r\n".encode('utf-8'))
+        socksend("Adam-scented condoms when?\r\n")
 
     if "--" not in message and "—" not in message:
         continue
 
     if "--topsimp" in message or "—topsimp" in message:
+        commands['--topsimp'] += 1
         sortedlist = list()                 #creating empty list to hold sorted users
         for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
             sortedlist.append(thing)        #add each key,value pair to sortedlist
@@ -414,7 +423,7 @@ while True:
                 sortedlist[j+1] = item
                 j = j-1
             sortedlist[j+1] = temp
-        sock.send(f"PRIVMSG {channel} :{sortedlist[0][0]} is the top simp with {sortedlist[0][1]} messages\r\n".encode('utf-8'))
+        socksend(f"{sortedlist[0][0]} is the top simp with {sortedlist[0][1]} messages\r\n")
 
     if "--disable" in message or "—disable" in message:                 #check for disable command
         if user in authorized:
@@ -448,9 +457,6 @@ while True:
                 usercount[user] = usercount[user] + 1  
             print("Tracking = " + str(tracking))
 
-    elif chat.startswith("PING"):               #check for PING from Twitch IRC
-        sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
-
     elif "--skip[" in message or "—skip[" in message:          #check for a specific plane to skip in the message, only zlayer___  or AdamTheEnginerd can access this command
         if user in authorized:
             commands['--skip'] += 1
@@ -462,32 +468,35 @@ while True:
                     plane = int(plane)
                     print(plane)
                     skipped = requestlist.pop(plane)
-                    sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
+                    socksend(f"{skipped} has been skipped\r\n")
                     actions.insert(0, Action(False, True, skipped, plane))
                 except:
                     planeresult = search2(plane)
                     print(planeresult)
                     if planeresult == "No match" or planeresult == "Bombers are useless":
                         planeresult = str(planeresult)
-                        sock.send(f"PRIVMSG {channel} :Skip failed; {planeresult}\r\n".encode('utf-8'))
+                        socksend(f"Skip failed; {planeresult}\r\n")
                     else:
                         plane = planeresult[0]
                         selected = indexOf(plane, requestlist)
                         skipped = requestlist.pop(selected)
                         if search2(plane)[0] in requestlist:
-                            sock.send(f"PRIVMSG {channel} :Skip failed\r\n".encode('utf-8'))
+                            socksend("Skip failed\r\n")
                         else:
-                            sock.send(f"PRIVMSG {channel} :{skipped} has been skipped\r\n".encode('utf-8'))
+                            socksend(f"{skipped} has been skipped\r\n")
                             actions.insert(0, Action(False, True, skipped, selected))
             else:
-                sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
+                socksend("Requestlist is empty\r\n")
 
     elif "--delLast" in message or "--dellast" in message or "—delLast" in message or "—dellast" in message:
         if user in authorized:
             commands['--dellast'] += 1
-            plane = requestlist.pop(len(requestlist)-1)
-            sock.send(f"PRIVMSG {channel} :{plane} deleted\r\n".encode('utf-8'))
-            actions.insert(0, Action(False, True, plane, len(requestlist)-1))
+            try:
+                plane = requestlist.pop(len(requestlist)-1)
+                socksend(f"{plane} deleted\r\n")
+                actions.insert(0, Action(False, True, plane, len(requestlist)-1))
+            except:
+                continue
 
     elif "--reqdel" in message or "—reqdel" in message:             #checking for reqdel command
         if user in authorized:
@@ -496,11 +505,11 @@ while True:
             for plane in requestlist:           #iterate through the planes in the list
                 buildstring += plane + ", "     #add the plane to the string and a comma
             if len(requestlist) > 0:            #if there are planes in the requestlist
-                sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))          #send the string of requested planes to the chat
+                socksend(f"{buildstring}\r\n")          #send the string of requested planes to the chat
                 removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
                 actions.insert(0, Action(False, True, removedplane, 0))
             else:
-                sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))      #if no planes in the list, send the message that there are no planes in the list
+                socksend("Requestlist is empty\r\n")      #if no planes in the list, send the message that there are no planes in the list
 
     elif "--requests" in message or "—requests" in message:               #check for requests message. Same code as before, but first plane is not removed
         commands['--requests'] += 1
@@ -508,12 +517,12 @@ while True:
         for plane in requestlist:
             buildstring += plane + ", "
         if len(requestlist) > 0:
-            sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))
+            socksend(f"{buildstring}\r\n")
         else:
-            sock.send(f"PRIVMSG {channel} :Requestlist is empty\r\n".encode('utf-8'))
+            socksend("Requestlist is empty\r\n")
 
     elif "--commands" in message or "—commands" in message:
-        sock.send(f"PRIVMSG {channel} :Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n".encode('utf-8'))
+        socksend("Learn planerequestbot commands here: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n")
     
     elif "--clear" in message or "—clear" in message:
         if user in authorized:
@@ -523,7 +532,7 @@ while True:
             obj = Clear(planelist)
             actions.insert(0, obj)
             requestlist.clear()
-            sock.send(f"PRIVMSG {channel} :Request list has been cleared\r\n".encode('utf-8'))
+            socksend("Request list has been cleared\r\n")
             print(requestlist)
 
     elif "--batchrequest" in message or "—batchrequest" in message:
@@ -544,10 +553,10 @@ while True:
                     planeresult = str(result[0])
                     planeresult = planeresult.replace("\n", "")
                     if indexOf(planeresult, requestlist) > -1:
-                        sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
+                        socksend(f"{planeresult} is a duplicate\r\n")
                     elif planeresult in rmnsDict:
                         if rmnsDict[planeresult] in requestlist:
-                            sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))
+                            socksend(f"{planeresult} is a duplicate\r\n")
                         else:
                             confirmation = random.randint(0, len(confirmations)-1)
                             if indexDict(planeresult, rmnsDict) > 54:
@@ -581,33 +590,39 @@ while True:
                         requestlist.insert(obj.getIndex(), obj.getPlane())
                 actions.pop(0)
             else:
-                sock.send(f"PRIVMSG {channel} :No previous actions\r\n".encode('utf-8'))
+                socksend("No previous actions\r\n")
             print(requestlist)
 
-    ''' elif "--ban" in message:
-        if user == "adamtheenginerd":
-            banned = re.findall("--ban (.+) for (.+) seconds", message)
-            banned = cleanup2(cleanup(banned))
+    elif "--ban" in message:
+        if user == "kingsman784":
+            banned = re.findall("--ban (.+) for .+ seconds", message)
+            banned = cleanup2(cleanup(banned)).replace("'", "")
+            print(banned)
             duration = re.findall("--ban .+ for (.+) seconds", message)
-            duration = cleanup2(cleanup(duration))
+            duration = cleanup2(cleanup(duration)).replace("'", "")
+            print(duration)
             try:
                 duration = int(duration)
-                sock.send(f"@ban-duration=duration :tmi.twitch.tv CLEARCHAT {channel} :{banned} has been banned for {duration/60.0} seconds\r\n".encode('utf-8'))
+                sock.send(f"@ban-duration={duration} :tmi.twitch.tv CLEARCHAT {channel} :{banned}\r\n".encode('utf-8'))
+                socksend(f"{banned} has been banned for {duration} seconds\r\n")
             except:
-                continue
+                socksend("Error\r\n")
 
     elif "--permban" in message:
-        if user == "adamtheenginerd":
-            banned = re.findall("--permban (.+)", message)
-            banned = cleanup2(cleanup(banned))
-            sock.send(f":tmi.twitch.tv CLEARCHAT {channel} :{banned} has been permanently chatbanned\r\n".encode('utf-8'))'''
+        if user == "kingsman784":
+            try:
+                banned = re.findall("--permban (.+)", message)
+                banned = cleanup2(cleanup(banned)).replace("'", "")
+                sock.send(f":tmi.twitch.tv CLEARCHAT {channel} :{banned}\r\n".encode('utf-8'))
+            except:
+                continue
 
     if go == True:                              #--request command only works when go is True
         
         if "--pick" in message:
             if user in authorized:
                 try:
-                    sock.send(f"PRIVMSG {channel} :{requestlist[randrange(len(requestlist))]} has been chosen by the gods\r\n".encode('utf-8'))
+                    socksend(f"{requestlist[randrange(len(requestlist))]} has been chosen by the gods\r\n")
                 except:
                     continue
                                                                 
@@ -619,34 +634,34 @@ while True:
             result = search2(plane)                                         #perform search algorithm
             requests[plane] = str(result)
             if result == "No match":                                        #if match is not above threshold, algo returns "No match"
-                sock.send(f"PRIVMSG {channel} :No match\r\n".encode('utf-8'))   #send chat
+                socksend("No match\r\n")                                    #send chat
             elif result == "Bombers are useless":                           #if algo determines that the request is a bomber
-                sock.send(f"PRIVMSG {channel} :Bombers are useless\r\n".encode('utf-8'))    #send chat message
+                socksend("Bombers are useless\r\n")    #send chat message
             else:
                 planeresult = str(result[0])                                #pull out the actual plane
                 planeresult = planeresult.replace("\n", "")                 #replace newline character
                 if indexOf(planeresult, requestlist) > -1:                  #if the plane is in the requestlist already
-                    sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))   #duplicate message to chat
+                    socksend(f"{planeresult} is a duplicate\r\n")   #duplicate message to chat
                 elif planeresult in rmnsDict:                               #if it is a roman numeral plane with mulitple correct versions
                     if rmnsDict[planeresult] in requestlist:                #and if the counterpart of the planeresult is already in the request list
-                        sock.send(f"PRIVMSG {channel} :{planeresult} is a duplicate\r\n".encode('utf-8'))   #send duplicate message
+                        socksend(f"{planeresult} is a duplicate\r\n")   #send duplicate message
                     else:
                         confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
                         if indexDict(planeresult, rmnsDict) > 54:
                             requestlist.append(rmnsDict[planeresult])
                             original = rmnsDict[planeresult]
-                            sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {original} requested!\r\n".encode('utf-8'))
+                            socksend(f"{confirmations[confirmation]} {original} requested!\r\n")
                             actions.insert(0, Action(True, False, original, len(requestlist)-1))
                             add(original, writerequests)
                         else:
                             requestlist.append(planeresult)                     #Otherwise, add the request to the request list
-                            sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))     #confirmation message
+                            socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")     #confirmation message
                             actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
                             add(planeresult, writerequests)
                 else:
                     requestlist.append(planeresult)                         #same as above
                     confirmation = random.randint(0, len(confirmations)-1)
-                    sock.send(f"PRIVMSG {channel} :{confirmations[confirmation]} {planeresult} requested!\r\n".encode('utf-8'))
+                    socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")
                     actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
                     add(planeresult, writerequests)
                     print(requestlist)              #print the list
