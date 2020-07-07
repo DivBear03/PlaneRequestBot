@@ -584,6 +584,24 @@ while True:
                 sock.send(f"PRIVMSG {channel} :No previous actions\r\n".encode('utf-8'))
             print(requestlist)
 
+    ''' elif "--ban" in message:
+        if user == "adamtheenginerd":
+            banned = re.findall("--ban (.+) for (.+) seconds", message)
+            banned = cleanup2(cleanup(banned))
+            duration = re.findall("--ban .+ for (.+) seconds", message)
+            duration = cleanup2(cleanup(duration))
+            try:
+                duration = int(duration)
+                sock.send(f"@ban-duration=duration :tmi.twitch.tv CLEARCHAT {channel} :{banned} has been banned for {duration/60.0} seconds\r\n".encode('utf-8'))
+            except:
+                continue
+
+    elif "--permban" in message:
+        if user == "adamtheenginerd":
+            banned = re.findall("--permban (.+)", message)
+            banned = cleanup2(cleanup(banned))
+            sock.send(f":tmi.twitch.tv CLEARCHAT {channel} :{banned} has been permanently chatbanned\r\n".encode('utf-8'))'''
+
     if go == True:                              #--request command only works when go is True
         
         if "--pick" in message:
