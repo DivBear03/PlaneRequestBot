@@ -1,8 +1,7 @@
 import socket           #importing useful modules
 import re
 import time
-from datetime import datetime
-from datetime import timedelta
+import datetime
 import difflib
 from difflib import SequenceMatcher
 import random
@@ -57,7 +56,7 @@ def cleanup(chat):                                                      #functio
 
 #Retrieving a new app access token for the viewer count average
 url = 'https://id.twitch.tv/oauth2/token?client_id=95hkffpc2ng2zww4gttnp17y0ix14n&client_secret=2anjpsryvwofq6l21o5bhkywltsidw&grant_type=client_credentials'
-app_access = requests.post(url)
+app_access = requests.post(url)                                                 #getting app access code for oauth credentials
 response = str(app_access.text)
 response = response.replace("\"", "")
 app_access = re.findall('{access_token:(.+),expires_in:', response)
@@ -65,10 +64,26 @@ app_access = cleanup(app_access)
 app_access = str(app_access)
 app_access = app_access.replace("'", "")
 print(app_access)
-url = 'https://api.twitch.tv/helix/streams?user_login=dudewithopinions'
-Client_ID = '95hkffpc2ng2zww4gttnp17y0ix14n'
-oauth = 'Bearer '+app_access
-head = {'client-id':Client_ID,'Authorization':oauth}
+url = 'https://api.twitch.tv/helix/streams?user_login=adamtheenginerd'          #url for getting viewer count
+Client_ID = '95hkffpc2ng2zww4gttnp17y0ix14n'                                    #client ID of my program
+oauth = 'Bearer '+app_access                                                    #oauth token is Bearer <app_access>
+head = {'client-id':Client_ID,'Authorization':oauth}                            #headers to be passed into the API
+def getViewers():
+    r = requests.get(url, headers = head)
+    r = str(r.text)
+    if r == "{\"data\":[],\"pagination\":{}}":
+        return -1
+    else:
+        filtered = r.replace("\"", "")
+        vcount = re.findall("{data:\[{id:.+,user_id:.+,user_name:.+,game_id:.+,type:.+,title:.+,viewer_count:([0-9]+),started_at:.+", filtered)
+        viewercount = cleanup(vcount)
+        viewercount = viewercount.replace("'", "")
+        viewercount = int(viewercount)
+        if viewercount > -1:
+            return viewercount
+        else:
+            return -1
+
 
 def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
     plane = plane.replace("-", "")
@@ -326,7 +341,7 @@ with open("AllRequests.txt", "r+") as overallhandle:
 authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]     #users authorized for all commands except track
 texthandle = open("logs.txt", 'a+')                 #opening logs file
 texthandle.write("Tracking start time: ")
-texthandle.write(str(datetime.now()))               #printing the start time of logging to the file each time the program is run
+texthandle.write(str(datetime.datetime.now()))               #printing the start time of logging to the file each time the program is run
 
 requesthandle = open("input-output.txt", 'a+')      #opening file for recording requests and the search results for algorithm improvement 
 
@@ -339,7 +354,7 @@ token = 'oauth:zsnamwt00lh6bsd7pv0ovywtbhympj'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#dudewithopinions'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -361,7 +376,7 @@ sampletimer = time.time() + 5
 planerequests = {}                                       #dictionary to hold requests and results
 users = []
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
-
+starttime = datetime.datetime.now().replace(microsecond=0)
 while True:
 
     if time.time() > timeout:                               #Contingency against disconnection from IRC
@@ -374,20 +389,10 @@ while True:
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
         timeout = time.time() + 600
 
-    r = requests.get(url, headers = head)
-    r = str(r.text)
-    filtered = r.replace("\"", "")
-    vcount = re.findall("{data:\[{id:.+,user_id:.+,user_name:.+,game_id:.+,type:.+,title:.+,viewer_count:([0-9]+),started_at:.+", filtered)
-    viewercount = cleanup(vcount)
-    viewercount = viewercount.replace("'", "")
-    viewercount = int(viewercount)
-    print(viewercount)
-    if viewercount > -1:
-        viewertotal += viewercount
+    if getViewers() > -1:
+        viewertotal += getViewers()
         samples += 1
         average = viewertotal/samples
-    else:
-        continue
 
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
@@ -395,7 +400,10 @@ while True:
     except:
         break
     count = count + 1
-        
+
+    if count == 3:
+        starttime = time.time()
+
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)
     user = cleanup2(user)                                                #clean up the list object
@@ -613,6 +621,10 @@ while True:
         sentin = str(int(average))
         socksend(f"Average viewer count: {sentin}\r\n")
 
+    elif "--uptime" in message or "—uptime" in message:
+        duration = datetime.datetime.now().replace(microsecond=0)-starttime
+        socksend(f"Stream uptime: {str(duration)}\r\n")
+
     if go == True:                              #--request command only works when go is True
         
         if "--pick" in message:
@@ -690,7 +702,7 @@ for item in sortedlist:
 
 texthandle.write("Number of requests: " + str(commands['--request']) + "\n")
 texthandle.write("Tracking end time: ")
-texthandle.write(str(datetime.now()) + "\n\n")
+texthandle.write(str(datetime.datetime.now()) + "\n\n")
 
 for request in planerequests:                                    #writing requests and results to the input-output file for debugging purposes
     buildstring = ""
