@@ -1,7 +1,6 @@
 import socket           #importing useful modules
 import re
 import time
-import os 
 from datetime import datetime
 from datetime import timedelta
 import difflib
@@ -9,7 +8,8 @@ from difflib import SequenceMatcher
 import random
 import scipy.stats
 from random import randrange
-
+from time import sleep
+import requests 
 class Action:
     def __init__(self, add, delete, plane, index):
         self.add = add
@@ -55,16 +55,20 @@ def cleanup(chat):                                                      #functio
     chat = chat.replace("\\r", "")
     return chat
 
-def time_convert(sec):                                                  #function for converting seconds into a readable time
-    mins = sec // 60
-    sec = sec % 60
-    hours = mins // 60
-    mins = mins % 60
-    return str(int(hours)) + ":" + str(int(mins)) + ":" + str(int(sec))
-
-def millitime(time_diff):                                                  #function for converting seconds into a readable time
-    execution_time = time_diff.total_seconds()
-    return execution_time
+#Retrieving a new app access token for the viewer count average
+url = 'https://id.twitch.tv/oauth2/token?client_id=95hkffpc2ng2zww4gttnp17y0ix14n&client_secret=2anjpsryvwofq6l21o5bhkywltsidw&grant_type=client_credentials'
+app_access = requests.post(url)
+response = str(app_access.text)
+response = response.replace("\"", "")
+app_access = re.findall('{access_token:(.+),expires_in:', response)
+app_access = cleanup(app_access)
+app_access = str(app_access)
+app_access = app_access.replace("'", "")
+print(app_access)
+url = 'https://api.twitch.tv/helix/streams?user_login=dudewithopinions'
+Client_ID = '95hkffpc2ng2zww4gttnp17y0ix14n'
+oauth = 'Bearer '+app_access
+head = {'client-id':Client_ID,'Authorization':oauth}
 
 def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
     plane = plane.replace("-", "")
@@ -320,8 +324,6 @@ with open("AllRequests.txt", "r+") as overallhandle:
         writerequests[key] = val
 
 authorized = ["adamtheenginerd", "zlayer___", "the_ssn", "kingsman784"]     #users authorized for all commands except track
-banned = []
-bannedObj = []
 texthandle = open("logs.txt", 'a+')                 #opening logs file
 texthandle.write("Tracking start time: ")
 texthandle.write(str(datetime.now()))               #printing the start time of logging to the file each time the program is run
@@ -333,11 +335,11 @@ port = 6667                                         #port number
 sock = socket.socket()                              #creating socket for connection to twitch
 sock.connect((server, port))                        #connecting to socket
 sock.settimeout(270.0)
-token = 'oauth:dl7phno18xbouiwgkl9p6969fga10a'      #oauth key for planerequestbot user. Could be changed if you want to send from another twitch user account
+token = 'oauth:zsnamwt00lh6bsd7pv0ovywtbhympj'      #oauth key for planerequestbot user. Could be changed if you want to send from another twitch user account
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#dudewithopinions'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
@@ -349,13 +351,15 @@ go = True                                           #setting program to default 
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0, '--topsimp':0}
-count = 0
+count = int(0)
 timeout = time.time() + 600                         #anti-disconnect timer
 
-DelAfterRand = False                                     #Whether or not to delete queue entry after --pick 
-
-requests = {}                                       #dictionary to hold requests and results
-
+viewertotal = 0
+samples = 0
+average = 0
+sampletimer = time.time() + 5
+planerequests = {}                                       #dictionary to hold requests and results
+users = []
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 
 while True:
@@ -370,13 +374,28 @@ while True:
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
         timeout = time.time() + 600
 
+    r = requests.get(url, headers = head)
+    r = str(r.text)
+    filtered = r.replace("\"", "")
+    vcount = re.findall("{data:\[{id:.+,user_id:.+,user_name:.+,game_id:.+,type:.+,title:.+,viewer_count:([0-9]+),started_at:.+", filtered)
+    viewercount = cleanup(vcount)
+    viewercount = viewercount.replace("'", "")
+    viewercount = int(viewercount)
+    print(viewercount)
+    if viewercount > -1:
+        viewertotal += viewercount
+        samples += 1
+        average = viewertotal/samples
+    else:
+        continue
+
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
     except:
         break
-    count += 1
-
+    count = count + 1
+        
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)
     user = cleanup2(user)                                                #clean up the list object
@@ -392,9 +411,6 @@ while True:
     
     if chat.startswith("PING"):               #check for PING from Twitch IRC
         sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
-
-    if user in banned:
-        continue
 
     if tracking == True and count > 2:                        #if tracking is turned on
         add(user, usercount)
@@ -544,7 +560,7 @@ while True:
             batchlist = batch.split(",")
             for plane in batchlist:
                 result = search2(plane)
-                requests[plane] = str(result)
+                planerequests[plane] = str(result)
                 if result == "No match":
                     continue
                 elif result == "Bombers are useless":
@@ -593,29 +609,9 @@ while True:
                 socksend("No previous actions\r\n")
             print(requestlist)
 
-    '''elif "--ban" in message:
-        if user == "adamtheenginerd":
-            banned = re.findall("--ban (.+) for .+ seconds", message)
-            banned = cleanup2(cleanup(banned)).replace("'", "")
-            print(banned)
-            duration = re.findall("--ban .+ for (.+) seconds", message)
-            duration = cleanup2(cleanup(duration)).replace("'", "")
-            print(duration)
-            try:
-                duration = int(duration)
-                sock.send(f"@ban-duration={duration} :tmi.twitch.tv CLEARCHAT {channel} :{banned}\r\n".encode('utf-8'))
-                socksend(f"{banned} has been banned for {duration} seconds\r\n")
-            except:
-                socksend("Error\r\n")
-
-    elif "--permban" in message:
-        if user == "adamtheenginerd":
-            try:
-                banned = re.findall("--permban (.+)", message)
-                banned = cleanup2(cleanup(banned)).replace("'", "")
-                sock.send(f":tmi.twitch.tv CLEARCHAT {channel} :{banned}\r\n".encode('utf-8'))
-            except:
-                continue'''
+    elif "--average" in message:
+        sentin = str(int(average))
+        socksend(f"Average viewer count: {sentin}\r\n")
 
     if go == True:                              #--request command only works when go is True
         
@@ -627,44 +623,51 @@ while True:
                     continue
                                                                 
         if "--request " in message or "—request" in message:                                         #checking for request command
-            commands['--request'] += 1
-            plane = re.findall("request (.+)", message)                   #pull out the plane name
-            plane = cleanup(plane)                                          #clean up the list object
-            plane = plane.replace("'", "")                                  #replace single quotes with nothing
-            result = search2(plane)                                         #perform search algorithm
-            requests[plane] = str(result)
-            if result == "No match":                                        #if match is not above threshold, algo returns "No match"
-                socksend("No match\r\n")                                    #send chat
-            elif result == "Bombers are useless":                           #if algo determines that the request is a bomber
-                socksend("Bombers are useless\r\n")    #send chat message
-            else:
-                planeresult = str(result[0])                                #pull out the actual plane
-                planeresult = planeresult.replace("\n", "")                 #replace newline character
-                if indexOf(planeresult, requestlist) > -1:                  #if the plane is in the requestlist already
-                    socksend(f"{planeresult} is a duplicate\r\n")   #duplicate message to chat
-                elif planeresult in rmnsDict:                               #if it is a roman numeral plane with mulitple correct versions
-                    if rmnsDict[planeresult] in requestlist:                #and if the counterpart of the planeresult is already in the request list
-                        socksend(f"{planeresult} is a duplicate\r\n")   #send duplicate message
-                    else:
-                        confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
-                        if indexDict(planeresult, rmnsDict) > 54:
-                            requestlist.append(rmnsDict[planeresult])
-                            original = rmnsDict[planeresult]
-                            socksend(f"{confirmations[confirmation]} {original} requested!\r\n")
-                            actions.insert(0, Action(True, False, original, len(requestlist)-1))
-                            add(original, writerequests)
-                        else:
-                            requestlist.append(planeresult)                     #Otherwise, add the request to the request list
-                            socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")     #confirmation message
-                            actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
-                            add(planeresult, writerequests)
+            if user not in users:
+                commands['--request'] += 1
+                plane = re.findall("request (.+)", message)                   #pull out the plane name
+                plane = cleanup(plane)                                          #clean up the list object
+                plane = plane.replace("'", "")                                  #replace single quotes with nothing
+                result = search2(plane)                                         #perform search algorithm
+                planerequests[plane] = str(result)
+                if result == "No match":                                        #if match is not above threshold, algo returns "No match"
+                    socksend("No match\r\n")                                    #send chat
+                elif result == "Bombers are useless":                           #if algo determines that the request is a bomber
+                    socksend("Bombers are useless\r\n")    #send chat message
                 else:
-                    requestlist.append(planeresult)                         #same as above
-                    confirmation = random.randint(0, len(confirmations)-1)
-                    socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")
-                    actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
-                    add(planeresult, writerequests)
-                    print(requestlist)              #print the list
+                    planeresult = str(result[0])                                #pull out the actual plane
+                    planeresult = planeresult.replace("\n", "")                 #replace newline character
+                    if indexOf(planeresult, requestlist) > -1:                  #if the plane is in the requestlist already
+                        socksend(f"{planeresult} is a duplicate\r\n")   #duplicate message to chat
+                    elif planeresult in rmnsDict:                               #if it is a roman numeral plane with mulitple correct versions
+                        if rmnsDict[planeresult] in requestlist:                #and if the counterpart of the planeresult is already in the request list
+                            socksend(f"{planeresult} is a duplicate\r\n")   #send duplicate message
+                        else:
+                            confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
+                            if indexDict(planeresult, rmnsDict) > 54:
+                                requestlist.append(rmnsDict[planeresult])
+                                original = rmnsDict[planeresult]
+                                socksend(f"{confirmations[confirmation]} {original} requested!\r\n")
+                                actions.insert(0, Action(True, False, original, len(requestlist)-1))
+                                add(original, writerequests)
+                                users.append(user)
+                            else:
+                                requestlist.append(planeresult)                     #Otherwise, add the request to the request list
+                                socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")     #confirmation message
+                                actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
+                                add(planeresult, writerequests)
+                                users.append(user)
+                    else:
+                        requestlist.append(planeresult)                         #same as above
+                        confirmation = random.randint(0, len(confirmations)-1)
+                        socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")
+                        actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
+                        add(planeresult, writerequests)
+                        print(requestlist)              #print the list
+                        users.append(user)
+            else:
+                socksend("You have already made your request")
+                continue
 
 sortedlist = list()                         #creating empty list to hold sorted users
 for thing in usercount.items():             #iterate through the keys and terms of usercount dictionary
@@ -689,13 +692,13 @@ texthandle.write("Number of requests: " + str(commands['--request']) + "\n")
 texthandle.write("Tracking end time: ")
 texthandle.write(str(datetime.now()) + "\n\n")
 
-for request in requests:                                    #writing requests and results to the input-output file for debugging purposes
+for request in planerequests:                                    #writing requests and results to the input-output file for debugging purposes
     buildstring = ""
     buildstring += request
     for n in range(23-len(request)):
         buildstring += "-"
     buildstring += ">"
-    buildstring += str(requests[request])
+    buildstring += str(planerequests[request])
     buildstring += "\n"
     requesthandle.write(buildstring)
 
