@@ -54,6 +54,18 @@ def cleanup(chat):                                                      #functio
     chat = chat.replace("\\r", "")
     return chat
 
+server = 'irc.chat.twitch.tv'                       #server address
+port = 6667                                         #port number
+sock = socket.socket()                              #creating socket for connection to twitch
+sock.connect((server, port))                        #connecting to socket
+sock.settimeout(270.0)
+token = 'oauth:zsnamwt00lh6bsd7pv0ovywtbhympj'      #oauth key for planerequestbot user. Could be changed if you want to send from another twitch user account
+sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
+nickname = 'planerequestbot'                        #doesn't really matter, could be anything
+sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
+channel = '#twitchrivals'                            #channel name, must be all lowercase and have hashtag before channel name
+sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
+
 #Retrieving a new app access token for the viewer count average
 url = 'https://id.twitch.tv/oauth2/token?client_id=95hkffpc2ng2zww4gttnp17y0ix14n&client_secret=2anjpsryvwofq6l21o5bhkywltsidw&grant_type=client_credentials'
 app_access = requests.post(url)                                                 #getting app access code for oauth credentials
@@ -64,10 +76,11 @@ app_access = cleanup(app_access)
 app_access = str(app_access)
 app_access = app_access.replace("'", "")
 print(app_access)
-url = 'https://api.twitch.tv/helix/streams?user_login=adamtheenginerd'          #url for getting viewer count
+url = 'https://api.twitch.tv/helix/streams?user_login=twitchrivals'          #url for getting viewer count
 Client_ID = '95hkffpc2ng2zww4gttnp17y0ix14n'                                    #client ID of my program
 oauth = 'Bearer '+app_access                                                    #oauth token is Bearer <app_access>
 head = {'client-id':Client_ID,'Authorization':oauth}                            #headers to be passed into the API
+
 def getViewers():
     r = requests.get(url, headers = head)
     r = str(r.text)
@@ -96,8 +109,15 @@ def getUptime():
     start_time = start_time.replace("'", "")
     print(start_time)
     start_time = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+    from datetime import time
+    start_time = start_time - datetime.datetime(1970, 1, 1, 4, 0, 0)
     print(datetime.datetime.now().replace(microsecond=0) - start_time)
     return (datetime.datetime.now().replace(microsecond=0) - start_time)
+
+def getAPI():
+    r = requests.get(url, headers = head)
+    r = str(r.text)
+    print(r)
 
 def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
     plane = plane.replace("-", "")
@@ -359,24 +379,13 @@ texthandle.write(str(datetime.datetime.now()))               #printing the start
 
 requesthandle = open("input-output.txt", 'a+')      #opening file for recording requests and the search results for algorithm improvement 
 
-server = 'irc.chat.twitch.tv'                       #server address
-port = 6667                                         #port number
-sock = socket.socket()                              #creating socket for connection to twitch
-sock.connect((server, port))                        #connecting to socket
-sock.settimeout(270.0)
-token = 'oauth:zsnamwt00lh6bsd7pv0ovywtbhympj'      #oauth key for planerequestbot user. Could be changed if you want to send from another twitch user account
-sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
-nickname = 'planerequestbot'                        #doesn't really matter, could be anything
-sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
-sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 texthandle.write(f"\n{channel}")
 
 def socksend(message):
     sock.send(f"PRIVMSG {channel} :{message}".encode('utf-8'))
 
 requestlist = list()                                #creating empty list of requested planes
-go = True                                           #setting program to default disable at start, use --enable command to enable bot
+go = False                                           #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0, '--topsimp':0}
@@ -389,6 +398,7 @@ average = 0
 planerequests = {}                                       #dictionary to hold requests and results
 users = []
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
+getAPI()
 while True:
 
     if time.time() > timeout:                               #Contingency against disconnection from IRC
@@ -412,7 +422,6 @@ while True:
     except:
         break
     count = count + 1
-
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)
     user = cleanup2(user)                                                #clean up the list object
