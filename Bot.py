@@ -10,12 +10,13 @@ from random import randrange
 from time import sleep
 import requests 
 class Action:
-    def __init__(self, add, delete, plane, index):
+    def __init__(self, add, delete, plane, index, user):
         self.add = add
         self.delete = delete
         self.plane = plane
         self.index = index
         self.time = time
+        self.user = user
     def getAdd(self):
         return self.add
     def getDelete(self):
@@ -24,6 +25,8 @@ class Action:
         return self.plane
     def getIndex(self):
         return self.index
+    def getUser(self):
+        return self.user
 class Clear:
     def __init__(self, planelist):
         self.planelist = planelist
@@ -384,7 +387,7 @@ def socksend(message):
     sock.send(f"PRIVMSG {channel} :{message}".encode('utf-8'))
 
 requestlist = list()                                #creating empty list of requested planes
-go = False                                           #setting program to default disable at start, use --enable command to enable bot
+go = True                                           #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0, '--topsimp':0}
@@ -511,7 +514,7 @@ while True:
                     print(plane)
                     skipped = requestlist.pop(plane)
                     socksend(f"{skipped} has been skipped\r\n")
-                    actions.insert(0, Action(False, True, skipped, plane))
+                    actions.insert(0, Action(False, True, skipped, plane, user))
                 except:
                     planeresult = search2(plane)
                     print(planeresult)
@@ -526,7 +529,7 @@ while True:
                             socksend("Skip failed\r\n")
                         else:
                             socksend(f"{skipped} has been skipped\r\n")
-                            actions.insert(0, Action(False, True, skipped, selected))
+                            actions.insert(0, Action(False, True, skipped, selected, user))
             else:
                 socksend("Requestlist is empty\r\n")
 
@@ -536,7 +539,7 @@ while True:
             try:
                 plane = requestlist.pop(len(requestlist)-1)
                 socksend(f"{plane} deleted\r\n")
-                actions.insert(0, Action(False, True, plane, len(requestlist)-1))
+                actions.insert(0, Action(False, True, plane, len(requestlist)-1, user))
             except:
                 continue
 
@@ -549,7 +552,7 @@ while True:
             if len(requestlist) > 0:            #if there are planes in the requestlist
                 socksend(f"{buildstring}\r\n")          #send the string of requested planes to the chat
                 removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
-                actions.insert(0, Action(False, True, removedplane, 0))
+                actions.insert(0, Action(False, True, removedplane, 0, user))
             else:
                 socksend("Requestlist is empty\r\n")      #if no planes in the list, send the message that there are no planes in the list
 
@@ -603,17 +606,17 @@ while True:
                             confirmation = random.randint(0, len(confirmations)-1)
                             if indexDict(planeresult, rmnsDict) > 54:
                                 requestlist.append(rmnsDict[planeresult])
-                                obj = Action(True, False, rmnsDict[planeresult], len(requestlist)-1)
+                                obj = Action(True, False, rmnsDict[planeresult], len(requestlist)-1, user)
                                 actions.insert(0, obj)
                                 add(rmnsDict[planeresult], writerequests)
                             else:
                                 requestlist.append(planeresult)
-                                obj = Action(True, False, planeresult, len(requestlist)-1)
+                                obj = Action(True, False, planeresult, len(requestlist)-1, user)
                                 actions.insert(0, obj)
                                 add(planeresult, writerequests)
                     else:
                         requestlist.append(planeresult)                         #same as above
-                        obj = Action(True, False, planeresult, len(requestlist)-1)
+                        obj = Action(True, False, planeresult, len(requestlist)-1, user)
                         actions.insert(0, obj)
                         add(planeresult, writerequests)
                         print(requestlist)              #print the list
@@ -628,8 +631,10 @@ while True:
                 elif type(obj) == Action:
                     if obj.getAdd():
                         requestlist.pop(obj.getIndex())
+                        users.pop(indexOf(obj.getUser(), users))
                     elif obj.getDelete():
                         requestlist.insert(obj.getIndex(), obj.getPlane())
+                        users.append(obj.getUser())
                 actions.pop(0)
             else:
                 socksend("No previous actions\r\n")
@@ -680,25 +685,25 @@ while True:
                                 requestlist.append(rmnsDict[planeresult])
                                 original = rmnsDict[planeresult]
                                 socksend(f"{confirmations[confirmation]} {original} requested!\r\n")
-                                actions.insert(0, Action(True, False, original, len(requestlist)-1))
+                                actions.insert(0, Action(True, False, original, len(requestlist)-1, user))
                                 add(original, writerequests)
                                 users.append(user)
                             else:
                                 requestlist.append(planeresult)                     #Otherwise, add the request to the request list
                                 socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")     #confirmation message
-                                actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
+                                actions.insert(0, Action(True, False, planeresult, len(requestlist)-1, user))
                                 add(planeresult, writerequests)
                                 users.append(user)
                     else:
                         requestlist.append(planeresult)                         #same as above
                         confirmation = random.randint(0, len(confirmations)-1)
                         socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")
-                        actions.insert(0, Action(True, False, planeresult, len(requestlist)-1))
+                        actions.insert(0, Action(True, False, planeresult, len(requestlist)-1, user))
                         add(planeresult, writerequests)
                         print(requestlist)              #print the list
                         users.append(user)
             else:
-                socksend("You have already made your request")
+                socksend("You have already made your request\r\n")
                 continue
 
 sortedlist = list()                         #creating empty list to hold sorted users
