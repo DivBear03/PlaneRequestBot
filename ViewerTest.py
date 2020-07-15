@@ -32,34 +32,17 @@ app_access = re.findall('{access_token:(.+),expires_in:', response)
 app_access = cleanup(app_access)
 app_access = str(app_access)
 print(app_access)
-url = 'https://api.twitch.tv/helix/streams?user_login=drlupo'
+url = 'https://api.twitch.tv/helix/streams?user_login=dudewithopinions'
 Client_ID = '95hkffpc2ng2zww4gttnp17y0ix14n'
 oauth = 'Bearer '+app_access
 head = {'client-id':Client_ID,'Authorization':oauth}
-def getViewers():
-    r = requests.get(url, headers = head)
-    r = str(r.text)
-    filtered = r.replace("\"", "")
-    vcount = re.findall("{data:\[{id:.+,user_id:.+,user_name:.+,game_id:.+,type:.+,title:.+,viewer_count:([0-9]+),started_at:.+", filtered)
-    viewercount = cleanup(vcount)
-    viewercount = viewercount.replace("'", "")
-    try:
-        return int(viewercount)
-    except:
-        return -1
-viewertotal = 0
-samples = 0
-average = 0
-sampletimer = time.time()
-starttime = datetime.datetime.now().replace(microsecond=0)
-while True:
-    something = input()
-    if something == "--uptime":
-        print(datetime.datetime.now().replace(microsecond=0)-starttime)
-    elif something == "--average":
-        print(average)
-    if getViewers() > -1:
-        viewertotal += getViewers()
-        samples += 1
-        average = viewertotal/samples
-    
+r = requests.get(url, headers = head)
+r = str(r.text)
+print(r)
+filtered = r.replace("\"", "")
+start_time = re.findall("{data:\[{id:.+,user_id:.+,user_name:.+,game_id:.+,type:.+,title:.+,viewer_count:[0-9]+,started_at:(.+),language:.+", filtered)
+start_time = cleanup(start_time)
+start_time = start_time.replace("T", " ")
+start_time = start_time.replace("Z", "")
+start_time = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+print(datetime.datetime.now().replace(microsecond=0) - start_time)

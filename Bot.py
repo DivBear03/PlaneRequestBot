@@ -75,7 +75,7 @@ def getViewers():
         return -1
     else:
         filtered = r.replace("\"", "")
-        vcount = re.findall("{data:\[{id:.+,user_id:.+,user_name:.+,game_id:.+,type:.+,title:.+,viewer_count:([0-9]+),started_at:.+", filtered)
+        vcount = re.findall("{data:\[{id:.*,user_id:.*,user_name:.*,game_id:.*,type:.*,title:.*,viewer_count:([0-9]*),started_at:.*", filtered)
         viewercount = cleanup(vcount)
         viewercount = viewercount.replace("'", "")
         viewercount = int(viewercount)
@@ -84,6 +84,20 @@ def getViewers():
         else:
             return -1
 
+def getUptime():
+    r = requests.get(url, headers = head)
+    r = str(r.text)
+    print(r)
+    filtered = r.replace("\"", "")
+    start_time = re.findall("{data:\[{id:.*,user_id:.*,user_name:.*,game_id:.*,type:.*,title:.*,viewer_count:[0-9]*,started_at:(.*),language:.*", filtered)
+    start_time = cleanup(start_time)
+    start_time = start_time.replace("T", " ")
+    start_time = start_time.replace("Z", "")
+    start_time = start_time.replace("'", "")
+    print(start_time)
+    start_time = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+    print(datetime.datetime.now().replace(microsecond=0) - start_time)
+    return (datetime.datetime.now().replace(microsecond=0) - start_time)
 
 def cleanup2(plane):                                    #function for cleaning up whitespace and non-alpha-numeric characters
     plane = plane.replace("-", "")
@@ -372,11 +386,9 @@ timeout = time.time() + 600                         #anti-disconnect timer
 viewertotal = 0
 samples = 0
 average = 0
-sampletimer = time.time() + 5
 planerequests = {}                                       #dictionary to hold requests and results
 users = []
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
-starttime = datetime.datetime.now().replace(microsecond=0)
 while True:
 
     if time.time() > timeout:                               #Contingency against disconnection from IRC
@@ -400,9 +412,6 @@ while True:
     except:
         break
     count = count + 1
-
-    if count == 3:
-        starttime = time.time()
 
     user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
     user = cleanup(user)
@@ -617,17 +626,19 @@ while True:
                 socksend("No previous actions\r\n")
             print(requestlist)
 
-    elif "--average" in message:
+    elif "--avgvcount" in message or "—avgvcount" in message:
         sentin = str(int(average))
         socksend(f"Average viewer count: {sentin}\r\n")
 
     elif "--uptime" in message or "—uptime" in message:
-        duration = datetime.datetime.now().replace(microsecond=0)-starttime
-        socksend(f"Stream uptime: {str(duration)}\r\n")
+        uptime = getUptime()
+        uptime = str(uptime)
+        print(uptime)
+        sock.send(f"PRIVMSG {channel} :Stream uptime: {uptime}\r\n".encode('utf-8'))
 
     if go == True:                              #--request command only works when go is True
         
-        if "--pick" in message:
+        if "--pick" in message or "—pick" in message:
             if user in authorized:
                 try:
                     socksend(f"{requestlist[randrange(len(requestlist))]} has been chosen by the gods\r\n")
