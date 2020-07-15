@@ -32,17 +32,21 @@ app_access = re.findall('{access_token:(.+),expires_in:', response)
 app_access = cleanup(app_access)
 app_access = str(app_access)
 print(app_access)
-url = 'https://api.twitch.tv/helix/streams?user_login=dudewithopinions'
+url = 'https://api.twitch.tv/helix/streams?user_login=twitchrivals'
 Client_ID = '95hkffpc2ng2zww4gttnp17y0ix14n'
 oauth = 'Bearer '+app_access
 head = {'client-id':Client_ID,'Authorization':oauth}
 r = requests.get(url, headers = head)
+print(type(r))
 r = str(r.text)
 print(r)
-filtered = r.replace("\"", "")
-start_time = re.findall("{data:\[{id:.+,user_id:.+,user_name:.+,game_id:.+,type:.+,title:.+,viewer_count:[0-9]+,started_at:(.+),language:.+", filtered)
-start_time = cleanup(start_time)
-start_time = start_time.replace("T", " ")
-start_time = start_time.replace("Z", "")
-start_time = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
-print(datetime.datetime.now().replace(microsecond=0) - start_time)
+if r != "{\"data\":[],\"pagination\":{}}":
+    filtered = r.replace("\"", "")
+    start_time = re.findall("{data:\[{id:.+,user_id:.+,user_name:.+,game_id:.+,type:.+,title:.+,viewer_count:[0-9]+,started_at:(.+),language:.+", filtered)
+    start_time = cleanup(start_time)
+    start_time = start_time.replace("T", " ")
+    start_time = start_time.replace("Z", "")
+    start_time = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+    from datetime import time
+    start_time = start_time - datetime.datetime(1970, 1, 1, 4, 0, 0)
+    print(datetime.datetime.now().replace(microsecond=0) - start_time)

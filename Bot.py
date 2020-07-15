@@ -100,19 +100,18 @@ def getViewers():
 def getUptime():
     r = requests.get(url, headers = head)
     r = str(r.text)
-    print(r)
-    filtered = r.replace("\"", "")
-    start_time = re.findall("{data:\[{id:.*,user_id:.*,user_name:.*,game_id:.*,type:.*,title:.*,viewer_count:[0-9]*,started_at:(.*),language:.*", filtered)
-    start_time = cleanup(start_time)
-    start_time = start_time.replace("T", " ")
-    start_time = start_time.replace("Z", "")
-    start_time = start_time.replace("'", "")
-    print(start_time)
-    start_time = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
-    from datetime import time
-    start_time = start_time - datetime.datetime(1970, 1, 1, 4, 0, 0)
-    print(datetime.datetime.now().replace(microsecond=0) - start_time)
-    return (datetime.datetime.now().replace(microsecond=0) - start_time)
+    if r != "{\"data\":[],\"pagination\":{}}":
+        filtered = r.replace("\"", "")
+        start_time = re.findall("{data:\[{id:.*,user_id:.*,user_name:.*,game_id:.*,type:.*,title:.*,viewer_count:[0-9]*,started_at:(.*),language:.*", filtered)
+        start_time = cleanup(start_time)
+        start_time = start_time.replace("T", " ")
+        start_time = start_time.replace("Z", "")
+        start_time = start_time.replace("'", "")
+        start_time = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+        from datetime import time
+        start_time = start_time - datetime.datetime(1970, 1, 1, 4, 0, 0)
+        print(datetime.datetime.now().replace(microsecond=0) - start_time)
+        return (datetime.datetime.now().replace(microsecond=0) - start_time)
 
 def getAPI():
     r = requests.get(url, headers = head)
@@ -399,6 +398,7 @@ planerequests = {}                                       #dictionary to hold req
 users = []
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 getAPI()
+print(str(getUptime())[11:])
 while True:
 
     if time.time() > timeout:                               #Contingency against disconnection from IRC
@@ -641,7 +641,7 @@ while True:
 
     elif "--uptime" in message or "—uptime" in message:
         uptime = getUptime()
-        uptime = str(uptime)
+        uptime = str(uptime)[11:]
         print(uptime)
         sock.send(f"PRIVMSG {channel} :Stream uptime: {uptime}\r\n".encode('utf-8'))
 
