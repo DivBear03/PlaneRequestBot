@@ -398,7 +398,7 @@ planerequests = {}                                       #dictionary to hold req
 users = []
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 getAPI()
-print(str(getUptime())[11:])
+print("Stream Uptime: " + str(getUptime())[11:])
 while True:
 
     if time.time() > timeout:                               #Contingency against disconnection from IRC
