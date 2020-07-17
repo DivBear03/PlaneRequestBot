@@ -66,7 +66,7 @@ token = 'oauth:zsnamwt00lh6bsd7pv0ovywtbhympj'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#kingsman784'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 
 #Retrieving a new app access token for the viewer count average
@@ -79,7 +79,7 @@ app_access = cleanup(app_access)
 app_access = str(app_access)
 app_access = app_access.replace("'", "")
 print(app_access)
-url = 'https://api.twitch.tv/helix/streams?user_login=kingsman784'          #url for getting viewer count
+url = 'https://api.twitch.tv/helix/streams?user_login=adamtheenginerd'          #url for getting viewer count
 Client_ID = '95hkffpc2ng2zww4gttnp17y0ix14n'                                    #client ID of my program
 oauth = 'Bearer '+app_access                                                    #oauth token is Bearer <app_access>
 head = {'client-id':Client_ID,'Authorization':oauth}                            #headers to be passed into the API
@@ -470,6 +470,29 @@ while True:
             sortedlist[j+1] = temp
         socksend(f"{sortedlist[0][0]} is the top simp with {sortedlist[0][1]} messages\r\n")
 
+    if "--topsimps" in message or "—topsimps" in message:
+        for thing in usercount.items():
+            sortedlist.append(thing)        #add each key,value pair to sortedlist
+
+        for i in range(1, len(sortedlist)):         #insertion sort algorithm
+            nextElementValue = sortedlist[i][1]
+            temp = sortedlist[i]
+            j = i-1
+            while j >= 0 and sortedlist[j][1] < nextElementValue:
+                item = sortedlist[j]
+                sortedlist[j+1] = item
+                j = j-1
+            sortedlist[j+1] = temp
+        buildstring = ""
+        if len(sortedlist) > 2:
+            for thing in range(3):
+                buildstring += "#"+str(thing) + ": " + str(sortedlist[thing][1]) + "messages; "
+            sock.send(f"PRIVMSG {channel}: {buildstring}\r\n".encode('utf-8'))
+        else:
+            for thing in range(len(sortedlist)):
+                buildstring += "#" + str(thing) + ": " + str(sortedlist[thing][1]) + "messages; "
+            sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))
+
     if "--disable" in message or "—disable" in message:                 #check for disable command
         if user in authorized:
             go = False
@@ -583,7 +606,7 @@ while True:
     elif "--batchrequest" in message or "—batchrequest" in message:
         if user in authorized:
             commands['--batchrequest'] += 1
-            batch = re.findall("--batchrequest (.+)", message)
+            batch = re.findall("batchrequest (.+)", message)
             batch = cleanup(batch)
             batch = batch.replace("'", "")
             batchlist = batch.split(",")
@@ -649,6 +672,26 @@ while True:
         uptime = str(uptime)[11:]
         print(uptime)
         sock.send(f"PRIVMSG {channel} :Stream uptime: {uptime}\r\n".encode('utf-8'))
+
+    elif "--restore" in message or "—restore" in message:
+        if user in authorized:
+            person = cleanup(re.findall("restore (.+)", message))
+            person = person.replace("'", "")
+            if person in users:
+                users.pop(indexOf(person, users))
+                sock.send(f"PRIVMSG {channel} :{person} request account restored by the gods\r\n".encode('utf-8'))
+            else:
+                sock.send(f"PRIVMSG {channel} :Request account already at 1\r\n".encode('utf-8'))
+
+    elif "--revoke" in message or "—revoke" in message:
+        if user in authorized:
+            person = cleanup(re.findall("revoke (.+)", message))
+            person = person.replace("'", "")
+            if user in usercount:
+                users.append(person)
+                sock.send(f"PRIVMSG {channel} :{person} request account depleted by the gods\r\n".encode('utf-8'))
+            else:
+                sock.send(f"PRIVMSG {channel} :No probable cause for executing {person}\r\n".encode('utf-8'))
 
     if go == True:                              #--request command only works when go is True
         
