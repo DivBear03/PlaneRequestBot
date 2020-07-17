@@ -489,11 +489,11 @@ while True:
         if len(sortedlist) > 2:
             for thing in range(3):
                 buildstring += "#"+str(thing) + ": " + str(sortedlist[thing][1]) + "messages; "
-            sock.send(f"PRIVMSG {channel}: {buildstring}\r\n".encode('utf-8'))
+            socksend(f"{buildstring}\r\n")
         else:
             for thing in range(len(sortedlist)):
                 buildstring += "#" + str(thing) + ": " + str(sortedlist[thing][1]) + "messages; "
-            sock.send(f"PRIVMSG {channel} :{buildstring}\r\n".encode('utf-8'))
+            socksend(f"{buildstring}\r\n")
 
     if "--disable" in message or "—disable" in message:                 #check for disable command
         if user in authorized:
@@ -673,7 +673,7 @@ while True:
         uptime = getUptime()
         uptime = str(uptime)[11:]
         print(uptime)
-        sock.send(f"PRIVMSG {channel} :Stream uptime: {uptime}\r\n".encode('utf-8'))
+        socksend(f"Stream uptime: {uptime}\r\n")
 
     elif "--restore" in message or "—restore" in message:
         if user in authorized:
@@ -681,9 +681,9 @@ while True:
             person = person.replace("'", "")
             if person in users:
                 users.pop(indexOf(person, users))
-                sock.send(f"PRIVMSG {channel} :{person} request account restored by the gods\r\n".encode('utf-8'))
+                socksend(f"{person} request account restored by the gods\r\n")
             else:
-                sock.send(f"PRIVMSG {channel} :Request account already at 1\r\n".encode('utf-8'))
+                socksend(f"Request account already at 1\r\n")
 
     elif "--revoke" in message or "—revoke" in message:
         if user in authorized:
@@ -691,9 +691,9 @@ while True:
             person = person.replace("'", "")
             if user in usercount:
                 users.append(person)
-                sock.send(f"PRIVMSG {channel} :{person} request account depleted by the gods\r\n".encode('utf-8'))
+                socksend(f"{person} request account depleted by the gods\r\n")
             else:
-                sock.send(f"PRIVMSG {channel} :No probable cause for executing {person}\r\n".encode('utf-8'))
+                socksend(f"No probable cause for executing {person}\r\n")
 
     if go == True:                              #--request command only works when go is True
         
