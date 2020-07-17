@@ -115,6 +115,8 @@ def getUptime():
         start_time = start_time - datetime.datetime(1970, 1, 1, 4, 0, 0)
         print(datetime.datetime.now().replace(microsecond=0) - start_time)
         return (datetime.datetime.now().replace(microsecond=0) - start_time)
+    else:
+        return datetime.datetime(1970, 1, 1, 0, 0, 0).replace(microsecond=0)
 
 def getAPI():
     r = requests.get(url, headers = head)
