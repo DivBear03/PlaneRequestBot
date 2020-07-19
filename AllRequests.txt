@@ -41,3 +41,4 @@ A-26B-50,1
 G.55 sottoserie 0,1
 P-63C-5,1
 P-51H-5-NA,1
+MiG-21SMT,1

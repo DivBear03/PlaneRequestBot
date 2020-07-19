@@ -84,3 +84,4 @@ F82-------------------->('F-82E', 79.68163621847744)
 WHATEVER ADAM WANTS! goodnight ya’ll>No match
 random plane----------->No match
 whatever Adam wants"--->No match
+mig21smt--------------->('MiG-21SMT', 90.0)

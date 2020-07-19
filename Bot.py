@@ -66,7 +66,7 @@ token = 'oauth:zsnamwt00lh6bsd7pv0ovywtbhympj'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
+channel = '#dudewithopinions'                            #channel name, must be all lowercase and have hashtag before channel name
 sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
 
 #Retrieving a new app access token for the viewer count average
@@ -79,7 +79,7 @@ app_access = cleanup(app_access)
 app_access = str(app_access)
 app_access = app_access.replace("'", "")
 print(app_access)
-url = 'https://api.twitch.tv/helix/streams?user_login=adamtheenginerd'          #url for getting viewer count
+url = 'https://api.twitch.tv/helix/streams?user_login=dudewithopinions'          #url for getting viewer count
 Client_ID = '95hkffpc2ng2zww4gttnp17y0ix14n'                                    #client ID of my program
 oauth = 'Bearer '+app_access                                                    #oauth token is Bearer <app_access>
 head = {'client-id':Client_ID,'Authorization':oauth}                            #headers to be passed into the API
@@ -389,7 +389,7 @@ def socksend(message):
     sock.send(f"PRIVMSG {channel} :{message}".encode('utf-8'))
 
 requestlist = list()                                #creating empty list of requested planes
-go = True                                           #setting program to default disable at start, use --enable command to enable bot
+go = False                                           #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0, '--topsimp':0}
@@ -455,7 +455,31 @@ while True:
     if "--" not in message and "—" not in message:
         continue
 
-    if "--topsimp" in message or "—topsimp" in message:
+    elif "--topsimps" in message or "—topsimps" in message:
+        sortedlist = []
+        for thing in usercount.items():
+            sortedlist.append(thing)        #add each key,value pair to sortedlist
+
+        for i in range(1, len(sortedlist)):         #insertion sort algorithm
+            nextElementValue = sortedlist[i][1]
+            temp = sortedlist[i]
+            j = i-1
+            while j >= 0 and sortedlist[j][1] < nextElementValue:
+                item = sortedlist[j]
+                sortedlist[j+1] = item
+                j = j-1
+            sortedlist[j+1] = temp
+        buildstring = ""
+        if len(sortedlist) >= 3:
+            for thing in range(3):
+                buildstring += "#"+str(thing+1) + ": " + sortedlist[thing][0] + str(sortedlist[thing][1]) + "messages; "
+            socksend(f"{buildstring}\r\n")
+        else:
+            for thing in range(len(sortedlist)):
+                buildstring += "#" + str(thing+1) + ": " + sortedlist[thing][0] +": " + str(sortedlist[thing][1]) + "messages; "
+            socksend(f"{buildstring}\r\n")
+
+    elif "--topsimp" in message or "—topsimp" in message:
         commands['--topsimp'] += 1
         sortedlist = list()                 #creating empty list to hold sorted users
         for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
@@ -472,30 +496,7 @@ while True:
             sortedlist[j+1] = temp
         socksend(f"{sortedlist[0][0]} is the top simp with {sortedlist[0][1]} messages\r\n")
 
-    if "--topsimps" in message or "—topsimps" in message:
-        for thing in usercount.items():
-            sortedlist.append(thing)        #add each key,value pair to sortedlist
-
-        for i in range(1, len(sortedlist)):         #insertion sort algorithm
-            nextElementValue = sortedlist[i][1]
-            temp = sortedlist[i]
-            j = i-1
-            while j >= 0 and sortedlist[j][1] < nextElementValue:
-                item = sortedlist[j]
-                sortedlist[j+1] = item
-                j = j-1
-            sortedlist[j+1] = temp
-        buildstring = ""
-        if len(sortedlist) > 2:
-            for thing in range(3):
-                buildstring += "#"+str(thing) + ": " + str(sortedlist[thing][1]) + "messages; "
-            socksend(f"{buildstring}\r\n")
-        else:
-            for thing in range(len(sortedlist)):
-                buildstring += "#" + str(thing) + ": " + str(sortedlist[thing][1]) + "messages; "
-            socksend(f"{buildstring}\r\n")
-
-    if "--disable" in message or "—disable" in message:                 #check for disable command
+    elif "--disable" in message or "—disable" in message:                 #check for disable command
         if user in authorized:
             go = False
             commands['--disable'] += 1
@@ -675,6 +676,10 @@ while True:
         print(uptime)
         socksend(f"Stream uptime: {uptime}\r\n")
 
+    elif "--restoreAll" in message or "—restoreAll" in message:
+        users.clear()
+        socksend("All user request accounts replenished by the gods\r\n")
+
     elif "--restore" in message or "—restore" in message:
         if user in authorized:
             person = cleanup(re.findall("restore (.+)", message))
@@ -689,7 +694,7 @@ while True:
         if user in authorized:
             person = cleanup(re.findall("revoke (.+)", message))
             person = person.replace("'", "")
-            if user in usercount:
+            if person in usercount.keys():
                 users.append(person)
                 socksend(f"{person} request account depleted by the gods\r\n")
             else:
