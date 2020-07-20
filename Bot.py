@@ -433,7 +433,20 @@ print("Stream Uptime: " + str(getUptime()))        #print stream uptime
 viewersamples = {}                                      #dictionary for holding timestamps and viewer count samples at that timestamp, later to be put into a Stream object
 sampletimer = timerclass.time() + 10                          #sample timer for viewer count
 
-#endtimer = timerclass.time() + 120
+automatic = False
+choicetimer = input("Would you like to time the program to end automatically? ")
+if choicetimer.lower() == "yes":
+    while True:
+        duration = input("Enter duration in seconds: ")
+        try:
+            duration = int(duration)
+            endtimer = timerclass.time() + duration
+            print("Program will end in " + str(duration) + "seconds")
+            automatic = True
+            break
+        except:
+            print("invalid response")
+            continue
 
 while True:
 
@@ -447,8 +460,8 @@ while True:
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
         timeout += 600
 
-    '''if timerclass.time() > endtimer:
-        break'''
+    if automatic == True and timerclass.time() > endtimer:
+        break
 
     if timerclass.time() > sampletimer:
         viewers = getViewers()
