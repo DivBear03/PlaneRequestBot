@@ -141,7 +141,7 @@ def getUptime():
         start_time = start_time - datetime.datetime(1970, 1, 1, 4, 0, 0)
         return str((datetime.datetime.now().replace(microsecond=0) - start_time))[11:]
     else:
-        return datetime.datetime(1970, 1, 1, 0, 0, 0).replace(microsecond=0)
+        return str(datetime.datetime(1970, 1, 1, 0, 0, 0).replace(microsecond=0))[11:]
 
 def getAPI():
     r = requests.get(url, headers = head, params = params)
@@ -433,7 +433,7 @@ print("Stream Uptime: " + str(getUptime()))        #print stream uptime
 viewersamples = {}                                      #dictionary for holding timestamps and viewer count samples at that timestamp, later to be put into a Stream object
 sampletimer = timerclass.time() + 10                          #sample timer for viewer count
 
-endtimer = timerclass.time() + 30
+#endtimer = timerclass.time() + 120
 
 while True:
 
@@ -447,8 +447,8 @@ while True:
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
         timeout += 600
 
-    if timerclass.time() > endtimer:
-        break
+    '''if timerclass.time() > endtimer:
+        break'''
 
     if timerclass.time() > sampletimer:
         viewers = getViewers()
