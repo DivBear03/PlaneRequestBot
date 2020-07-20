@@ -106,3 +106,69 @@ Number of requests: 0
 Tracking end time: 2020-07-17 23:32:14.078802
 
 
+Tracking start time: 2020-07-20 10:24:26.996586
+#drlupoTracking start time: 2020-07-20 10:25:13.567713
+#drlupoTracking start time: 2020-07-20 10:29:15.268042
+#drlupoTracking start time: 2020-07-20 10:30:36.724734
+#drlupoTracking start time: 2020-07-20 10:34:59.729256
+#drlupoTracking start time: 2020-07-20 10:47:45.857779
+#thedon_Tracking start time: 2020-07-20 10:56:47.032377
+#thedon_
+Username        Messages
+sneaton                2
+realskillzgaming       1
+Number of requests: 0
+Tracking end time: 2020-07-20 10:57:29.264546
+
+
+Tracking start time: 2020-07-20 11:00:34.717795
+#thedon_
+Username        Messages
+nightbot               1
+Number of requests: 0
+Tracking end time: 2020-07-20 11:01:16.065769
+
+
+Tracking start time: 2020-07-20 11:01:53.439660
+#thedon_
+Username        Messages
+realskillzgaming       1
+Number of requests: 0
+Tracking end time: 2020-07-20 11:02:24.938794
+
+
+Tracking start time: 2020-07-20 11:03:33.684808
+#thedon_
+Username        Messages
+realskillzgaming       1
+Number of requests: 0
+Tracking end time: 2020-07-20 11:04:17.310772
+
+
+Tracking start time: 2020-07-20 11:04:40.408794
+#thedon_
+Username        Messages
+Number of requests: 0
+Tracking end time: 2020-07-20 11:05:14.207792
+
+
+Tracking start time: 2020-07-20 11:06:36.301944
+#thedon_
+Username        Messages
+realskillzgaming       1
+damshot                1
+Number of requests: 0
+Tracking end time: 2020-07-20 11:07:28.688098
+
+
+Tracking start time: 2020-07-20 11:08:08.500659
+#thedon_
+Username        Messages
+realskillzgaming       1
+last_dutch_hero        1
+damshot                1
+sneaton                1
+Number of requests: 0
+Tracking end time: 2020-07-20 11:08:40.728544
+
+

@@ -1,13 +1,12 @@
 import socket           #importing useful modules
 import re
-import time
+import time as timerclass
 import datetime
 import difflib
 from difflib import SequenceMatcher
 import random
 import scipy.stats
 from random import randrange
-from time import sleep
 import requests 
 class Action:
     def __init__(self, add, delete, plane, index, user):
@@ -15,7 +14,6 @@ class Action:
         self.delete = delete
         self.plane = plane
         self.index = index
-        self.time = time
         self.user = user
     def getAdd(self):
         return self.add
@@ -35,7 +33,6 @@ class Clear:
 class Stream:
     def __init__(self, date, viewergraph, duration, requests):
         self.date = date
-        self.averageviewers = averageviewers
         self.viewergraph = viewergraph
         self.duration = duration
         self.requests = requests
@@ -47,7 +44,10 @@ class Stream:
         for thing in self.viewergraph.items():
             total += thing[1]
             samples += 1
-        return round(total/samples)
+        if samples != 0:
+            return round(total/samples)
+        else:
+            return 0
     def getVGraph(self):
         return self.viewergraph
     def getDuration(self):
@@ -87,8 +87,12 @@ token = 'oauth:zsnamwt00lh6bsd7pv0ovywtbhympj'      #oauth key for planerequestb
 sock.send(f"PASS {token}\n".encode('utf-8'))        #passing oauth key into twitch IRC
 nickname = 'planerequestbot'                        #doesn't really matter, could be anything
 sock.send(f"NICK {nickname}\n".encode('utf-8'))     #passing nickname to twitch IRC
-channel = '#adamtheenginerd'                            #channel name, must be all lowercase and have hashtag before channel name
-sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
+channel = input("Enter the channel name with hash sign: ")
+if channel.__contains__("#"):
+    sock.send(f"JOIN {channel}\n".encode('utf-8'))      #passing channel name to twitch IRC
+else:
+    channel = "#"+channel
+    sock.send(f"JOIN {channel}\n".encode('utf-8'))
 
 #Retrieving a new app access token for the viewer count average
 url = 'https://id.twitch.tv/oauth2/token?client_id=95hkffpc2ng2zww4gttnp17y0ix14n&client_secret=2anjpsryvwofq6l21o5bhkywltsidw&grant_type=client_credentials'
@@ -100,13 +104,14 @@ app_access = cleanup(app_access)
 app_access = str(app_access)
 app_access = app_access.replace("'", "")
 print(app_access)
-url = 'https://api.twitch.tv/helix/streams?user_login=adamtheenginerd'          #url for getting viewer count
+url = 'https://api.twitch.tv/helix/streams?'          #url for getting viewer count
 Client_ID = '95hkffpc2ng2zww4gttnp17y0ix14n'                                    #client ID of my program
 oauth = 'Bearer '+app_access                                                    #oauth token is Bearer <app_access>
 head = {'client-id':Client_ID,'Authorization':oauth}                            #headers to be passed into the API
+params = {'user_login':channel.replace("#","")}
 
 def getViewers():
-    r = requests.get(url, headers = head)
+    r = requests.get(url, headers = head, params = params)
     r = str(r.text)
     if r == "{\"data\":[],\"pagination\":{}}":
         return -1
@@ -122,7 +127,7 @@ def getViewers():
             return -1
 
 def getUptime():
-    r = requests.get(url, headers = head)
+    r = requests.get(url, headers = head, params = params)
     r = str(r.text)
     if r != "{\"data\":[],\"pagination\":{}}":
         filtered = r.replace("\"", "")
@@ -134,13 +139,12 @@ def getUptime():
         start_time = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
         from datetime import time
         start_time = start_time - datetime.datetime(1970, 1, 1, 4, 0, 0)
-        print(datetime.datetime.now().replace(microsecond=0) - start_time)
-        return (datetime.datetime.now().replace(microsecond=0) - start_time)
+        return str((datetime.datetime.now().replace(microsecond=0) - start_time))[11:]
     else:
         return datetime.datetime(1970, 1, 1, 0, 0, 0).replace(microsecond=0)
 
 def getAPI():
-    r = requests.get(url, headers = head)
+    r = requests.get(url, headers = head, params = params)
     r = str(r.text)
     print(r)
 
@@ -410,12 +414,12 @@ def socksend(message):
     sock.send(f"PRIVMSG {channel} :{message}".encode('utf-8'))
 
 requestlist = list()                                #creating empty list of requested planes
-go = False                                           #setting program to default disable at start, use --enable command to enable bot
+go = True                                           #setting program to default disable at start, use --enable command to enable bot
 tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0, '--topsimp':0}
 count = int(0)
-timeout = time.time() + 600                         #anti-disconnect timer
+timeout = timerclass.time() + 600                         #anti-disconnect timer
 
 viewertotal = 0                                         #viewertotal, added up over time
 samples = 0                                             #number of viewercount samples
@@ -424,14 +428,16 @@ planerequests = {}                                      #dictionary to hold requ
 users = []                                              #dictionary to hold users who have made requests
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 getAPI()                                                #print JSON response from API, giving current status of streamer
-print("Stream Uptime: " + str(getUptime())[11:])        #print stream uptime
+print("Stream Uptime: " + str(getUptime()))        #print stream uptime
 
-#viewersamples = {}                                      #dictionary for holding timestamps and viewer count samples at that timestamp, later to be put into a Stream object
-sampletimer = time.time() + 10                          #sample timer for viewer count
+viewersamples = {}                                      #dictionary for holding timestamps and viewer count samples at that timestamp, later to be put into a Stream object
+sampletimer = timerclass.time() + 10                          #sample timer for viewer count
+
+endtimer = timerclass.time() + 30
 
 while True:
 
-    if time.time() > timeout:                               #Contingency against disconnection from IRC
+    if timerclass.time() > timeout:                               #Contingency against disconnection from IRC
         sock.close()
         sock = socket.socket()                              #creating socket for connection to twitch
         sock.connect((server, port))
@@ -439,19 +445,21 @@ while True:
         sock.send(f"PASS {token}\n".encode('utf-8'))
         sock.send(f"NICK {nickname}\n".encode('utf-8'))
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
-        timeout = time.time() + 600
+        timeout += 600
 
-    """ if time.time() > sampletimer:
-        sampletimer = time.time() + 60
+    if timerclass.time() > endtimer:
+        break
+
+    if timerclass.time() > sampletimer:
         viewers = getViewers()
-        if viewers > -1:
-            viewersamples[getUptime()] = viewers """
-    if time.time() > sampletimer:
-        viewers = getViewers()
+        uptime = getUptime()
         if viewers > -1:
             viewertotal += viewers
             samples += 1
             average = viewertotal/samples
+            viewersamples[uptime] = viewers
+            print(str(uptime) + " , " + str(viewers))
+        sampletimer += 10
 
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
@@ -846,8 +854,12 @@ overallhandle.close()
 texthandle.close()      #closing connection to file
 sock.close()            #closing connection to Twitch IRC
 
-#obj = Stream(datetime.date.today(), viewersamples, datetime.datetime.now(), commands["--request"])
+obj = Stream(datetime.date.today(), viewersamples, datetime.datetime.now(), commands["--request"])
 with open("StreamObj.txt", 'a+') as objhandle:
     objhandle.write("\n\n")
+    objhandle.write(str(obj.getDate()))
+    objhandle.write("\n")
     for thing in obj.getVGraph().items():
-        objhandle.write(str(thing[0]) + "," + str(thing[1]))
+        objhandle.write(str(thing[0]) + "," + str(thing[1]) + "\n")
+    objhandle.write("Requests," + str(obj.getRequests()) + "\n")
+    objhandle.write("AvgViewers," + str(obj.getAvgViewers()) + "\n")
