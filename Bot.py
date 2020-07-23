@@ -30,30 +30,6 @@ class Clear:
         self.planelist = planelist
     def getPlaneList(self):
         return self.planelist
-class Stream:
-    def __init__(self, date, viewergraph, duration, requests):
-        self.date = date
-        self.viewergraph = viewergraph
-        self.duration = duration
-        self.requests = requests
-    def getDate(self):
-        return self.date
-    def getAvgViewers(self):
-        total = 0
-        samples = 0
-        for thing in self.viewergraph.items():
-            total += thing[1]
-            samples += 1
-        if samples != 0:
-            return round(total/samples)
-        else:
-            return 0
-    def getVGraph(self):
-        return self.viewergraph
-    def getDuration(self):
-        return self.duration
-    def getRequests(self):
-        return self.requests
 actions = []
 
 aircraft = []
@@ -289,10 +265,11 @@ def search(plane):                                                      #search 
     else:
         return "No match"
 
-def search2(plane):                                                     #better search algorithm
+def search2(plane):                                                     #better search algorithm, returns a tuple of plane name and similarity
     
     plane = cleanup2(plane)
-
+    if plane == 'a26':
+        return ('A-26B-50',100)
     if len(plane) <= 2 and plane != "j2" and plane != "j4" and plane != "j6" and plane != "j7" and plane != "t2":
         return "No match"
 
@@ -430,7 +407,6 @@ confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'A
 getAPI()                                                #print JSON response from API, giving current status of streamer
 print("Stream Uptime: " + str(getUptime()))        #print stream uptime
 
-viewersamples = {}                                      #dictionary for holding timestamps and viewer count samples at that timestamp, later to be put into a Stream object
 sampletimer = timerclass.time() + 10                          #sample timer for viewer count
 
 automatic = False
@@ -470,7 +446,6 @@ while True:
             viewertotal += viewers
             samples += 1
             average = viewertotal/samples
-            viewersamples[uptime] = viewers
             print(str(uptime) + " , " + str(viewers))
         sampletimer += 10
 
@@ -725,7 +700,7 @@ while True:
 
     elif "--uptime" in message or "—uptime" in message:
         uptime = getUptime()
-        uptime = str(uptime)[11:]
+        uptime = str(uptime)
         print(uptime)
         socksend(f"Stream uptime: {uptime}\r\n")
 
@@ -866,13 +841,3 @@ requesthandle.close()
 overallhandle.close()
 texthandle.close()      #closing connection to file
 sock.close()            #closing connection to Twitch IRC
-
-obj = Stream(datetime.date.today(), viewersamples, datetime.datetime.now(), commands["--request"])
-with open("StreamObj.txt", 'a+') as objhandle:
-    objhandle.write("\n\n")
-    objhandle.write(str(obj.getDate()))
-    objhandle.write("\n")
-    for thing in obj.getVGraph().items():
-        objhandle.write(str(thing[0]) + "," + str(thing[1]) + "\n")
-    objhandle.write("Requests," + str(obj.getRequests()) + "\n")
-    objhandle.write("AvgViewers," + str(obj.getAvgViewers()) + "\n")
