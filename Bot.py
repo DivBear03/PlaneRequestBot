@@ -409,21 +409,6 @@ print("Stream Uptime: " + str(getUptime()))        #print stream uptime
 
 sampletimer = timerclass.time() + 10                          #sample timer for viewer count
 
-automatic = False
-choicetimer = input("Would you like to time the program to end automatically? ")
-if choicetimer.lower() == "yes":
-    while True:
-        duration = input("Enter duration in seconds: ")
-        try:
-            duration = int(duration)
-            endtimer = timerclass.time() + duration
-            print("Program will end in " + str(duration) + "seconds")
-            automatic = True
-            break
-        except:
-            print("invalid response")
-            continue
-
 while True:
 
     if timerclass.time() > timeout:                               #Contingency against disconnection from IRC
@@ -435,9 +420,6 @@ while True:
         sock.send(f"NICK {nickname}\n".encode('utf-8'))
         sock.send(f"JOIN {channel}\n".encode('utf-8'))
         timeout += 600
-
-    if automatic == True and timerclass.time() > endtimer:
-        break
 
     if timerclass.time() > sampletimer:
         viewers = getViewers()

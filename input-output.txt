@@ -85,3 +85,4 @@ WHATEVER ADAM WANTS! goodnight ya’ll>No match
 random plane----------->No match
 whatever Adam wants"--->No match
 mig21smt--------------->('MiG-21SMT', 90.0)
+a26-------------------->('A-26B-50', 100)
