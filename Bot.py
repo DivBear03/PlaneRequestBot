@@ -406,10 +406,37 @@ users = []                                              #dictionary to hold user
 confirmations = ['Attack the D point!', 'Bravo, team!', 'Con-gratu-lations!', 'Affirmative!', 'Yes!', 'I agree!', 'Roger that!', 'Excellent!', 'Thank you!',]
 getAPI()                                                #print JSON response from API, giving current status of streamer
 print("Stream Uptime: " + str(getUptime()))        #print stream uptime
-
+requestsOn = True
 sampletimer = timerclass.time() + 10                          #sample timer for viewer count
 
+sock.send("CAP REQ :twitch.tv/tags\r\n".encode('utf-8'))
+sock.send("CAP REQ :twitch.tv/commands\r\n".encode('utf-8'))
+
+requestlist.append("Spitfire F Mk 22")
+requestlist.append("Spitfire F Mk 24")
+requestlist.append("J-7II")
+requestlist.append("F4U-4B")
+requestlist.append("P-51")
+
+redeemed = []
+
 while True:
+    size = input("Enter max number of requests in request list: ")
+    try:
+        size = int(size)
+        print(f"Request list will be limited to {size} planes")
+        timerclass.sleep(0.75)
+        break
+    except:
+        print("Invalid input")
+        continue
+
+while True:
+
+    if len(requestlist) == size:
+        requestsOn = False
+    else:
+        requestsOn = True
 
     if timerclass.time() > timeout:                               #Contingency against disconnection from IRC
         sock.close()
@@ -437,14 +464,19 @@ while True:
     except:
         break
     count = count + 1
-    user = re.findall(":.+!.+@(.+)\.tmi\.twitch\.tv", chat)             #pull username out of received message
+    
+    user = re.findall(f"user-type=.*:.+!.+@(.+)\.tmi\.twitch\.tv PRIVMSG {channel} :", chat)
     user = cleanup(user)
     user = cleanup2(user)                                                #clean up the list object
     user = user.replace("'", "")                                        #remove single quotes
-    startmessage = (len(user)) * 3 + len(channel) + 28                  #calculate starting index of message
-    message = chat[startmessage:]                                       #pull out the message text
+    message = re.findall(f"user-type=.*:.+!.+@.+\.tmi\.twitch\.tv PRIVMSG {channel} :(.+)", chat)
+    message = cleanup(message)
+    message = message.replace("'", "")
     try:
-        print(user + ": " + message.rstrip())                               #print simplified version of user and message
+        if count < 4:
+            print(chat)
+        else:
+            print(user + ": " + message.rstrip())                               #print simplified version of user and message
     except:
         if tracking == True and count > 2:
             add(user, usercount)
@@ -452,6 +484,7 @@ while True:
     
     if chat.startswith("PING"):               #check for PING from Twitch IRC
         sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
+        continue
 
     if tracking == True and count > 2:                        #if tracking is turned on
         add(user, usercount)
@@ -482,7 +515,7 @@ while True:
         buildstring = ""
         if len(sortedlist) >= 3:
             for thing in range(3):
-                buildstring += "#"+str(thing+1) + ": " + sortedlist[thing][0] + str(sortedlist[thing][1]) + "messages; "
+                buildstring += "#"+str(thing+1) + ": " + sortedlist[thing][0] + " " + str(sortedlist[thing][1]) + " messages; "
             socksend(f"{buildstring}\r\n")
         else:
             for thing in range(len(sortedlist)):
@@ -710,6 +743,51 @@ while True:
             else:
                 socksend(f"No probable cause for executing {person}\r\n")
 
+    elif "--moveup " in message or "—moveup " in message:
+        if user not in redeemed:
+            highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))
+            highlighted = cleanup(highlighted)
+            highlighted = highlighted.replace("'", "")
+            redeemed.append(user)
+            if highlighted == "highlighted-message":
+                print("Highlighted message")
+                string = re.findall("moveup (.+)", message)
+                string = cleanup(string).replace("'", "")
+                terms = string.split("|")
+                plane = terms[0]
+                newplane = search2(plane)
+                if newplane == "No match":
+                    socksend("No match\r\n")
+                    continue
+                elif newplane == "Bombers are useless":
+                    socksend("Bombers are useless\r\n")
+                    continue
+                else:
+                    newplane = newplane[0]
+                    places = terms[1]
+                    try:
+                        places = int(places)
+                    except:
+                        socksend("Invalid syntax\r\n")
+                        continue
+                    index = indexOf(newplane, requestlist)
+                    if index == -1:
+                        socksend("No such plane in requestlist\r\n")
+                    else:
+                        if places < index:
+                            temp = requestlist.pop(index)
+                            requestlist.insert(index-places, temp)
+                            socksend(f"{newplane} moved up {places} places\r\n")
+                        else:
+                            temp = requestlist.pop(index)
+                            requestlist.insert(0, temp)
+                            socksend(f"{newplane} moved up to 1st in line\r\n")
+            else:
+                socksend("No channel points redeemed\r\n")
+        else:
+            socksend("You have already redeemed channel points to move your request up\r\n")
+
+
     if go == True:                              #--request command only works when go is True
         
         if "--pick" in message or "—pick" in message:
@@ -719,55 +797,58 @@ while True:
                 except:
                     continue
                                                                 
-        if "--request " in message or "—request" in message:                                         #checking for request command
-            if user not in users:
-                commands['--request'] += 1
-                plane = re.findall("request (.+)", message)                   #pull out the plane name
-                plane = cleanup(plane)                                          #clean up the list object
-                plane = plane.replace("'", "")                                  #replace single quotes with nothing
-                result = search2(plane)                                         #perform search algorithm
-                planerequests[plane] = str(result)
-                if result == "No match":                                        #if match is not above threshold, algo returns "No match"
-                    socksend("No match\r\n")                                    #send chat
-                elif result == "Bombers are useless":                           #if algo determines that the request is a bomber
-                    socksend("Bombers are useless\r\n")    #send chat message
-                else:
-                    planeresult = str(result[0])                                #pull out the actual plane
-                    planeresult = planeresult.replace("\n", "")                 #replace newline character
-                    if indexOf(planeresult, requestlist) > -1:                  #if the plane is in the requestlist already
-                        socksend(f"{planeresult} is a duplicate\r\n")   #duplicate message to chat
-                    elif planeresult in rmnsDict:                               #if it is a roman numeral plane with mulitple correct versions
-                        if rmnsDict[planeresult] in requestlist:                #and if the counterpart of the planeresult is already in the request list
-                            socksend(f"{planeresult} is a duplicate\r\n")   #send duplicate message
-                        else:
-                            confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
-                            if indexDict(planeresult, rmnsDict) > 54:
-                                requestlist.append(rmnsDict[planeresult])
-                                original = rmnsDict[planeresult]
-                                socksend(f"{confirmations[confirmation]} {original} requested!\r\n")
-                                actions.insert(0, Action(True, False, original, len(requestlist)-1, user))
-                                add(original, writerequests)
-                                if user not in authorized:
-                                    users.append(user)
-                            else:
-                                requestlist.append(planeresult)                     #Otherwise, add the request to the request list
-                                socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")     #confirmation message
-                                actions.insert(0, Action(True, False, planeresult, len(requestlist)-1, user))
-                                add(planeresult, writerequests)
-                                if user not in authorized:
-                                    users.append(user)
+        if "--request " in message or "—request " in message:                                         #checking for request command
+            if requestsOn == True:
+                if user not in users:
+                    commands['--request'] += 1
+                    plane = re.findall("request (.+)", message)                   #pull out the plane name
+                    plane = cleanup(plane)                                          #clean up the list object
+                    plane = plane.replace("'", "")                                  #replace single quotes with nothing
+                    result = search2(plane)                                         #perform search algorithm
+                    planerequests[plane] = str(result)
+                    if result == "No match":                                        #if match is not above threshold, algo returns "No match"
+                        socksend("No match\r\n")                                    #send chat
+                    elif result == "Bombers are useless":                           #if algo determines that the request is a bomber
+                        socksend("Bombers are useless\r\n")    #send chat message
                     else:
-                        requestlist.append(planeresult)                         #same as above
-                        confirmation = random.randint(0, len(confirmations)-1)
-                        socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")
-                        actions.insert(0, Action(True, False, planeresult, len(requestlist)-1, user))
-                        add(planeresult, writerequests)
-                        print(requestlist)              #print the list
-                        if user not in authorized:
-                            users.append(user)
+                        planeresult = str(result[0])                                #pull out the actual plane
+                        planeresult = planeresult.replace("\n", "")                 #replace newline character
+                        if indexOf(planeresult, requestlist) > -1:                  #if the plane is in the requestlist already
+                            socksend(f"{planeresult} is a duplicate\r\n")   #duplicate message to chat
+                        elif planeresult in rmnsDict:                               #if it is a roman numeral plane with mulitple correct versions
+                            if rmnsDict[planeresult] in requestlist:                #and if the counterpart of the planeresult is already in the request list
+                                socksend(f"{planeresult} is a duplicate\r\n")   #send duplicate message
+                            else:
+                                confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
+                                if indexDict(planeresult, rmnsDict) > 54:
+                                    requestlist.append(rmnsDict[planeresult])
+                                    original = rmnsDict[planeresult]
+                                    socksend(f"{confirmations[confirmation]} {original} requested!\r\n")
+                                    actions.insert(0, Action(True, False, original, len(requestlist)-1, user))
+                                    add(original, writerequests)
+                                    if user not in authorized:
+                                        users.append(user)
+                                else:
+                                    requestlist.append(planeresult)                     #Otherwise, add the request to the request list
+                                    socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")     #confirmation message
+                                    actions.insert(0, Action(True, False, planeresult, len(requestlist)-1, user))
+                                    add(planeresult, writerequests)
+                                    if user not in authorized:
+                                        users.append(user)
+                        else:
+                            requestlist.append(planeresult)                         #same as above
+                            confirmation = random.randint(0, len(confirmations)-1)
+                            socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")
+                            actions.insert(0, Action(True, False, planeresult, len(requestlist)-1, user))
+                            add(planeresult, writerequests)
+                            print(requestlist)              #print the list
+                            if user not in authorized:
+                                users.append(user)
+                else:
+                    socksend("You have already made your request\r\n")
+                    continue
             else:
-                socksend("You have already made your request\r\n")
-                continue
+                socksend("Requestlist is full\r\n")
 
 sortedlist = list()                         #creating empty list to hold sorted users
 for thing in usercount.items():             #iterate through the keys and terms of usercount dictionary
