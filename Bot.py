@@ -410,14 +410,21 @@ requestsOn = True
 sampletimer = timerclass.time() + 10                          #sample timer for viewer count
 
 sock.send("CAP REQ :twitch.tv/tags\r\n".encode('utf-8'))
-sock.send("CAP REQ :twitch.tv/commands\r\n".encode('utf-8'))
 
 requestlist.append("Ta 152 C-3")
 requestlist.append("Ta 152 H-1")
 requestlist.append("F4U-4B")
 requestlist.append("J-7II")
 
+pool = [
+    "Ta 152 C-3",
+    "Ta 152 H-1",
+    "F4U-4B",
+    "J-7II"
+]
+
 redeemed = {}                                                               #dictionary of users and the number of channel points they have redeemed
+boosted = {}
 
 while True:                                                                 #accepting input for size of the requestlist
     size = input("Enter max number of requests in request list: ")
@@ -472,10 +479,10 @@ while True:
     message = cleanup(message)
     message = message.replace("'", "")
     try:
-        if count < 4:
-            print(chat)                                                         #print full version
-        else:
-            print(user + ": " + message.rstrip())                               #print simplified version of user and message
+        #if count < 4:
+        print(chat)                                                         #print full version
+        '''else:
+            print(user + ": " + message.rstrip())                               #print simplified version of user and message'''
     except:
         if tracking == True and count > 4:                                      #adding user to usercount dict
             add(user, usercount, 1)
@@ -747,15 +754,16 @@ while True:
 
     elif "--moveup " in message or "—moveup " in message:
         if redeemed.get(user, 0) < 10000:
-            highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))
+            highlighted = re.findall("custom-reward-id=(.+);display-name=.+", str(chat))
             highlighted = cleanup(highlighted)
             highlighted = highlighted.replace("'", "")
+            print(highlighted)
             if redeemed.get(user, -1) == -1:
                 redeemed[user] = 2000
             else:
                 redeemed[user] = redeemed[user] + 2000
-            if highlighted == "highlighted-message":
-                print("Highlighted message")
+            if highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":
+                print("Moveup")
                 plane = re.findall("moveup (.+)", message)
                 plane = cleanup(plane).replace("'", "")
                 result = search2(plane)
@@ -770,6 +778,8 @@ while True:
                     index = indexOf(newplane, requestlist)
                     if index == -1:
                         socksend("No such plane in requestlist\r\n")
+                    elif index == 0:
+                        socksend(f"You just wasted channel points: {newplane} is already at spot 1\r\n")
                     else:
                         temp = requestlist.pop(index)
                         requestlist.insert(index-1, temp)
@@ -780,6 +790,44 @@ while True:
         else:
             socksend("You have already redeemed 10000 channel points\r\n")
 
+    elif "--boost " in message or "—boost " in message:
+        if boosted.get(user, 0) < 10000:
+            highlighted = re.findall("custom-reward-id=(.+);display-name=.+", str(chat))
+            highlighted = cleanup(highlighted)
+            highlighted = highlighted.replace("'", "")
+            print(highlighted)
+            if redeemed.get(user, -1) == -1:
+                redeemed[user] = 2000
+            else:
+                redeemed[user] = redeemed[user] + 2000
+            if highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":
+                print("Boost redeemed")
+                plane = re.findall("boost (.+)", message)
+                plane = cleanup(plane).replace("'", "")
+                result = search2(plane)
+                if result == "No match" or result == "Bombers are useless":
+                    socksend(f"{result}\r\n")
+                else:
+                    newplane = result[0]
+                    index = indexOf(newplane, requestlist)
+                    if index == -1:
+                        socksend("No such plane in requestlist\r\n")
+                    else:
+                        pool.append(newplane)
+                        socksend(f"{newplane} has been boosted\r\n")
+            else:
+                socksend("No channel points redeemed\r\n")
+        else:
+            socksend("You have already redeemed 10000 channel points\r\n")
+
+    elif "--pool" in message or "—pool" in message:
+        buildstring = ""
+        for thing in pool:
+            buildstring += thing + ", "
+        if len(pool) == 0:
+            socksend("Request pool is empty\r\n")
+        else:
+            socksend(f"{buildstring}\r\n")
 
     if go == True:                              #--request command only works when go is True
         
@@ -821,6 +869,7 @@ while True:
                                     add(original, writerequests, 1)
                                     if user not in authorized:
                                         users.append(user)
+                                    pool.append(original)
                                 else:
                                     requestlist.append(planeresult)                     #Otherwise, add the request to the request list
                                     socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")     #confirmation message
@@ -828,6 +877,7 @@ while True:
                                     add(planeresult, writerequests, 1)
                                     if user not in authorized:
                                         users.append(user)
+                                    pool.append(planeresult)
                         else:
                             requestlist.append(planeresult)                         #same as above
                             confirmation = random.randint(0, len(confirmations)-1)
@@ -837,11 +887,13 @@ while True:
                             print(requestlist)              #print the list
                             if user not in authorized:
                                 users.append(user)
+                            pool.append(planeresult)
                 else:
                     socksend("You have already made your request\r\n")
                     continue
             else:
                 socksend("Requestlist is full\r\n")
+
 
 sortedlist = list()                         #creating empty list to hold sorted users
 for thing in usercount.items():             #iterate through the keys and terms of usercount dictionary
