@@ -392,7 +392,7 @@ def socksend(message):
 
 requestlist = list()                                #creating empty list of requested planes
 go = True                                           #setting program to default disable at start, use --enable command to enable bot
-tracking = True                                     #setting tracking to True as default
+tracking = False                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0, '--topsimp':0}
 count = int(0)
@@ -422,6 +422,13 @@ pool = [
     "F4U-4B",
     "J-7II"
 ]
+def deleteFromPool(plane):
+    index = indexOf(plane, pool)
+    while index > -1:
+        pool.pop(index)
+        index = indexOf(plane, pool)
+
+reward = "highlighted"
 
 redeemed = {}                                                               #dictionary of users and the number of channel points they have redeemed
 boosted = {}
@@ -476,13 +483,13 @@ while True:
     user = cleanup2(user)                                                #clean up the list object
     user = user.replace("'", "")                                        #remove single quotes
     message = re.findall(f"user-type=.*:.+!.+@.+\.tmi\.twitch\.tv PRIVMSG {channel} :(.+)", chat)   #extracting message
-    message = cleanup(message)
-    message = message.replace("'", "")
+    message = str(message)
+    message = message[2:(len(message)-4)]
     try:
         #if count < 4:
         print(chat)                                                         #print full version
-        '''else:
-            print(user + ": " + message.rstrip())                               #print simplified version of user and message'''
+        #else:
+        print(user + ":" + message.rstrip())                               #print simplified version of user and message'''
     except:
         if tracking == True and count > 4:                                      #adding user to usercount dict
             add(user, usercount, 1)
@@ -592,6 +599,7 @@ while True:
                     print(plane)
                     skipped = requestlist.pop(plane)
                     socksend(f"{skipped} has been skipped\r\n")
+                    deleteFromPool(skipped)
                     actions.insert(0, Action(False, True, skipped, plane, user))
                 except:
                     planeresult = search2(plane)
@@ -607,6 +615,7 @@ while True:
                             socksend("Skip failed\r\n")
                         else:
                             socksend(f"{skipped} has been skipped\r\n")
+                            deleteFromPool(skipped)
                             actions.insert(0, Action(False, True, skipped, selected, user))
             else:
                 socksend("Requestlist is empty\r\n")
@@ -754,7 +763,10 @@ while True:
 
     elif "--moveup " in message or "—moveup " in message:
         if redeemed.get(user, 0) < 10000:
-            highlighted = re.findall("custom-reward-id=(.+);display-name=.+", str(chat))
+            if reward == "highlighted":
+                highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))                                     #custom-reward-id=(.+);display-name=.+
+            elif reward == "custom":
+                highlighted = re.findall("custom-reward-id=(.+);display-name=.+", str(chat))
             highlighted = cleanup(highlighted)
             highlighted = highlighted.replace("'", "")
             print(highlighted)
@@ -762,7 +774,7 @@ while True:
                 redeemed[user] = 2000
             else:
                 redeemed[user] = redeemed[user] + 2000
-            if highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":
+            if highlighted == "highlighted-message" or highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":                                   #8a3ce587-3258-4524-968d-5bdbdefec5cd
                 print("Moveup")
                 plane = re.findall("moveup (.+)", message)
                 plane = cleanup(plane).replace("'", "")
@@ -792,7 +804,7 @@ while True:
 
     elif "--boost " in message or "—boost " in message:
         if boosted.get(user, 0) < 10000:
-            highlighted = re.findall("custom-reward-id=(.+);display-name=.+", str(chat))
+            highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))         #custom-reward-id=(.+);display-name=.+
             highlighted = cleanup(highlighted)
             highlighted = highlighted.replace("'", "")
             print(highlighted)
@@ -800,7 +812,7 @@ while True:
                 redeemed[user] = 2000
             else:
                 redeemed[user] = redeemed[user] + 2000
-            if highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":
+            if highlighted == "highlighted-message":
                 print("Boost redeemed")
                 plane = re.findall("boost (.+)", message)
                 plane = cleanup(plane).replace("'", "")
@@ -834,7 +846,7 @@ while True:
         if "--pick" in message or "—pick" in message:
             if user in authorized:
                 try:
-                    socksend(f"{requestlist[randrange(len(requestlist))]} has been chosen by the gods\r\n")
+                    socksend(f"{requestlist[randrange(len(pool))]} has been chosen by the gods\r\n")
                 except:
                     continue
                                                                 
