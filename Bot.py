@@ -420,8 +420,8 @@ def deleteFromPool(plane):
 
 reward = "custom"
 
-movedup = {}                                                               #dictionary of users and the number of channel points they have redeemed
-boosted = {}
+movedup = {}                                                               #dictionary of users and the number of channel points they have redeemed on the moveup command
+boosted = {}                                                               #dictionary of users and the number of channel points they have redeemed on the boost command
 
 while True:                                                                 #accepting input for size of the requestlist
     size = input("Enter max number of requests in request list: ")
