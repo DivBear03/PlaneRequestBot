@@ -411,17 +411,7 @@ sampletimer = timerclass.time() + 10                          #sample timer for 
 
 sock.send("CAP REQ :twitch.tv/tags\r\n".encode('utf-8'))
 
-requestlist.append("Ta 152 C-3")
-requestlist.append("Ta 152 H-1")
-requestlist.append("F4U-4B")
-requestlist.append("J-7II")
-
-pool = [
-    "Ta 152 C-3",
-    "Ta 152 H-1",
-    "F4U-4B",
-    "J-7II"
-]
+pool = []
 def deleteFromPool(plane):
     index = indexOf(plane, pool)
     while index > -1:
@@ -430,7 +420,7 @@ def deleteFromPool(plane):
 
 reward = "custom"
 
-redeemed = {}                                                               #dictionary of users and the number of channel points they have redeemed
+movedup = {}                                                               #dictionary of users and the number of channel points they have redeemed
 boosted = {}
 
 while True:                                                                 #accepting input for size of the requestlist
@@ -763,7 +753,7 @@ while True:
                 socksend(f"No probable cause for executing {person}\r\n")
 
     elif "--moveup " in message or "—moveup " in message:
-        if redeemed.get(user, 0) < 10000:
+        if movedup.get(user, 0) < 10000:
             if reward == "highlighted":
                 highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))                                     #custom-reward-id=(.+);display-name=.+
             elif reward == "custom":
@@ -771,10 +761,10 @@ while True:
             highlighted = cleanup(highlighted)
             highlighted = highlighted.replace("'", "")
             print(highlighted)
-            if redeemed.get(user, -1) == -1:
-                redeemed[user] = 2000
+            if movedup.get(user, -1) == -1:
+                movedup[user] = 2000
             else:
-                redeemed[user] = redeemed[user] + 2000
+                movedup[user] = movedup[user] + 2000
             if highlighted == "highlighted-message" or highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":                                   #8a3ce587-3258-4524-968d-5bdbdefec5cd
                 print("Moveup")
                 plane = re.findall("moveup (.+)", message)
@@ -797,7 +787,6 @@ while True:
                         temp = requestlist.pop(index)
                         requestlist.insert(index-1, temp)
                         socksend(f"{newplane} moved up 1 place in the list\r\n")
-                        add(user, redeemed, 2000)
             else:
                 socksend("No channel points redeemed\r\n")
         else:
@@ -812,10 +801,10 @@ while True:
             highlighted = cleanup(highlighted)
             highlighted = highlighted.replace("'", "")
             print(highlighted)
-            if redeemed.get(user, -1) == -1:
-                redeemed[user] = 2000
+            if boosted.get(user, -1) == -1:
+                boosted[user] = 2000
             else:
-                redeemed[user] = redeemed[user] + 2000
+                boosted[user] = boosted[user] + 2000
             if highlighted == "highlighted-message" or highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":
                 print("Boost redeemed")
                 plane = re.findall("boost (.+)", message)
