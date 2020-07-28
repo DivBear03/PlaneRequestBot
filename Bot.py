@@ -428,7 +428,7 @@ def deleteFromPool(plane):
         pool.pop(index)
         index = indexOf(plane, pool)
 
-reward = "highlighted"
+reward = "custom"
 
 redeemed = {}                                                               #dictionary of users and the number of channel points they have redeemed
 boosted = {}
@@ -639,6 +639,7 @@ while True:
             if len(requestlist) > 0:            #if there are planes in the requestlist
                 socksend(f"{buildstring}\r\n")          #send the string of requested planes to the chat
                 removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
+                deleteFromPool(removedplane)
                 actions.insert(0, Action(False, True, removedplane, 0, user))
             else:
                 socksend("Requestlist is empty\r\n")      #if no planes in the list, send the message that there are no planes in the list
@@ -804,7 +805,10 @@ while True:
 
     elif "--boost " in message or "—boost " in message:
         if boosted.get(user, 0) < 10000:
-            highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))         #custom-reward-id=(.+);display-name=.+
+            if reward == "highlighted":
+                highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))         #custom-reward-id=(.+);display-name=.+
+            elif reward == "custom":
+                highlighted = re.findall("custom-reward-id=(.+);display-name=.+", str(chat))
             highlighted = cleanup(highlighted)
             highlighted = highlighted.replace("'", "")
             print(highlighted)
@@ -812,7 +816,7 @@ while True:
                 redeemed[user] = 2000
             else:
                 redeemed[user] = redeemed[user] + 2000
-            if highlighted == "highlighted-message":
+            if highlighted == "highlighted-message" or highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":
                 print("Boost redeemed")
                 plane = re.findall("boost (.+)", message)
                 plane = cleanup(plane).replace("'", "")
@@ -825,7 +829,7 @@ while True:
                     if index == -1:
                         socksend("No such plane in requestlist\r\n")
                     else:
-                        pool.append(newplane)
+                        pool.insert(randrange(len(pool)+1), newplane)
                         socksend(f"{newplane} has been boosted\r\n")
             else:
                 socksend("No channel points redeemed\r\n")
