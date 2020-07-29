@@ -30,6 +30,23 @@ class Clear:
         self.planelist = planelist
     def getPlaneList(self):
         return self.planelist
+
+class Poll:
+    def __init__(self, question, options):
+        self.question = question
+        self.options = options
+        self.responses = list()
+        if options != None:
+            for n in range(len(self.options)):
+                self.responses.append(list())
+    def getQuestion(self):
+        return self.question
+    def getOptions(self):
+        return self.options
+    def addResponse(self, num):
+        self.responses[num-1].append("yay")
+    def getResults(self):
+        return self.responses
 actions = []
 
 aircraft = []
@@ -410,6 +427,7 @@ requestsOn = True
 sampletimer = timerclass.time() + 10                          #sample timer for viewer count
 
 sock.send("CAP REQ :twitch.tv/tags\r\n".encode('utf-8'))
+sock.send("CAP REQ :twitch.tv/commands\r\n".encode('utf-8'))
 
 pool = []
 def deleteFromPool(plane):
@@ -422,6 +440,8 @@ reward = "custom"
 
 movedup = {}                                                               #dictionary of users and the number of channel points they have redeemed on the moveup command
 boosted = {}                                                               #dictionary of users and the number of channel points they have redeemed on the boost command
+
+PollObj = Poll(None, None)
 
 while True:                                                                 #accepting input for size of the requestlist
     size = input("Enter max number of requests in request list: ")
@@ -468,11 +488,11 @@ while True:
         break
     count = count + 1
     
-    user = re.findall(f"user-type=.*:.+!.+@(.+)\.tmi\.twitch\.tv PRIVMSG {channel} :", chat)        #extracting username
+    user = re.findall(f"user-type=.*:.+!.+@(.+)\.tmi\.twitch\.tv", chat)        #extracting username
     user = cleanup(user)
     user = cleanup2(user)                                                #clean up the list object
     user = user.replace("'", "")                                        #remove single quotes
-    message = re.findall(f"user-type=.*:.+!.+@.+\.tmi\.twitch\.tv PRIVMSG {channel} :(.+)", chat)   #extracting message
+    message = re.findall(f"user-type=.*:.+!.+@.+\.tmi\.twitch\.tv .+ {channel} :(.+)", chat)   #extracting message
     message = str(message)
     message = message[2:(len(message)-4)]
     try:
@@ -500,6 +520,34 @@ while True:
 
     if "@planerequestbot" in message:
         socksend(f"Welcome to the stream, @{user}. PlaneRequestBot commands: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n")
+
+    if "WHISPER" in chat:
+        user = re.findall("user-type=.*:.+!.+@(.+)\.tmi\.twitch\.tv WHISPER planerequestbot :.+", str(chat))
+        user = str(user)
+        user = user[2: len(user)-2]
+        message = re.findall(f"user-type=.*:{user}!{user}@{user}\.tmi\.twitch\.tv WHISPER planerequestbot :(.+)", str(chat))
+        message = str(message)
+        message = message[2:(len(message)-4)]
+        print(user,":", message)
+        if "--newpoll " in message or "—newpoll " in message:
+            question = re.findall("newpoll (.+)\?", message)
+            question = str(question)
+            question = question[2:(len(question)-2)]
+            question = question + "?"
+            question = question.strip()
+            print(question)
+            print(message)
+            options = re.findall("newpoll .+\? (.+)", message)
+            options = str(options)
+            print(options)
+            options = options[2:len(options)-2]
+            options = options.split("|")
+            num = len(options)
+            print("Number of options: ", num)
+            print(options)
+
+            PollObj = Poll(question, options)
+        continue
 
     if "--" not in message and "—" not in message:              #logic gate to prevent more CPU usage if command not present
         continue
@@ -833,6 +881,33 @@ while True:
             socksend("Request pool is empty\r\n")
         else:
             socksend(f"{buildstring}\r\n")
+
+    elif "--question" in message or "—question" in message:
+        if PollObj.getQuestion() != None:
+            socksend(f"{PollObj.getQuestion()}\r\n")
+            buildstring = ""
+            if PollObj.getOptions() != None:
+                for n in range(len(PollObj.getOptions())):
+                    buildstring += "Option " + str(n+1) + ": " + PollObj.getOptions()[n] + ", "
+            socksend(f"{buildstring}\r\n")
+
+    elif "--respond " in message or "—respond " in message:
+        response = re.findall("respond (.+)", message)
+        response = str(response)
+        response = response[2:(len(response)-2)]
+        try:
+            response = int(response)
+            PollObj.addResponse(response)
+            socksend(f"Response of {response} accepted\r\n")
+        except:
+            socksend("Please enter a valid response number\r\n")
+
+    elif "--results" in message or "—results" in message:
+        buildstring = ""
+        responses = PollObj.getResults()
+        for n in range(len(responses)):
+            buildstring += "Option " + str(n+1) + ": " + str(len(responses[n])) + ", "
+        socksend(f"{buildstring}\r\n")
 
     if go == True:                              #--request command only works when go is True
         

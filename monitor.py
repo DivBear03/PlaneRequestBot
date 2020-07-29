@@ -40,7 +40,6 @@ timeout = timerclass.time() + 600                         #anti-disconnect timer
 
 sock.send("CAP REQ :twitch.tv/tags\r\n".encode('utf-8'))
 sock.send("CAP REQ :twitch.tv/commands\r\n".encode('utf-8'))
-sock.send("CAP REQ :twitch.tv/membership\r\n".encode('utf-8'))
 while True:
     highmsg = False
     if timerclass.time() > timeout:                               #Contingency against disconnection from IRC
@@ -59,14 +58,18 @@ while True:
     if chat.startswith("PING"):               #check for PING from Twitch IRC
         sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
         continue
-    user = re.findall("user-type=.*:.+!.+@(.+)\.tmi\.twitch\.tv PRIVMSG #adamtheenginerd :", chat)
+    user = re.findall(f"user-type=.*:.+!.+@(.+)\.tmi\.twitch\.tv PRIVMSG {channel} :", chat)
     user = cleanup(user)
     user = cleanup2(user)                                                #clean up the list object
     user = user.replace("'", "")
-    message = re.findall("user-type=.*:.+!.+@.+\.tmi\.twitch\.tv PRIVMSG #adamtheenginerd :(.+)", chat)
-    message = cleanup(message)
-    message = message.replace("'", "")
+    message = re.findall(f"user-type=.*:.+!.+@.+\.tmi\.twitch\.tv PRIVMSG {channel} :(.+)", chat)
+    message = str(message)
+    message = message[2:(len(message)-4)]
     print(user + ": " + message)
+
+    if "--whisper" in message:
+        sock.send(f"PRIVMSG {channel} :/w AdamTheEnginerd Hello from newly verified PlaneRequestBot\r\n".encode('utf-8'))
+        print("whisper sent")
 
     if "--moveup " in message or "—moveup " in message:
         highlighted = re.findall("@badge-info=.*mod=[0-9];msg-id=(.+);room-id=[0-9]+", str(chat))
