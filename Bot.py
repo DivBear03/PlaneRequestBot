@@ -808,7 +808,7 @@ while True:
             else:
                 socksend(f"No probable cause for executing {person}\r\n")
 
-    elif "--moveup " in message or "—moveup " in message:
+    elif False and ("--moveup " in message or "—moveup " in message):
         if movedup.get(user, 0) < 10000:
             if reward == "highlighted":
                 highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))                                     #custom-reward-id=(.+);display-name=.+
@@ -821,7 +821,7 @@ while True:
                 movedup[user] = 2000
             else:
                 movedup[user] = movedup[user] + 2000
-            if highlighted == "highlighted-message" or highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":                                   #8a3ce587-3258-4524-968d-5bdbdefec5cd
+            if highlighted == "highlighted-message" or highlighted == "f21bc48f-ce54-4595-a619-86d2c334645c":                                   #8a3ce587-3258-4524-968d-5bdbdefec5cd
                 print("Moveup")
                 plane = re.findall("moveup (.+)", message)
                 plane = cleanup(plane).replace("'", "")
@@ -848,7 +848,7 @@ while True:
         else:
             socksend("You have already redeemed 10000 channel points\r\n")
 
-    elif "--boost " in message or "—boost " in message:
+    elif ("--boost " in message or "—boost " in message):
         if boosted.get(user, 0) < 10000:
             if reward == "highlighted":
                 highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))         #custom-reward-id=(.+);display-name=.+
@@ -861,7 +861,7 @@ while True:
                 boosted[user] = 2000
             else:
                 boosted[user] = boosted[user] + 2000
-            if highlighted == "highlighted-message" or highlighted == "8a3ce587-3258-4524-968d-5bdbdefec5cd":
+            if highlighted == "highlighted-message" or highlighted == "0f4fa868-f365-44a7-9fe9-2d793556fb50":
                 print("Boost redeemed")
                 plane = re.findall("boost (.+)", message)
                 plane = cleanup(plane).replace("'", "")
@@ -880,8 +880,8 @@ while True:
                 socksend("No channel points redeemed\r\n")
         else:
             socksend("You have already redeemed 10000 channel points\r\n")
-
-    elif "--pool" in message or "—pool" in message:
+    
+    elif ("--pool" in message or "—pool" in message):
         buildstring = ""
         for thing in pool:
             buildstring += thing + ", "
