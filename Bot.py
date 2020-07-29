@@ -529,7 +529,7 @@ while True:
         message = str(message)
         message = message[2:(len(message)-4)]
         print(user,":", message)
-        if "--newpoll " in message or "—newpoll " in message:
+        if "--newpoll " in message or "—newpoll " in message and user.lower() == channel.replace("#", ""):
             question = re.findall("newpoll (.+)\?", message)
             question = str(question)
             question = question[2:(len(question)-2)]
