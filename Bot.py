@@ -39,14 +39,18 @@ class Poll:
         if options != None:
             for n in range(len(self.options)):
                 self.responses.append(list())
+        self.responded = list()
     def getQuestion(self):
         return self.question
     def getOptions(self):
         return self.options
-    def addResponse(self, num):
+    def addResponse(self, num, user):
         self.responses[num-1].append("yay")
+        self.responded.append(user)
     def getResults(self):
         return self.responses
+    def getResponded(self):
+        return self.responded
 actions = []
 
 aircraft = []
@@ -547,6 +551,10 @@ while True:
             print(options)
 
             PollObj = Poll(question, options)
+            buildstring = ""
+            for n in range(len(PollObj.getOptions())):
+                buildstring += "Option " + str(n+1) + ": " + PollObj.getOptions()[n] + ", "
+            socksend(f"A new poll is live! Question: {question} {buildstring}\r\n")
         continue
 
     if "--" not in message and "—" not in message:              #logic gate to prevent more CPU usage if command not present
@@ -892,15 +900,16 @@ while True:
             socksend(f"{buildstring}\r\n")
 
     elif "--respond " in message or "—respond " in message:
-        response = re.findall("respond (.+)", message)
-        response = str(response)
-        response = response[2:(len(response)-2)]
-        try:
-            response = int(response)
-            PollObj.addResponse(response)
-            socksend(f"Response of {response} accepted\r\n")
-        except:
-            socksend("Please enter a valid response number\r\n")
+        if user not in PollObj.getResponded():
+            response = re.findall("respond (.+)", message)
+            response = str(response)
+            response = response[2:(len(response)-2)]
+            try:
+                response = int(response)
+                PollObj.addResponse(response, user)
+                socksend(f"Response of {response} accepted\r\n")
+            except:
+                socksend("Please enter a valid response number\r\n")
 
     elif "--results" in message or "—results" in message:
         buildstring = ""
