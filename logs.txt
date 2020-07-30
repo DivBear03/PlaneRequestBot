@@ -479,4 +479,73 @@ Tracking end time: 2020-07-29 21:41:29.908735
 
 Tracking start time: 2020-07-29 21:41:39.394140
 #adamtheenginerdTracking start time: 2020-07-29 21:48:27.235556
+#adamtheenginerdTracking start time: 2020-07-29 22:29:51.477738
+#kingsman784Tracking start time: 2020-07-29 22:37:15.242068
 #adamtheenginerd
+Username        Messages
+                     218
+zlayer___             68
+kingsman784           55
+bantay321             47
+serburger             43
+lancelynxx            38
+blitzcreeper2309      34
+thisisonlythedream    33
+ginger_ninja__        27
+jawsxd22              24
+acecarpenter          18
+cowgoesmooooooooooooo  17
+subwayeatflesh4       16
+bomberlivesmatter     16
+rotatebump96          15
+xinfernocobra         14
+elivelton_ss          13
+juicebowel            13
+bamboopill            11
+hockeymazing95        11
+quedrum                9
+theviper492            9
+high_elf_archer        8
+seymourskinnertv       7
+nightbot               5
+captain_acab           5
+adamtheenginerd        5
+duckforreve            5
+sirtankss              5
+danleydanderson        5
+eaglecjt87             5
+mrhankie0              4
+turtrucking            4
+diekonig00             4
+orkelle                4
+tachirocks             3
+fascile                3
+turretlifegh           3
+thedeerkingson         2
+madcobra2              2
+shtl__                 2
+maddweeb               2
+handofstalin_russianbias   2
+ferrousimpals          2
+morecowbellwt          2
+bobusbors              2
+tacticalsnakei         2
+spacegeek37            2
+burt_thunderston       2
+ginmokusei_            2
+unknowndistance        1
+lukkenso               1
+foxtrotzgaming         1
+akblast                1
+croagan_roagan         1
+damshot                1
+neellieh               1
+moroman765             1
+diekonig01             1
+ezmoney6950            1
+brthibault             1
+twillian_              1
+Number of requests: 8
+Tracking end time: 2020-07-30 00:09:58.167562
+
+

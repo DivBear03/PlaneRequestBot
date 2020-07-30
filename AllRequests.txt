@@ -16,7 +16,7 @@ La-7,2
 Ki-84 ko,2
 P-38L-5-LO,1
 Yak-15P,1
-F4U-4B,2
+F4U-4B,3
 F-82E,1
 Spitfire F Mk IXc,1
 Spitfire F Mk IX,1
@@ -31,16 +31,16 @@ SM.92,1
 A-36,1
 A21RB,1
 Fw 190 D-9,1
-Ta 152 H-1,1
+Ta 152 H-1,2
 CL-13B Mk.6,1
 Ta 152 C-3,1
 SM.91,1
 F9F-5,1
 MB.5,1
-A-26B-50,3
+A-26B-50,4
 G.55 sottoserie 0,1
 P-63C-5,1
-P-51H-5-NA,1
+P-51H-5-NA,2
 MiG-21SMT,1
 Ju 87 D-5,2
 Me 262 C-2b,2
@@ -49,3 +49,7 @@ P-51,1
 Spitfire Mk Vb,1
 J29F,1
 P-26A-33,1
+Yak-15,1
+F4U-4,1
+Hs 129 B-3,1
+F6F-5N,1

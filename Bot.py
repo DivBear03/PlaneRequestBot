@@ -6,7 +6,6 @@ import difflib
 from difflib import SequenceMatcher
 import random
 import scipy.stats
-from random import randrange
 import requests 
 class Action:
     def __init__(self, add, delete, plane, index, user):
@@ -26,10 +25,13 @@ class Action:
     def getUser(self):
         return self.user
 class Clear:
-    def __init__(self, planelist):
+    def __init__(self, planelist, pool):
         self.planelist = planelist
+        self.pool = pool
     def getPlaneList(self):
         return self.planelist
+    def getPool(self):
+        return self.pool
 
 class Poll:
     def __init__(self, question, options):
@@ -413,7 +415,7 @@ def socksend(message):
 
 requestlist = list()                                #creating empty list of requested planes
 go = True                                           #setting program to default disable at start, use --enable command to enable bot
-tracking = False                                     #setting tracking to True as default
+tracking = True                                     #setting tracking to True as default
 usercount = dict()                                  #creating empty dictionary for tracking user message counts
 commands = {'--disable': 0, '--enable': 0, '--track': 0, '--stoptrack': 0, '--request': 0, '--reqdel': 0, '--skip': 0, '--requests': 0, '--batchrequest':0, '--dellast':0, '--topsimp':0}
 count = int(0)
@@ -446,6 +448,8 @@ movedup = {}                                                               #dict
 boosted = {}                                                               #dictionary of users and the number of channel points they have redeemed on the boost command
 
 PollObj = Poll(None, None)
+
+capreqtimer = timerclass.time() + 60
 
 while True:                                                                 #accepting input for size of the requestlist
     size = input("Enter max number of requests in request list: ")
@@ -485,6 +489,11 @@ while True:
             print(str(uptime) + " , " + str(viewers))
         sampletimer += 10
 
+    if timerclass.time() > capreqtimer:
+        sock.send("CAP REQ :twitch.tv/tags\r\n".encode('utf-8'))
+        sock.send("CAP REQ :twitch.tv/commands\r\n".encode('utf-8'))
+        capreqtimer += 60
+
     try:
         chat = sock.recv(2048).decode('utf-8')      #receive message
         chat = str(chat)                            #convert to string
@@ -500,12 +509,12 @@ while True:
     message = str(message)
     message = message[2:(len(message)-4)]
     try:
-        #if count < 4:
-        print(chat)                                                         #print full version
-        #else:
-        print(user + ":" + message.rstrip())                               #print simplified version of user and message'''
+        if count < 5:
+            print(chat)                                                         #print full version
+        else:
+            print(user + ":" + message.rstrip())                               #print simplified version of user and message'''
     except:
-        if tracking == True and count > 4:                                      #adding user to usercount dict
+        if tracking == True and count > 5:                                      #adding user to usercount dict
             add(user, usercount, 1)
         continue
     
@@ -583,35 +592,42 @@ while True:
             for thing in range(len(sortedlist)):
                 buildstring += "#" + str(thing+1) + ": " + sortedlist[thing][0] +": " + str(sortedlist[thing][1]) + "messages; "
             socksend(f"{buildstring}\r\n")
+        continue
 
     elif "--topsimp" in message or "—topsimp" in message:       #topsimp command, sends the name of the top simp to chat
         commands['--topsimp'] += 1
         sortedlist = list()                 #creating empty list to hold sorted users
-        for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
-            sortedlist.append(thing)        #add each key,value pair to sortedlist
-
-        for i in range(1, len(sortedlist)):         #insertion sort algorithm
-            nextElementValue = sortedlist[i][1]
-            temp = sortedlist[i]
-            j = i-1
-            while j >= 0 and sortedlist[j][1] < nextElementValue:
-                item = sortedlist[j]
-                sortedlist[j+1] = item
-                j = j-1
-            sortedlist[j+1] = temp
-        socksend(f"{sortedlist[0][0]} is the top simp with {sortedlist[0][1]} messages\r\n")
+        if len(usercount) != 0:
+            for thing in usercount.items():     #iterate through the keys and terms of usercount dictionary
+                sortedlist.append(thing)        #add each key,value pair to sortedlist
+            print(sortedlist)
+            for i in range(1, len(sortedlist)):         #insertion sort algorithm
+                nextElementValue = sortedlist[i][1]
+                temp = sortedlist[i]
+                j = i-1
+                while j >= 0 and sortedlist[j][1] < nextElementValue:
+                    item = sortedlist[j]
+                    sortedlist[j+1] = item
+                    j = j-1
+                sortedlist[j+1] = temp
+            socksend(f"{sortedlist[0][0]} is the top simp with {sortedlist[0][1]} messages\r\n")
+        else:
+            socksend("Tracking is turned off\r\n")
+        continue
 
     elif "--disable" in message or "—disable" in message:       #check for disable command
         if user in authorized:
             go = False
             commands['--disable'] += 1
             print("BotOn = " + str(go))
+        continue
 
     elif "--enable" in message or "—enable" in message:         #check for enable command
         if user in authorized:
             go = True
             commands['--enable'] += 1
             print("BotOn = " + str(go))
+        continue
 
     elif "--end" in message or "—end" in message:               #check for end program command
         if user in authorized:
@@ -622,6 +638,7 @@ while True:
             tracking = True
             commands['--track'] += 1
             print("Tracking = " + str(tracking))
+        continue
 
     elif '--stoptrack' in message or "—stoptrack" in message:   #check for tracking end command
         if user == "adamtheenginerd":
@@ -632,6 +649,7 @@ while True:
             else:
                 usercount[user] = usercount[user] + 1  
             print("Tracking = " + str(tracking))
+        continue
 
     elif "--skip[" in message or "—skip[" in message:           #check for a specific plane to skip in the message, uses search algorithm or list index
         if user in authorized:
@@ -665,6 +683,7 @@ while True:
                             actions.insert(0, Action(False, True, skipped, selected, user))
             else:
                 socksend("Requestlist is empty\r\n")
+        continue
 
     elif "--delLast" in message or "--dellast" in message or "—delLast" in message or "—dellast" in message:    #command that deletes the last plane in the list
         if user in authorized:
@@ -673,6 +692,7 @@ while True:
                 plane = requestlist.pop(len(requestlist)-1)
                 socksend(f"{plane} deleted\r\n")
                 actions.insert(0, Action(False, True, plane, len(requestlist)-1, user))
+                deleteFromPool(plane)
             except:
                 continue
 
@@ -708,11 +728,12 @@ while True:
             planelist = []
             for n in range(len(requestlist)):
                 planelist.append(requestlist[n])
-            obj = Clear(planelist)
+            obj = Clear(planelist, pool)
             actions.insert(0, obj)
             requestlist.clear()
             socksend("Request list has been cleared\r\n")
-            print(requestlist)
+            pool.clear()
+        continue
 
     elif "--batchrequest" in message or "—batchrequest" in message:
         if user in authorized:
@@ -743,23 +764,28 @@ while True:
                                 obj = Action(True, False, rmnsDict[planeresult], len(requestlist)-1, user)
                                 actions.insert(0, obj)
                                 add(rmnsDict[planeresult], writerequests, 1)
+                                pool.append(rmnsDict[planeresult])
                             else:
                                 requestlist.append(planeresult)
                                 obj = Action(True, False, planeresult, len(requestlist)-1, user)
                                 actions.insert(0, obj)
                                 add(planeresult, writerequests, 1)
+                                pool.append(planeresult)
                     else:
                         requestlist.append(planeresult)                         #same as above
                         obj = Action(True, False, planeresult, len(requestlist)-1, user)
                         actions.insert(0, obj)
                         add(planeresult, writerequests, 1)
+                        pool.append(planeresult)
                         print(requestlist)              #print the list
+        continue
 
     elif "--undo" in message or "—undo" in message:
         if user in authorized:
             if len(actions) > 0:
                 obj = actions[0]
                 if type(obj) == Clear:
+                    pool = obj.getPool()
                     for plane in obj.getPlaneList():
                         requestlist.append(plane)
                 elif type(obj) == Action:
@@ -773,25 +799,32 @@ while True:
             else:
                 socksend("No previous actions\r\n")
             print(requestlist)
+        continue
 
     elif "--avgvcount" in message or "—avgvcount" in message:
         sentin = str(int(average))
         socksend(f"Average viewer count: {sentin}\r\n")
+        continue
 
     elif "--uptime" in message or "—uptime" in message:
         uptime = getUptime()
         uptime = str(uptime)
         print(uptime)
         socksend(f"Stream uptime: {uptime}\r\n")
+        continue
 
     elif "--restoreAll" in message or "—restoreAll" in message:
         users.clear()
         socksend("All user request accounts replenished by the gods\r\n")
+        continue
 
     elif "--restore" in message or "—restore" in message:
         if user in authorized:
-            person = cleanup(re.findall("restore (.+)", message))
-            person = person.replace("'", "")
+            person = re.findall("restore (.+)", message)
+            person = str(person)
+            person = person[2:len(person)-2]
+            print(person)
+            print(users)
             if person in users:
                 users.pop(indexOf(person, users))
                 socksend(f"{person} request account restored by the gods\r\n")
@@ -800,13 +833,15 @@ while True:
 
     elif "--revoke" in message or "—revoke" in message:
         if user in authorized:
-            person = cleanup(re.findall("revoke (.+)", message))
-            person = person.replace("'", "")
+            person = re.findall("revoke (.+)", message)
+            person = str(person)
+            person = person[2:len(person)-2]
             if person in usercount.keys():
                 users.append(person)
                 socksend(f"{person} request account depleted by the gods\r\n")
             else:
-                socksend(f"No probable cause for executing {person}\r\n")
+                socksend(f"No probable cause for depleting {person}\r\n")
+        continue
 
     elif False and ("--moveup " in message or "—moveup " in message):
         if movedup.get(user, 0) < 10000:
@@ -847,6 +882,7 @@ while True:
                 socksend("No channel points redeemed\r\n")
         else:
             socksend("You have already redeemed 10000 channel points\r\n")
+        continue
 
     elif ("--boost " in message or "—boost " in message):
         if boosted.get(user, 0) < 10000:
@@ -874,12 +910,13 @@ while True:
                     if index == -1:
                         socksend("No such plane in requestlist\r\n")
                     else:
-                        pool.insert(randrange(len(pool)+1), newplane)
+                        pool.insert(random.randrange(len(pool)+1), newplane)
                         socksend(f"{newplane} has been boosted\r\n")
             else:
                 socksend("No channel points redeemed\r\n")
         else:
             socksend("You have already redeemed 10000 channel points\r\n")
+        continue
     
     elif ("--pool" in message or "—pool" in message):
         buildstring = ""
@@ -889,6 +926,7 @@ while True:
             socksend("Request pool is empty\r\n")
         else:
             socksend(f"{buildstring}\r\n")
+        continue
 
     elif "--question" in message or "—question" in message:
         if PollObj.getQuestion() != None:
@@ -898,6 +936,7 @@ while True:
                 for n in range(len(PollObj.getOptions())):
                     buildstring += "Option " + str(n+1) + ": " + PollObj.getOptions()[n] + ", "
             socksend(f"{buildstring}\r\n")
+        continue
 
     elif "--respond " in message or "—respond " in message:
         if user not in PollObj.getResponded():
@@ -910,6 +949,7 @@ while True:
                 socksend(f"Response of {response} accepted\r\n")
             except:
                 socksend("Please enter a valid response number\r\n")
+        continue
 
     elif "--results" in message or "—results" in message:
         buildstring = ""
@@ -917,15 +957,29 @@ while True:
         for n in range(len(responses)):
             buildstring += "Option " + str(n+1) + ": " + str(len(responses[n])) + ", "
         socksend(f"{buildstring}\r\n")
+        continue
+
+    elif "--pick" in message or "—pick" in message:
+        if user in authorized:
+            if len(pool) != 0:
+                integer = random.randint(0, (len(pool)-1))
+                socksend(f"{pool[integer]} has been chosen by the gods\r\n")
+            else:
+                socksend("Request pool is empty\r\n")
+        continue
+
+    '''
+    elif "--expand " in message or "—expand " in message:
+        if user in authorized:
+            newsize = re.findall("expand ([0-9]+)", message)
+            newsize = str(newsize)
+            newsize = newsize[2:len(newsize)-2]
+            size = newsize
+            socksend(f"Request list expanded to {size} spots\r\n")
+        continue
+    '''
 
     if go == True:                              #--request command only works when go is True
-        
-        if "--pick" in message or "—pick" in message:
-            if user in authorized:
-                try:
-                    socksend(f"{requestlist[randrange(len(pool))]} has been chosen by the gods\r\n")
-                except:
-                    continue
                                                                 
         if "--request " in message or "—request " in message:                                         #checking for request command
             if requestsOn == True:
@@ -982,6 +1036,7 @@ while True:
                     continue
             else:
                 socksend("Requestlist is full\r\n")
+            continue
 
 
 sortedlist = list()                         #creating empty list to hold sorted users
