@@ -1012,21 +1012,21 @@ while True:
             newsize = str(newsize)
             newsize = newsize[2:len(newsize)-2]
             print(newsize)
-            #try:
-            newsize = int(newsize)
-            if newsize >= size:
-                socksend("Cannot increase request list size with --shrink. Must use --expand command\r\n")
-                continue
-            size = newsize
-            for n in range(newsize, len(requestlist)):
-                deleted = requestlist.pop(n)
-                deleteFromPool(deleted.getPlane())
-                if len(users) != 0:
-                    users.pop(indexOf(deleted.getUser(), users))
-                socksend(f"{deleted.getPlane()} removed from request list and pool. {deleted.getUser()}'s request account restored\r\n")
-            socksend(f"Request list shrunk down to {newsize} spots\r\n")
-            #except:
-                #socksend("Invalid input\r\n")
+            try:
+                newsize = int(newsize)
+                if newsize >= size:
+                    socksend("Cannot increase request list size with --shrink. Must use --expand command\r\n")
+                    continue
+                size = newsize
+                for n in range(newsize, len(requestlist)):
+                    deleted = requestlist.pop(n)
+                    deleteFromPool(deleted.getPlane())
+                    if len(users) != 0:
+                        users.pop(indexOf(deleted.getUser(), users))
+                    socksend(f"{deleted.getPlane()} removed from request list and pool. @{deleted.getUser()}'s request account restored\r\n")
+                socksend(f"Request list shrunk down to {newsize} spots\r\n")
+            except:
+                socksend("Invalid input\r\n")
         continue
 
     if go == True:                              #--request command only works when go is True
