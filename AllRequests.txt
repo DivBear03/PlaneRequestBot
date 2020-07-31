@@ -45,7 +45,7 @@ MiG-21SMT,1
 Ju 87 D-5,2
 Me 262 C-2b,2
 J29A,1
-P-51,2
+P-51,3
 Spitfire Mk Vb,1
 J29F,1
 P-26A-33,1
@@ -55,3 +55,4 @@ Hs 129 B-3,1
 F6F-5N,1
 I-185 M-82,1
 Spitfire F Mk XIVe,1
+Yak-3,1

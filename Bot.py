@@ -1021,8 +1021,9 @@ while True:
             for n in range(newsize, len(requestlist)):
                 deleted = requestlist.pop(n)
                 deleteFromPool(deleted.getPlane())
-                users.pop(deleted.getUser())
-                socksend(f"{deleted} removed from request list and pool. {deleted.getUser()}'s request account restored\r\n")
+                if len(users) != 0:
+                    users.pop(indexOf(deleted.getUser(), users))
+                socksend(f"{deleted.getPlane()} removed from request list and pool. {deleted.getUser()}'s request account restored\r\n")
             socksend(f"Request list shrunk down to {newsize} spots\r\n")
             #except:
                 #socksend("Invalid input\r\n")
