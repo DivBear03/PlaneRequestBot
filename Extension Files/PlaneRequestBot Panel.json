@@ -1,0 +1,59 @@
+{
+  "allowHttpBackend": false,
+  "backendCommand": "node backend -c \"33o74o9hq504cgk8xcib330z8s0w17\" -s \"Mr3bA1sCNjril0J9Hpfmp9wtk1hsh66n/Y+Sq6l1fQg=\"",
+  "backendFolderName": "extension-getting-started\\services",
+  "certificateExceptions": [],
+  "extensionViews": [],
+  "manifest": {
+    "anchor": "panel",
+    "assetUrls": [],
+    "authorName": "kingsman784",
+    "bitsEnabled": false,
+    "canInstall": true,
+    "configUrl": "https://localhost:8080/config.html",
+    "configurationLocation": "none",
+    "description": "",
+    "eulaTosUrl": "",
+    "hasChatSupport": false,
+    "iconUrl": "",
+    "iconUrls": {},
+    "id": "33o74o9hq504cgk8xcib330z8s0w17",
+    "installationCount": -42,
+    "liveConfigUrl": "",
+    "name": "PlaneRequestBot Panel",
+    "panelHeight": 300,
+    "privacyPolicyUrl": "",
+    "requestIdentityLink": false,
+    "requiredBroadcasterAbilities": [],
+    "screenshotUrls": [],
+    "sku": "",
+    "state": "Testing",
+    "subscriptionsSupportLevel": "none",
+    "summary": "",
+    "supportEmail": "esben.n.nielsen.nj@gmail.com",
+    "vendorCode": "",
+    "version": "0.0.1",
+    "viewerSummary": "",
+    "viewerUrl": "https://localhost:8080/panel.html",
+    "viewerUrls": {
+      "panel": "https://localhost:8080/panel.html"
+    },
+    "views": {
+      "panel": {
+        "viewerUrl": "https://localhost:8080/panel.html",
+        "height": 300,
+        "canLinkExternalContent": false
+      },
+      "config": {
+        "viewerUrl": "https://localhost:8080/config.html",
+        "canLinkExternalContent": false
+      }
+    },
+    "whitelistedConfigUrls": [],
+    "whitelistedPanelUrls": []
+  },
+  "frontendCommand": "--run",
+  "frontendFolderName": "extension-getting-started\\public",
+  "name": "PlaneRequestBot Panel",
+  "version": 2
+}
