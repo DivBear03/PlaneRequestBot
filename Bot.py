@@ -53,6 +53,16 @@ class Poll:
         return self.responses
     def getResponded(self):
         return self.responded
+
+class Request:
+    def __init__(self, plane, user):
+        self.plane = plane
+        self.user = user
+    def getUser(self):
+        return self.user
+    def getPlane(self):
+        return self.plane
+
 actions = []
 
 aircraft = []
@@ -514,7 +524,7 @@ while True:
         else:
             print(user + ":" + message.rstrip())                               #print simplified version of user and message'''
     except:
-        if tracking == True and count > 5:                                      #adding user to usercount dict
+        if tracking == True and count > 5 and user != "":                                      #adding user to usercount dict
             add(user, usercount, 1)
         continue
     
@@ -522,7 +532,7 @@ while True:
         sock.send("PONG\n".encode('utf-8'))     #send "PONG" to stay connected
         continue
 
-    if tracking == True and count > 2:                          #if tracking is turned on
+    if tracking == True and count > 2 and user != "":                          #if tracking is turned on
         add(user, usercount, 1)
     
     if message.startswith('ssn') or message.startswith("SSN"):  #check for ssn meme command
@@ -531,7 +541,7 @@ while True:
     if "!merch" in message:                                     #check for !merch meme command
         socksend("Adam-scented condoms when?\r\n")
 
-    if "@planerequestbot" in message:
+    if "@PlaneRequestBot" in message:
         socksend(f"Welcome to the stream, @{user}. PlaneRequestBot commands: https://sites.google.com/view/planerequestbotcommands/home?authuser=0\r\n")
 
     if "WHISPER" in chat:
@@ -662,9 +672,9 @@ while True:
                     plane = int(plane)
                     print(plane)
                     skipped = requestlist.pop(plane)
-                    socksend(f"{skipped} has been skipped\r\n")
-                    deleteFromPool(skipped)
-                    actions.insert(0, Action(False, True, skipped, plane, user))
+                    socksend(f"{skipped.getPlane()} has been skipped\r\n")
+                    deleteFromPool(skipped.getPlane())
+                    actions.insert(0, Action(False, True, skipped.getPlane(), plane, user))
                 except:
                     planeresult = search2(plane)
                     print(planeresult)
@@ -678,9 +688,9 @@ while True:
                         if search2(plane)[0] in requestlist:
                             socksend("Skip failed\r\n")
                         else:
-                            socksend(f"{skipped} has been skipped\r\n")
-                            deleteFromPool(skipped)
-                            actions.insert(0, Action(False, True, skipped, selected, user))
+                            socksend(f"{skipped.getPlane()} has been skipped\r\n")
+                            deleteFromPool(skipped.getPlane())
+                            actions.insert(0, Action(False, True, skipped.getPlane(), selected, user))
             else:
                 socksend("Requestlist is empty\r\n")
         continue
@@ -690,9 +700,9 @@ while True:
             commands['--dellast'] += 1
             try:
                 plane = requestlist.pop(len(requestlist)-1)
-                socksend(f"{plane} deleted\r\n")
-                actions.insert(0, Action(False, True, plane, len(requestlist)-1, user))
-                deleteFromPool(plane)
+                socksend(f"{plane.getPlane()} deleted\r\n")
+                actions.insert(0, Action(False, True, plane.getPlane(), len(requestlist)-1, user))
+                deleteFromPool(plane.getPlane())
             except:
                 continue
 
@@ -701,12 +711,12 @@ while True:
             commands['--reqdel'] += 1
             buildstring = ""                    #create empty string that will show the list of requested planes
             for plane in requestlist:           #iterate through the planes in the list
-                buildstring += plane + ", "     #add the plane to the string and a comma
+                buildstring += plane.getPlane() + ", "     #add the plane to the string and a comma
             if len(requestlist) > 0:            #if there are planes in the requestlist
                 socksend(f"{buildstring}\r\n")          #send the string of requested planes to the chat
                 removedplane = requestlist.pop(0)                                           #remove the first plane in the list since it will be played. 
-                deleteFromPool(removedplane)
-                actions.insert(0, Action(False, True, removedplane, 0, user))
+                deleteFromPool(removedplane.getPlane())
+                actions.insert(0, Action(False, True, removedplane.getPlane(), 0, user))
             else:
                 socksend("Requestlist is empty\r\n")      #if no planes in the list, send the message that there are no planes in the list
 
@@ -714,7 +724,7 @@ while True:
         commands['--requests'] += 1
         buildstring = ""
         for plane in requestlist:
-            buildstring += plane + ", "
+            buildstring += plane.getPlane() + ", "
         if len(requestlist) > 0:
             socksend(f"{buildstring}\r\n")
         else:
@@ -728,6 +738,10 @@ while True:
             planelist = []
             for n in range(len(requestlist)):
                 planelist.append(requestlist[n])
+                try:
+                    users.pop(indexOf(requestlist[n].getUser(), users))
+                except:
+                    pass
             obj = Clear(planelist, pool)
             actions.insert(0, obj)
             requestlist.clear()
@@ -752,27 +766,30 @@ while True:
                 else:
                     planeresult = str(result[0])
                     planeresult = planeresult.replace("\n", "")
-                    if indexOf(planeresult, requestlist) > -1:
+                    newlist = []
+                    for thing in requestlist:
+                        newlist.append(thing.getPlane())
+                    if indexOf(planeresult, newlist) > -1:
                         socksend(f"{planeresult} is a duplicate\r\n")
                     elif planeresult in rmnsDict:
-                        if rmnsDict[planeresult] in requestlist:
+                        if rmnsDict[planeresult] in newlist:
                             socksend(f"{planeresult} is a duplicate\r\n")
                         else:
                             confirmation = random.randint(0, len(confirmations)-1)
                             if indexDict(planeresult, rmnsDict) > 54:
-                                requestlist.append(rmnsDict[planeresult])
+                                requestlist.append(Request(rmnsDict[planeresult], user))
                                 obj = Action(True, False, rmnsDict[planeresult], len(requestlist)-1, user)
                                 actions.insert(0, obj)
                                 add(rmnsDict[planeresult], writerequests, 1)
                                 pool.append(rmnsDict[planeresult])
                             else:
-                                requestlist.append(planeresult)
+                                requestlist.append(Request(planeresult, user))
                                 obj = Action(True, False, planeresult, len(requestlist)-1, user)
                                 actions.insert(0, obj)
                                 add(planeresult, writerequests, 1)
                                 pool.append(planeresult)
                     else:
-                        requestlist.append(planeresult)                         #same as above
+                        requestlist.append(Request(planeresult, user))                         #same as above
                         obj = Action(True, False, planeresult, len(requestlist)-1, user)
                         actions.insert(0, obj)
                         add(planeresult, writerequests, 1)
@@ -788,12 +805,16 @@ while True:
                     pool = obj.getPool()
                     for plane in obj.getPlaneList():
                         requestlist.append(plane)
+                        users.append(plane.getUser())
                 elif type(obj) == Action:
                     if obj.getAdd():
                         requestlist.pop(obj.getIndex())
-                        users.pop(indexOf(obj.getUser(), users))
+                        if len(users) != 0:
+                            users.pop(indexOf(obj.getUser(), users))
+                        pool.pop(indexOf(obj.getPlane(), pool))
                     elif obj.getDelete():
-                        requestlist.insert(obj.getIndex(), obj.getPlane())
+                        requestlist.insert(obj.getIndex(), Request(obj.getPlane(), obj.getUser()))
+                        pool.append(requestlist[obj.getIndex()].getPlane())
                         users.append(obj.getUser())
                 actions.pop(0)
             else:
@@ -830,6 +851,7 @@ while True:
                 socksend(f"{person} request account restored by the gods\r\n")
             else:
                 socksend(f"Request account already at 1\r\n")
+        continue
 
     elif "--revoke" in message or "—revoke" in message:
         if user in authorized:
@@ -968,16 +990,43 @@ while True:
                 socksend("Request pool is empty\r\n")
         continue
 
-    '''
     elif "--expand " in message or "—expand " in message:
         if user in authorized:
             newsize = re.findall("expand ([0-9]+)", message)
             newsize = str(newsize)
             newsize = newsize[2:len(newsize)-2]
-            size = newsize
-            socksend(f"Request list expanded to {size} spots\r\n")
+            try:
+                newsize = int(newsize)
+                if newsize <= size:
+                    socksend("Cannot decrease request list size with --expand. Must use --shrink command\r\n")
+                    continue
+                size = newsize
+                socksend(f"Request list expanded to {size} spots\r\n")
+            except:
+                socksend("Invalid input\r\nx")
         continue
-    '''
+
+    elif "--shrink " in message or "—shrink " in message:
+        if user in authorized:
+            newsize = re.findall("shrink (.+)", message)
+            newsize = str(newsize)
+            newsize = newsize[2:len(newsize)-2]
+            print(newsize)
+            #try:
+            newsize = int(newsize)
+            if newsize >= size:
+                socksend("Cannot increase request list size with --shrink. Must use --expand command\r\n")
+                continue
+            size = newsize
+            for n in range(newsize, len(requestlist)):
+                deleted = requestlist.pop(n)
+                deleteFromPool(deleted.getPlane())
+                users.pop(deleted.getUser())
+                socksend(f"{deleted} removed from request list and pool. {deleted.getUser()}'s request account restored\r\n")
+            socksend(f"Request list shrunk down to {newsize} spots\r\n")
+            #except:
+                #socksend("Invalid input\r\n")
+        continue
 
     if go == True:                              #--request command only works when go is True
                                                                 
@@ -1004,8 +1053,8 @@ while True:
                                 socksend(f"{planeresult} is a duplicate\r\n")   #send duplicate message
                             else:
                                 confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
-                                if indexDict(planeresult, rmnsDict) > 54:
-                                    requestlist.append(rmnsDict[planeresult])
+                                if indexDict(planeresult, rmnsDict) > 5:
+                                    requestlist.append(Request(rmnsDict[planeresult], user))
                                     original = rmnsDict[planeresult]
                                     socksend(f"{confirmations[confirmation]} {original} requested!\r\n")
                                     actions.insert(0, Action(True, False, original, len(requestlist)-1, user))
@@ -1014,7 +1063,7 @@ while True:
                                         users.append(user)
                                     pool.append(original)
                                 else:
-                                    requestlist.append(planeresult)                     #Otherwise, add the request to the request list
+                                    requestlist.append(Request(planeresult, user))                     #Otherwise, add the request to the request list
                                     socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")     #confirmation message
                                     actions.insert(0, Action(True, False, planeresult, len(requestlist)-1, user))
                                     add(planeresult, writerequests, 1)
@@ -1022,7 +1071,7 @@ while True:
                                         users.append(user)
                                     pool.append(planeresult)
                         else:
-                            requestlist.append(planeresult)                         #same as above
+                            requestlist.append(Request(planeresult, user))                         #same as above
                             confirmation = random.randint(0, len(confirmations)-1)
                             socksend(f"{confirmations[confirmation]} {planeresult} requested!\r\n")
                             actions.insert(0, Action(True, False, planeresult, len(requestlist)-1, user))
