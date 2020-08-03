@@ -104,7 +104,7 @@ else:
     sock.send(f"JOIN {channel}\n".encode('utf-8'))
 
 #Retrieving a new app access token for the viewer count average
-url = 'https://id.twitch.tv/oauth2/token?client_id=95hkffpc2ng2zww4gttnp17y0ix14n&client_secret=2anjpsryvwofq6l21o5bhkywltsidw&grant_type=client_credentials'
+url = 'https://id.twitch.tv/oauth2/token?client_id=95hkffpc2ng2zww4gttnp17y0ix14n&client_secret=6w38tk1cwoeetikxps838phxuerm65&grant_type=client_credentials'
 app_access = requests.post(url)                                                 #getting app access code for oauth credentials
 response = str(app_access.text)
 response = response.replace("\"", "")
@@ -421,6 +421,7 @@ requesthandle = open("input-output.txt", 'a+')      #opening file for recording 
 texthandle.write(f"\n{channel}")
 
 def socksend(message):
+    message = "/me " + message
     sock.send(f"PRIVMSG {channel} :{message}".encode('utf-8'))
 
 requestlist = list()                                #creating empty list of requested planes
@@ -461,6 +462,10 @@ PollObj = Poll(None, None)
 
 capreqtimer = timerclass.time() + 60
 
+sock.send(f"PRIVMSG {channel} :/color Blue\r\n".encode('utf-8'))
+
+currentplane = ""
+
 while True:                                                                 #accepting input for size of the requestlist
     size = input("Enter max number of requests in request list: ")
     try:
@@ -471,6 +476,8 @@ while True:                                                                 #acc
     except:
         print("Invalid input")
         continue
+
+killcount = 0
 
 while True:
 
@@ -576,6 +583,15 @@ while True:
             socksend(f"A new poll is live! Question: {question} {buildstring}\r\n")
         continue
 
+    elif "!plane" in message:
+        if currentplane != "":
+            socksend(f"Adam is playing the {currentplane}\r\n")
+        else:
+            socksend("No current plane specified\r\n")
+
+    elif "!kills" in message:
+        socksend(f"Adam has {str(killcount)} kills in the {currentplane}\r\n")
+
     if "--" not in message and "—" not in message:              #logic gate to prevent more CPU usage if command not present
         continue
 
@@ -666,8 +682,8 @@ while True:
             commands['--skip'] += 1
             if len(requestlist) > 0:
                 plane = re.findall("skip\[(.+)\]", message)
-                plane = cleanup(plane)
-                plane = plane.replace("'", "")
+                plane = str(plane)
+                plane = plane[2:len(plane)-2]
                 try:
                     plane = int(plane)
                     print(plane)
@@ -677,15 +693,19 @@ while True:
                     actions.insert(0, Action(False, True, skipped.getPlane(), plane, user))
                 except:
                     planeresult = search2(plane)
-                    print(planeresult)
+                    print(planeresult[0], planeresult[1])
                     if planeresult == "No match" or planeresult == "Bombers are useless":
                         planeresult = str(planeresult)
                         socksend(f"Skip failed; {planeresult}\r\n")
                     else:
                         plane = planeresult[0]
-                        selected = indexOf(plane, requestlist)
+                        newlist = []
+                        for thing in requestlist:
+                            newlist.append(thing.getPlane())
+                        selected = indexOf(plane, newlist)
                         skipped = requestlist.pop(selected)
-                        if search2(plane)[0] in requestlist:
+                        newlist.pop(selected)
+                        if search2(plane)[0] in newlist:
                             socksend("Skip failed\r\n")
                         else:
                             socksend(f"{skipped.getPlane()} has been skipped\r\n")
@@ -753,8 +773,8 @@ while True:
         if user in authorized:
             commands['--batchrequest'] += 1
             batch = re.findall("batchrequest (.+)", message)
-            batch = cleanup(batch)
-            batch = batch.replace("'", "")
+            batch = str(batch)
+            batch = batch[2:len(batch)-2]
             batchlist = batch.split(",")
             for plane in batchlist:
                 result = search2(plane)
@@ -891,9 +911,12 @@ while True:
                     continue
                 else:
                     newplane = result[0]
-                    index = indexOf(newplane, requestlist)
+                    newlist = []
+                    for thing in requestlist:
+                        newlist.append(thing.getPlane())
+                    index = indexOf(newplane, newlist)
                     if index == -1:
-                        socksend("No such plane in requestlist\r\n")
+                        socksend("No such plane in request list\r\n")
                     elif index == 0:
                         socksend(f"You just wasted channel points: {newplane} is already at spot 1\r\n")
                     else:
@@ -912,8 +935,8 @@ while True:
                 highlighted = re.findall("msg-id=(.+);room-id=[0-9]+", str(chat))         #custom-reward-id=(.+);display-name=.+
             elif reward == "custom":
                 highlighted = re.findall("custom-reward-id=(.+);display-name=.+", str(chat))
-            highlighted = cleanup(highlighted)
-            highlighted = highlighted.replace("'", "")
+            highlighted = str(highlighted)
+            highlighted = highlighted[2:len(highlighted)-2]
             print(highlighted)
             if boosted.get(user, -1) == -1:
                 boosted[user] = 2000
@@ -922,13 +945,17 @@ while True:
             if highlighted == "highlighted-message" or highlighted == "0f4fa868-f365-44a7-9fe9-2d793556fb50":
                 print("Boost redeemed")
                 plane = re.findall("boost (.+)", message)
-                plane = cleanup(plane).replace("'", "")
+                plane = str(plane)
+                plane = plane[2: len(plane)-2]
                 result = search2(plane)
                 if result == "No match" or result == "Bombers are useless":
                     socksend(f"{result}\r\n")
                 else:
                     newplane = result[0]
-                    index = indexOf(newplane, requestlist)
+                    newlist = []
+                    for thing in requestlist:
+                        newlist.append(thing.getPlane())
+                    index = indexOf(newplane, newlist)
                     if index == -1:
                         socksend("No such plane in requestlist\r\n")
                     else:
@@ -1029,6 +1056,29 @@ while True:
                 socksend("Invalid input\r\n")
         continue
 
+    elif "--size" in message or "—size" in message:
+        socksend(f"Request list size is {size} planes\r\n")
+
+    elif "--setplane " in message or "—setplane " in message:
+        plane = re.findall("setplane (.+)", message)
+        plane = str(plane)
+        plane = plane[2:len(plane)-2]
+        if plane == "":
+            continue
+        else:
+            currentplane = plane
+            socksend(f"Current plane has been set to {currentplane}\r\n")
+            killcount = 0
+
+    elif "--kill" in message or "—kill" in message:
+        killcount += 1
+        socksend(f"Kill added for {currentplane}\r\n")
+
+    elif "--reset" in message or "—reset" in message:
+        killcount = 0
+        currentplane = ""
+        sock.send("Current plane and kill count reset to defaults\r\n")
+
     if go == True:                              #--request command only works when go is True
                                                                 
         if "--request " in message or "—request " in message:                                         #checking for request command
@@ -1036,10 +1086,13 @@ while True:
                 if user not in users:
                     commands['--request'] += 1
                     plane = re.findall("request (.+)", message)                   #pull out the plane name
-                    plane = cleanup(plane)                                          #clean up the list object
-                    plane = plane.replace("'", "")                                  #replace single quotes with nothing
+                    plane = str(plane)                                 #replace single quotes with nothing
+                    plane = plane[2:len(plane)-2]
                     result = search2(plane)                                         #perform search algorithm
                     planerequests[plane] = str(result)
+                    stringlist = []
+                    for thing in requestlist:
+                        stringlist.append(thing.getPlane())
                     if result == "No match":                                        #if match is not above threshold, algo returns "No match"
                         socksend("No match\r\n")                                    #send chat
                     elif result == "Bombers are useless":                           #if algo determines that the request is a bomber
@@ -1047,10 +1100,10 @@ while True:
                     else:
                         planeresult = str(result[0])                                #pull out the actual plane
                         planeresult = planeresult.replace("\n", "")                 #replace newline character
-                        if indexOf(planeresult, requestlist) > -1:                  #if the plane is in the requestlist already
+                        if indexOf(planeresult, stringlist) > -1:                  #if the plane is in the requestlist already
                             socksend(f"{planeresult} is a duplicate\r\n")   #duplicate message to chat
                         elif planeresult in rmnsDict:                               #if it is a roman numeral plane with mulitple correct versions
-                            if rmnsDict[planeresult] in requestlist:                #and if the counterpart of the planeresult is already in the request list
+                            if rmnsDict[planeresult] in stringlist:                #and if the counterpart of the planeresult is already in the request list
                                 socksend(f"{planeresult} is a duplicate\r\n")   #send duplicate message
                             else:
                                 confirmation = random.randint(0, len(confirmations)-1)  #random War Thunder quote
